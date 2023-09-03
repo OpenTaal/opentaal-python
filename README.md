@@ -8,3 +8,7 @@
 # OpenTaal Histogram
 
 Python package for creating histograms with Unicode support.
+
+![logo Stichting OpenTaal](images/logo-shape-trans-640x360.png?raw=true)
+
+Donating is also possible with <noscript><a href="https://liberapay.com/opentaal/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
