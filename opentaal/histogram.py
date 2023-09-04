@@ -15,9 +15,11 @@ from pygnuplot import gnuplot
 class Histogram():
     '''Class for creating histograms. See also
     https://en.wikipedia.org/wiki/Histogram for more information.'''
-    def __init__(self, desc):
+    def __init__(self, desc, filename=None):
         '''Construct object and set its description.
         :param desc: Description of the histogram.
+        :type desc: str
+        :param desc: Filename of text file to process.
         :type desc: str
         :return: Constructed object.
         :rtype: Histogram'''
@@ -26,10 +28,25 @@ class Histogram():
         self.desc = desc
         self.data = {}
         self.max = 0
+        if filename is not None:
+            with open(filename) as file:
+                for line in file:
+                    for char in line[:-1]:
+                        self.add(char)
 
     def size(self):
         '''Return the number of unique values, also known as bins.'''
         return len(self.data)
+
+    def get(self, value):
+        '''Return the TODO number of unique values, also known as bins.
+        :param desc: TODOFilename of text file to process.
+        :type desc: str
+        :return: TODOConstructed object.
+        :rtype: int'''
+        if value in self.data:
+            return self.data[value]
+        return 0
 
     def maximum(self):
         '''Return the maximum count.'''
@@ -365,4 +382,3 @@ class Histogram():
 
 # pylint:enable=too-many-arguments
 # pylint:enable=unspecified-encoding
-
