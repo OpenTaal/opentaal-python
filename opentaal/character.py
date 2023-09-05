@@ -10,8 +10,16 @@ class Character():
     '''Class for creating histograms. See also
     https://en.wikipedia.org/wiki/Histogram for more information.'''
     @staticmethod
+    def get_name(char):
+        return name(char)
+
+    @staticmethod
+    def get_cat(char):
+        return category(char)
+
+    @staticmethod
     def decode_category(code, abbrev=True):  # pylint:disable=too-many-return-statements
-        '''Decode Unicode category code.
+        '''Decode Unicode category code from unicode.category().
         :param code: The category code.
         :type code: str
         :param abbrev: Return abbreveated category name no longer than seven charecters.
@@ -41,7 +49,7 @@ class Character():
 
     @staticmethod
     def is_letter(code):
-        '''Test if a Unicode category code relates to a letter.
+        '''Test if a Unicode category from unicode.category() code relates to a letter.
         :param code: The category code.
         :type code: str
         :return: True is the category relates to a letter.

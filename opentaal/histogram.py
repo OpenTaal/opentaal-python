@@ -6,7 +6,6 @@ __url__ = 'https://github.com/opentaal/opentaal-python'
 
 from operator import itemgetter
 from sys import maxsize
-from unicodedata import category, name
 
 from opentaal import Character
 from pygnuplot import gnuplot
@@ -156,15 +155,16 @@ class Histogram():
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 if count < minimum:
                     minimum = count
-                cat = category(value)
+                name = Character.get_name(value)
+                cat = Character.get_cat(value)
                 if multi:
                     tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}' \
                           f'\t{Character.to_hex(value)}' \
-                          f'\t{Character.decode_category(code=cat,abbrev=abbrev)}\t{name(value)}\n'
+                          f'\t{Character.decode_category(code=cat,abbrev=abbrev)}\t{name}\n'
                 else:
                     tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
-                          f' {Character.decode_category(code=cat,abbrev=abbrev)} {name(value)}\n'
+                          f' {Character.decode_category(code=cat,abbrev=abbrev)} {name}\n'
                 # perhaps hex(ord(value))
                 # right align
         else:
@@ -202,17 +202,18 @@ class Histogram():
             tmp = f'{tmp}--: | ---\n'
         if unicode:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
-                cat = category(value)
+                name = Character.get_name(value)
+                cat = Character.get_cat(value)
                 if multi:
                     tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`' \
                           f' | `{Character.to_hex(value)}`' \
                           f' | {Character.decode_category(code=cat, abbrev=False)}' \
-                          f' | {name(value)}\n'
+                          f' | {name}\n'
                 else:
                     tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`' \
                           f' `{Character.to_hex(value)}`' \
                           f' {Character.decode_category(code=cat, abbrev=False)}' \
-                          f' {name(value)}\n'
+                          f' {name}\n'
                 # perhaps hex(ord(value))
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
@@ -241,14 +242,15 @@ class Histogram():
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 if count < minimum:
                     minimum = count
-                cat = category(value)
+                name = Character.get_name(value)
+                cat = Character.get_cat(value)
                 if multi:
                     tmp = f'{tmp}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{self.print_friendly(value)}",\n' \
                           f'      "codepoint": "{Character.to_hex(value)}",\n' \
                           f'      "category": "{Character.decode_category(code=cat, abbrev=False)}",\n' \
-                          f'      "description": "{name(value)}"\n' \
+                          f'      "description": "{name}"\n' \
                           '    },\n'
                 else:
                     tmp = f'{tmp}    {{\n' \
@@ -256,7 +258,7 @@ class Histogram():
                           f'      "value": "{self.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
                           f' {Character.decode_category(code=cat, abbrev=False)}' \
-                          f' {name(value)}"\n' \
+                          f' {name}"\n' \
                           '    },\n'
                 # perhaps hex(ord(value))
         else:
