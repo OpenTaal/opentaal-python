@@ -2,14 +2,14 @@
 
 __author__ = 'OpenTaal'
 __license__ = 'MIT'
-__url__ = 'https://github.com/opentaal/opentaal-histogram'
+__url__ = 'https://github.com/opentaal/opentaal-python'
 
 from random import randint, seed
 
 from opentaal import Histogram
 
 @pytest.fixture
-def test_histogram()
+def test_histogram():
     '''Test the class Histogram.'''
     hist = Histogram('Test')
     seed(2.71828)

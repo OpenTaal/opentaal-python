@@ -5,3 +5,7 @@ __url__ = 'https://github.com/opentaal/opentaal-histogram'
 __all__ = [
     'Histogram',
 ]
+
+from character import Character
+from sort import Sort
+from histogram import Histogram

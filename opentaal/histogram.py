@@ -2,12 +2,13 @@
 
 __author__ = 'OpenTaal'
 __license__ = 'MIT'
-__url__ = 'https://github.com/opentaal/opentaal-histogram'
+__url__ = 'https://github.com/opentaal/opentaal-python'
 
 from operator import itemgetter
 from sys import maxsize
 from unicodedata import category, name
 
+from opentaal import Character
 from pygnuplot import gnuplot
 
 # pylint:disable=unspecified-encoding
@@ -62,47 +63,6 @@ class Histogram():
             self.data[value] = 1
         if self.data[value] > self.max:
             self.max = self.data[value]
-
-    @staticmethod
-    def decode_category(code, abbrev=True):  # pylint:disable=too-many-return-statements
-        '''Decode Unicode category code.
-        :param code: The category code.
-        :type code: str
-        :param abbrev: Return abbreveated category name no longer than seven charecters.
-        :type code: str
-        :return: The category name.
-        :rtype: str'''
-        first = code[0]
-        if first == 'C':
-            return 'control'
-        if first == 'L':
-            return 'letter'
-        if first == 'M':
-            return 'mark'
-        if first == 'N':
-            return 'number'
-        if first == 'P':
-            if abbrev:
-                return 'punct.'
-            return 'punctuation'
-        if first == 'S':
-            return 'symbol'
-        if first == 'Z':
-            if abbrev:
-                return 'whites.'
-            return 'whitespace'
-        raise ValueError('Unsupported Unicode category code {code}')
-
-    @staticmethod
-    def is_letter(code):
-        '''Test if a Unicode category code relates to a letter.
-        :param code: The category code.
-        :type code: str
-        :return: True is the category relates to a letter.
-        :rtype: bool'''
-        if code in ('LC', 'Ll', 'Lo', 'Lu'): # excluding Lm: Letter. Modifier
-            return True
-        return False
 
     @staticmethod
     def print_friendly(char):#, markdown=False
@@ -199,12 +159,12 @@ class Histogram():
                 cat = category(value)
                 if multi:
                     tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}' \
-                          f'\tU+{value.encode("utf-8").hex().upper()}' \
-                          f'\t{self.decode_category(code=cat,abbrev=abbrev)}\t{name(value)}\n'
+                          f'\t{Character.to_hex(value)}' \
+                          f'\t{Character.decode_category(code=cat,abbrev=abbrev)}\t{name(value)}\n'
                 else:
                     tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}' \
-                          f' U+{value.encode("utf-8").hex().upper()}' \
-                          f' {self.decode_category(code=cat,abbrev=abbrev)} {name(value)}\n'
+                          f' {Character.to_hex(value)}' \
+                          f' {Character.decode_category(code=cat,abbrev=abbrev)} {name(value)}\n'
                 # perhaps hex(ord(value))
                 # right align
         else:
@@ -245,12 +205,14 @@ class Histogram():
                 cat = category(value)
                 if multi:
                     tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`' \
-                          f' | `U+{value.encode("utf-8").hex().upper()}`' \
-                          f' | {self.decode_category(code=cat, abbrev=False)} | {name(value)}\n'
+                          f' | `{Character.to_hex(value)}`' \
+                          f' | {Character.decode_category(code=cat, abbrev=False)}' \
+                          f' | {name(value)}\n'
                 else:
                     tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`' \
-                          f' `U+{value.encode("utf-8").hex().upper()}`' \
-                          f' {self.decode_category(code=cat, abbrev=False)} {name(value)}\n'
+                          f' `{Character.to_hex(value)}`' \
+                          f' {Character.decode_category(code=cat, abbrev=False)}' \
+                          f' {name(value)}\n'
                 # perhaps hex(ord(value))
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
@@ -284,16 +246,16 @@ class Histogram():
                     tmp = f'{tmp}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{self.print_friendly(value)}",\n' \
-                          f'      "codepoint": "U+{value.encode("utf-8").hex().upper()}",\n' \
-                          f'      "category": "{self.decode_category(code=cat, abbrev=False)}",\n' \
+                          f'      "codepoint": "{Character.to_hex(value)}",\n' \
+                          f'      "category": "{Character.decode_category(code=cat, abbrev=False)}",\n' \
                           f'      "description": "{name(value)}"\n' \
                           '    },\n'
                 else:
                     tmp = f'{tmp}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{self.print_friendly(value)}' \
-                          f' U+{value.encode("utf-8").hex().upper()}' \
-                          f' {self.decode_category(code=cat, abbrev=False)}' \
+                          f' {Character.to_hex(value)}' \
+                          f' {Character.decode_category(code=cat, abbrev=False)}' \
                           f' {name(value)}"\n' \
                           '    },\n'
                 # perhaps hex(ord(value))
