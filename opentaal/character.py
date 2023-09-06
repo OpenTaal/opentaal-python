@@ -1,20 +1,20 @@
-'''Blah blah.'''
-
-__author__ = 'OpenTaal'
-__license__ = 'MIT'
-__url__ = 'https://github.com/opentaal/opentaal-python'
+'''Class definition for Character.'''
 
 from unicodedata import category, name
 
 class Character():
     '''Class for creating histograms. See also
-    https://en.wikipedia.org/wiki/Histogram for more information.'''
+    https://en.wikipedia.org/wiki/Histogram ,
+    https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str .'''
+
     @staticmethod
     def get_name(char):
+        '''Get Unicode name for character.'''
         return name(char)
 
     @staticmethod
     def get_cat(char):
+        '''Get Unicode category for character.'''
         return category(char)
 
     @staticmethod
@@ -45,7 +45,7 @@ class Character():
             if abbrev:
                 return 'whites.'
             return 'whitespace'
-        raise ValueError('Unsupported Unicode category code {code}')
+        raise ValueError(f'Unsupported Unicode category code {code}')
 
     @staticmethod
     def is_letter(code):
@@ -54,6 +54,7 @@ class Character():
         :type code: str
         :return: True is the category relates to a letter.
         :rtype: bool'''
+        #TODO https://docs.python.org/3/library/stdtypes.html#str.isalpha
         if code in ('LC', 'Ll', 'Lo', 'Lu'): # excluding Lm: Letter. Modifier
             return True
         return False
@@ -63,11 +64,13 @@ class Character():
         '''Convert Unicode character to its hexidecimal representation.
         :param character: The character to convert.
         :type code: str
-        :return: TODO·.
+        :return: Unicode codepoint in hexidecimal representation.
         :rtype: str'''
-        tmp = character.encode("utf-8").hex()
+        tmp = character.encode('utf-8').hex()
         if upper:
             tmp = tmp.upper()
         if prefix:
             tmp = f'U+{tmp}'
         return tmp
+
+#TODO localized upper and lower e.g. IJsselmeer

@@ -1,12 +1,23 @@
-'''Blah blah.'''
+'''Test class Sort.'''
 
-__author__ = 'OpenTaal'
-__license__ = 'MIT'
-__url__ = 'https://github.com/opentaal/opentaal-python'
+from pytest import fixture, raises
 
 from opentaal import Sort
 
-words = '''BB
+# pylint:disable=missing-function-docstring
+
+@fixture
+def short():
+    return '''eer
+beer
+tafel
+α-straling
+stoel
+appel'''
+
+@fixture
+def long():
+    return '''BB
 zo-even
 C 32
 sint-bernardshond
@@ -172,7 +183,57 @@ St.-Eustatius
 a.u.b.
 å'''
 
-@pytest.fixture
-def test_sort():
-    '''Test the class Sort.'''
-    pass
+# pylint:disable=redefined-outer-name
+
+def test_sort(short):
+    assert Sort.sort(short) == \
+        '''appel
+beer
+eer
+stoel
+tafel
+α-straling'''
+
+def test_sort_reverse(short):
+    assert Sort.sort(short, reverse=True) == \
+        '''α-straling
+tafel
+stoel
+eer
+beer
+appel'''
+
+def test_sort_retrograde(short):
+    assert Sort.sort(short, retro=True) == \
+        '''α-straling
+tafel
+stoel
+appel
+eer
+beer'''
+
+def test_sort_reverse_retro(short):
+    assert Sort.sort(short, reverse=True, retro=True) == \
+        '''beer
+eer
+appel
+stoel
+tafel
+α-straling'''
+
+def test_sort_exact(short):
+    assert Sort.sort(short, exact=True) == \
+        '''appel
+α-straling
+beer
+eer
+stoel
+tafel'''
+
+def test_sort_exact_forbidden():
+    with raises(ValueError, match='The characters ḁ are not allowed in exact sort.'):
+        assert Sort.sort('ḁppel', exact=True)
+
+# pylint:enable=redefined-outer-name
+
+# pylint:enable=missing-function-docstring

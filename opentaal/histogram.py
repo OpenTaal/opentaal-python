@@ -1,8 +1,4 @@
-'''Blah blah.'''
-
-__author__ = 'OpenTaal'
-__license__ = 'MIT'
-__url__ = 'https://github.com/opentaal/opentaal-python'
+'''Class definition for Histogram.'''
 
 from operator import itemgetter
 from sys import maxsize
@@ -14,7 +10,49 @@ from pygnuplot import gnuplot
 
 class Histogram():
     '''Class for creating histograms. See also
-    https://en.wikipedia.org/wiki/Histogram for more information.'''
+    https://en.wikipedia.org/wiki/Histogram .'''
+
+    @staticmethod
+    def print_friendly(char):#, markdown=False
+        '''Make character print friendly. See also
+        https://en.wikipedia.org/wiki/Whitespace_character and
+        https://en.wikipedia.org/wiki/Non-breaking_space .
+        :param char: The character to make print friendly.
+        :type char: str
+        :param markdown: For use in MarkDown table.
+        :type makrdown: bool
+        :return: Print friendly version of the supplied character.
+        :rtype: str'''
+        if char == '\t': # tab character
+            return '↹'
+        if char == '\n': # return character
+            return '⏎'
+        if char == '': # soft hyphen character
+            return '-'
+        if char in (' ', # 0020 space character
+                    ' ', # 2007 figure space character
+                    ' ', # 2008 punctuation space character
+                    ' ', # 2009 thin space character
+                    ' ', # 200A hair space character
+                    ):
+            return '␣'
+        if char in (' ', # 00A0 no-break space character
+                    ' ', # 202F narrow no-break space character
+                    ):
+            return '⍽'
+        # if char == '': # zero width no-break space character
+            # return '␣'
+        # if char == ' ': # zero width non-joiner character
+        #     return ''
+        # if char == ' ': # zero width joiner character
+        #     return ''
+        #perhaps escape single quote or backslash or word joiner 2060
+        #for identified not implemented  raise ValueError('Unsuode {code}')
+        # if char == '|' and markdown:
+            # return '\\|' TODO perhaps not needed with `` around it
+
+        return char
+
     def __init__(self, desc, filename=None):
         '''Construct object and set its description.
         :param desc: Description of the histogram.
@@ -23,8 +61,6 @@ class Histogram():
         :type desc: str
         :return: Constructed object.
         :rtype: Histogram'''
-        if desc is None or desc == '':
-            raise ValueError('Empty description is not allowed.')
         self.desc = desc
         self.data = {}
         self.max = 0
@@ -63,47 +99,6 @@ class Histogram():
         if self.data[value] > self.max:
             self.max = self.data[value]
 
-    @staticmethod
-    def print_friendly(char):#, markdown=False
-        '''Make character print friendly. See also
-        https://en.wikipedia.org/wiki/Whitespace_character and
-        https://en.wikipedia.org/wiki/Non-breaking_space for more information.
-        :param char: The character to make print friendly.
-        :type char: str
-        :param markdown: For use in MArkDown table.
-        :type makrdown: bool
-        :return: Print friendly version of the supplied character.
-        :rtype: str'''
-        if char == '\t': # tab character
-            return '↹'
-        if char == '\n': # return character
-            return '⏎'
-        if char == '': # soft hyphen character
-            return '-'
-        if char in (' ', # 0020 space character
-                    ' ', # 2007 figure space character
-                    ' ', # 2008 punctuation space character
-                    ' ', # 2009 thin space character
-                    ' ', # 200A hair space character
-                    ):
-            return '␣'
-        if char in (' ', # 00A0 no-break space character
-                    ' ', # 202F narrow no-break space character
-                    ):
-            return '⍽'
-        # if char == '': # zero width no-break space character
-            # return '␣'
-        # if char == ' ': # zero width non-joiner character
-        #     return ''
-        # if char == ' ': # zero width joiner character
-        #     return ''
-        #perhaps escape single quote or backslash or word joiner 2060
-        #for identified not implemented  raise ValueError('Unsuode {code}')
-        # if char == '|' and markdown:
-            # return '\\|' TODO perhaps not needed with `` around it
-
-        return char
-
 # pylint:disable=too-many-arguments
 
     def to_string(self, desc=True, head=True, reverse=True, unicode=True, abbrev=True, multi=True):
@@ -123,8 +118,7 @@ class Histogram():
     def to_tsvstring(self, desc=True, head=True, reverse=True, unicode=True,
                      abbrev=True, multi=True):
         '''Write the description and sorted histogram counts to a tab-separated
-        string. See also https://en.wikipedia.org/wiki/Tab-separated_values for
-        more information.
+        string. See also https://en.wikipedia.org/wiki/Tab-separated_values .
         :param desc: Include description.
         :type desc: bool
         :param head: Include header.
@@ -176,8 +170,7 @@ class Histogram():
 
     def to_mdstring(self, desc=True, reverse=True, unicode=True, multi=True):
         '''Write the description and sorted histogram counts to a MarkDown
-        string. See also https://en.wikipedia.org/wiki/Markdown for more
-        information.
+        string. See also https://en.wikipedia.org/wiki/Markdown .
         :param desc: Include description.
         :type desc: bool
         :param reverse: Reverse the counts, starting with the highest first.
@@ -223,7 +216,7 @@ class Histogram():
 
     def to_jsonstring(self, desc=True, reverse=True, unicode=True, multi=True):
         '''Write the description and sorted histogram counts to a JSON string.
-        See also https://en.wikipedia.org/wiki/JSON for more information.
+        See also https://en.wikipedia.org/wiki/JSON .
         :param desc: Include description.
         :type desc: bool
         :param reverse: Reverse the counts, starting with the highest first.
@@ -345,4 +338,5 @@ class Histogram():
         plt.plot(f'"{datafilename}" using 1:xtic(2) linecolor 8')
 
 # pylint:enable=too-many-arguments
+
 # pylint:enable=unspecified-encoding

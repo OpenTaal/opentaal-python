@@ -28,6 +28,9 @@ setup(
     include_package_data=True,
     test_suite='tests',
     install_requires=[
+        'hunspell',
+        'nltk',
+        'uniseg',
         'py-gnuplot',
     ],
     keywords='histogram unicode sort Dutch',

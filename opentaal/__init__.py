@@ -1,13 +1,15 @@
-__author__ = 'OpenTaal'
-__license__ = 'MIT'
-__url__ = 'https://github.com/opentaal/opentaal-histogram'
-
 __all__ = [
     'Character',
-    'Sort',
+    'Checker',
     'Histogram',
+    'Tokenizer',
+    'Sort',
+    'Wordlist',
 ]
 
 from .character import Character
-from .sort import Sort
+from .checker import Checker
 from .histogram import Histogram
+from .sort import Sort
+from .tokenizer import Tokenizer
+from .wordlist import Wordlist
