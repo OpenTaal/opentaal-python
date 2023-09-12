@@ -7,7 +7,7 @@
 
 # OpenTaal Python
 
-Python package by OpenTaal for processing Dutch texts.
+Python package by OpenTaal for quickly processing Dutch texts.
 
 ![logo Stichting OpenTaal](images/logo-shape-trans-640x360.png?raw=true)
 
@@ -19,7 +19,7 @@ Install the following packages for usage
 
 Install the following packages for development
 
-    pip install -U twine pytest-cov
+    pip install -U twine pytest-cov sphinx-autodoc-typehints mock
 
 Run unit tests verbose
 

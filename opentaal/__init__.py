@@ -3,13 +3,13 @@ __all__ = [
     'Checker',
     'Histogram',
     'Tokenizer',
-    'Sort',
+    'Sorter',
     'Wordlist',
 ]
 
 from .character import Character
 from .checker import Checker
 from .histogram import Histogram
-from .sort import Sort
+from .sorter import Sorter
 from .tokenizer import Tokenizer
 from .wordlist import Wordlist

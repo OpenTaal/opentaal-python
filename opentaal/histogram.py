@@ -2,6 +2,7 @@
 
 from operator import itemgetter
 from sys import maxsize
+from unicodedata import category
 
 from opentaal import Character
 from pygnuplot import gnuplot
@@ -13,16 +14,13 @@ class Histogram():
     https://en.wikipedia.org/wiki/Histogram .'''
 
     @staticmethod
-    def print_friendly(char):#, markdown=False
+    def print_friendly(char: str) -> str:#, markdown=False
         '''Make character print friendly. See also
         https://en.wikipedia.org/wiki/Whitespace_character and
         https://en.wikipedia.org/wiki/Non-breaking_space .
+
         :param char: The character to make print friendly.
-        :type char: str
-        :param markdown: For use in MarkDown table.
-        :type makrdown: bool
-        :return: Print friendly version of the supplied character.
-        :rtype: str'''
+        :return: Print friendly version of the supplied character.'''
         if char == '\t': # tab character
             return '↹'
         if char == '\n': # return character
@@ -53,14 +51,12 @@ class Histogram():
 
         return char
 
-    def __init__(self, desc, filename=None):
+    def __init__(self, desc: str, filename: str=None):
         '''Construct object and set its description.
+
         :param desc: Description of the histogram.
-        :type desc: str
         :param desc: Filename of text file to process.
-        :type desc: str
-        :return: Constructed object.
-        :rtype: Histogram'''
+        :return: Constructed object.'''
         self.desc = desc
         self.data = {}
         self.max = 0
@@ -70,28 +66,27 @@ class Histogram():
                     for char in line[:-1]:
                         self.add(char)
 
-    def size(self):
+    def size(self) -> int:
         '''Return the number of unique values, also known as bins.'''
         return len(self.data)
 
-    def get(self, value):
+    def get(self, value) -> int:
         '''Return the TODO number of unique values, also known as bins.
+
         :param desc: TODOFilename of text file to process.
-        :type desc: str
-        :return: TODOConstructed object.
-        :rtype: int'''
+        :return: TODOConstructed object.'''
         if value in self.data:
             return self.data[value]
         return 0
 
-    def maximum(self):
+    def maximum(self) -> int:
         '''Return the maximum count.'''
         return self.max
 
     def add(self, value):
         '''Add a value by increasing its count in the histogram.
-        :param value: The value to increase its count of by one.
-        :type desc: object'''
+
+        :param value: The value to increase its count of by one.'''
         if value in self.data:
             self.data[value] += 1
         else:
@@ -101,46 +96,40 @@ class Histogram():
 
 # pylint:disable=too-many-arguments
 
-    def to_string(self, desc=True, head=True, reverse=True, unicode=True, abbrev=True, multi=True):
+    def to_string(self, desc=True, head=True, reverse=True, unicode=True, abbrev=True, multi=True) -> str:
         '''Write the description and sorted histogram counts to a string.
+
         :param desc: Include description.
-        :type desc: bool
         :param head: Include header.
-        :type head: bool
         :param reverse: Reverse the counts, starting with the highest first.
-        :type reverse: bool
-        :return: The description and histogram.
-        :rtype: str'''
+        :return: The description and histogram.'''
         return self.to_tsvstring(desc=desc, head=head, reverse=reverse,
                                  unicode=unicode, abbrev=abbrev, multi=multi)[0]
 
 # pylint:disable=too-many-branches
-    def to_tsvstring(self, desc=True, head=True, reverse=True, unicode=True,
-                     abbrev=True, multi=True):
+    def to_tsvstring(self, desc: bool=True, head: bool=True, reverse: bool=True, unicode: bool=True,
+                     abbrev: bool=True, multi: bool=True) -> str:
         '''Write the description and sorted histogram counts to a tab-separated
         string. See also https://en.wikipedia.org/wiki/Tab-separated_values .
+
         :param desc: Include description.
-        :type desc: bool
         :param head: Include header.
-        :type head: bool
         :param reverse: Reverse the counts, starting with the highest first.
-        :type reverse: bool
-        :return: The description and histogram.
-        :rtype: str'''
+        :return: The description and histogram.'''
         if len(self.data) == 0:
             raise ValueError(f'Cannot process "{self.desc}" because no values'
                              ' have been added.')
-        tmp = ''
+        res = ''
         if desc:
-            tmp = f'{self.desc}\n'
+            res = f'{self.desc}\n'
         if head:
             if unicode:
                 if abbrev:
-                    tmp = f'{tmp}count\tchar.\tcodep.\tcateg.\tdescription\n'
+                    res = f'{res}count\tchar.\tcodep.\tcateg.\tdescription\n'
                 else:
-                    tmp = f'{tmp}count\tcharacter\tcodepoint\tcategory\tdescription\n'
+                    res = f'{res}count\tcharacter\tcodepoint\tcategory\tdescription\n'
             else:
-                tmp = f'{tmp}count\tvalue\n'
+                res = f'{res}count\tvalue\n'
         minimum = maxsize
         if self.maximum() >= 10000000:
             raise ValueError('Unable to pad more than seven spaces at the'
@@ -150,107 +139,103 @@ class Histogram():
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
-                cat = Character.get_cat(value)
+                cat = category(value)
                 if multi:
-                    tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}' \
+                    res = f'{res}{count: >7}\t{self.print_friendly(value)}' \
                           f'\t{Character.to_hex(value)}' \
-                          f'\t{Character.decode_category(code=cat,abbrev=abbrev)}\t{name}\n'
+                          f'\t{Character.decode_category(cat=cat,abbrev=abbrev)}\t{name}\n'
                 else:
-                    tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}' \
+                    res = f'{res}{count: >7}\t{self.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
-                          f' {Character.decode_category(code=cat,abbrev=abbrev)} {name}\n'
+                          f' {Character.decode_category(cat=cat,abbrev=abbrev)} {name}\n'
                 # perhaps hex(ord(value))
                 # right align
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 if count < minimum:
                     minimum = count
-                tmp = f'{tmp}{count: >7}\t{self.print_friendly(value)}\n'
-        return tmp, minimum, self.maximum
+                res = f'{res}{count: >7}\t{self.print_friendly(value)}\n'
+        return res, minimum, self.maximum
 
-    def to_mdstring(self, desc=True, reverse=True, unicode=True, multi=True):
+    def to_mdstring(self, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True) -> str:
         '''Write the description and sorted histogram counts to a MarkDown
         string. See also https://en.wikipedia.org/wiki/Markdown .
+
         :param desc: Include description.
-        :type desc: bool
         :param reverse: Reverse the counts, starting with the highest first.
-        :type reverse: bool
-        :return: The description and histogram.
-        :rtype: str'''
+        :return: The description and histogram.'''
         if len(self.data) == 0:
             raise ValueError(f'Cannot process "{self.desc}" because no values'
                              ' have been added.')
-        tmp = ''
+        res = ''
         if desc:
-            tmp = f'{self.desc}\n\n'
+            res = f'{self.desc}\n\n'
         if unicode:
             if multi:
-                tmp = f'{tmp}count | character | codepoint | categegory | description\n'
-                tmp = f'{tmp}--: | --- | --: | --- | ---\n'
+                res = f'{res}count | character | codepoint | categegory | description\n'
+                res = f'{res}--: | --- | --: | --- | ---\n'
             else:
-                tmp = f'{tmp}count | character, codepoint, categegory and description\n'
-                tmp = f'{tmp}--: | ---\n'
+                res = f'{res}count | character, codepoint, categegory and description\n'
+                res = f'{res}--: | ---\n'
         else:
-            tmp = f'{tmp}count | value\n'
-            tmp = f'{tmp}--: | ---\n'
+            res = f'{res}count | value\n'
+            res = f'{res}--: | ---\n'
         if unicode:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 name = Character.get_name(value)
-                cat = Character.get_cat(value)
+                cat = category(value)
                 if multi:
-                    tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`' \
+                    res = f'{res}`{count}` | `{self.print_friendly(value)}`' \
                           f' | `{Character.to_hex(value)}`' \
-                          f' | {Character.decode_category(code=cat, abbrev=False)}' \
+                          f' | {Character.decode_category(cat=cat, abbrev=False)}' \
                           f' | {name}\n'
                 else:
-                    tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`' \
+                    res = f'{res}`{count}` | `{self.print_friendly(value)}`' \
                           f' `{Character.to_hex(value)}`' \
-                          f' {Character.decode_category(code=cat, abbrev=False)}' \
+                          f' {Character.decode_category(cat=cat, abbrev=False)}' \
                           f' {name}\n'
                 # perhaps hex(ord(value))
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
-                tmp = f'{tmp}`{count}` | `{self.print_friendly(value)}`\n'
-        return tmp
+                res = f'{res}`{count}` | `{self.print_friendly(value)}`\n'
+        return res
 # pylint:enable=too-many-branches
 
-    def to_jsonstring(self, desc=True, reverse=True, unicode=True, multi=True):
+    def to_jsonstring(self, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True) -> str:
         '''Write the description and sorted histogram counts to a JSON string.
         See also https://en.wikipedia.org/wiki/JSON .
+
         :param desc: Include description.
-        :type desc: bool
         :param reverse: Reverse the counts, starting with the highest first.
-        :type reverse: bool
-        :return: The description and histogram.
-        :rtype: str'''
+        :return: The description and histogram.'''
         if len(self.data) == 0:
             raise ValueError(f'Cannot process "{self.desc}" because no values'
                              ' have been added.')
-        tmp = '{\n'
+        res = '{\n'
         if desc:
-            tmp = f'{tmp}  "description": "{self.desc}",\n'
-        tmp = f'{tmp}  "data": [\n'
+            res = f'{res}  "description": "{self.desc}",\n'
+        res = f'{res}  "data": [\n'
         minimum = maxsize
         if unicode:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
-                cat = Character.get_cat(value)
+                cat = category(value)
                 if multi:
-                    tmp = f'{tmp}    {{\n' \
+                    res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{self.print_friendly(value)}",\n' \
                           f'      "codepoint": "{Character.to_hex(value)}",\n' \
-                          f'      "category": "{Character.decode_category(code=cat, abbrev=False)}",\n' \
+                          f'      "category": "{Character.decode_category(cat=cat, abbrev=False)}",\n' \
                           f'      "description": "{name}"\n' \
                           '    },\n'
                 else:
-                    tmp = f'{tmp}    {{\n' \
+                    res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{self.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
-                          f' {Character.decode_category(code=cat, abbrev=False)}' \
+                          f' {Character.decode_category(cat=cat, abbrev=False)}' \
                           f' {name}"\n' \
                           '    },\n'
                 # perhaps hex(ord(value))
@@ -258,62 +243,58 @@ class Histogram():
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 if count < minimum:
                     minimum = count
-                tmp = f'{tmp}    {{\n' \
+                res = f'{res}    {{\n' \
                       f'      "count": {count},\n' \
                       f'      "value": "{self.print_friendly(value)}"\n' \
                       '    },\n'
-        tmp = f'{tmp[:-2]}\n'
-        tmp = f'{tmp}  ],\n'
-        tmp = f'{tmp}  "unique": {len(self.data)},\n'
-        tmp = f'{tmp}  "minimum": {minimum},\n'
-        tmp = f'{tmp}  "maximum": {self.maximum}\n'
-        tmp = f'{tmp}}}\n'
-        return tmp
+        res = f'{res[:-2]}\n'
+        res = f'{res}  ],\n'
+        res = f'{res}  "unique": {len(self.data)},\n'
+        res = f'{res}  "minimum": {minimum},\n'
+        res = f'{res}  "maximum": {self.maximum}\n'
+        res = f'{res}}}\n'
+        return res
 
-    def to_tsvfile(self, filename, head=True, reverse=True, unicode=True, multi=True):
+    def to_tsvfile(self, filename: str, head: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True):
         '''Write the description and sorted histogram to an SVG file.
-        :param filename: The filename to write to.
-        :type filename: str'''
+
+        :param filename: The filename to write to.'''
         res = self.to_tsvstring(desc=False, head=head, reverse=reverse,
                                 unicode=unicode, multi=multi)
         with open(filename, 'w') as file:
             file.write(res[0])
         return res[1:]
 
-    def to_mdfile(self, filename, desc=True, reverse=True, unicode=True, multi=True):
+    def to_mdfile(self, filename: str, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True):
         '''Write the description and sorted histogram to a MarkDown file.
-        :param filename: The filename to write to.
-        :type filename: str'''
+
+        :param filename: The filename to write to.'''
         with open(filename, 'w') as file:
             file.write(self.to_mdstring(desc=desc, reverse=reverse,
                                         unicode=unicode, multi=multi))
 
-    def to_jsonfile(self, filename, desc=True, reverse=True, unicode=True, multi=True):
+    def to_jsonfile(self, filename: str, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True):
         '''Write the description and sorted histogram to a JSON file.
-        :param filename: The filename to write to.
-        :type filename: str'''
+
+        :param filename: The filename to write to.'''
         with open(filename, 'w') as file:
             file.write(self.to_jsonstring(desc=desc, reverse=reverse,
                                           unicode=unicode, multi=multi))
 
-    def to_graphfile(self, filename, reverse=True, unicode=True, pattern=True,
-                 width=1920, height=1080, font='Roboto Slab', term='png'):
+    def to_graphfile(self, filename: str, reverse: bool=True, unicode: bool=True, pattern: bool=True,
+                 width: int=1920, height: int=1080, font: str='Roboto Slab', term: str='png'):
         #TODO transparent background
         #TODO y axis from 0 as option def
         #TODO xlabel angle
         '''Write the description and sorted histogram as a graph to a PNG or
         SVG file. Note: for an optimal result, run e.g. optipng or scour on the
         result.
+
         :param filename: The filename to write to.
-        :type filename: str
         :param filename: The image width.
-        :type filename: int
         :param filename: The image height.
-        :type filename: int
         :param filename: The font to use.
-        :type filename: str
-        :param term: The Gnuplot terminal to use such as 'png' and 'svg'.
-        :type filename: str'''
+        :param term: The Gnuplot terminal to use such as 'png' and 'svg'.'''
         #TODO refactor with gnnuplot columns
         datafilename = f'{filename}.tsv' #TODO random string + unlink or inline
         res = self.to_tsvfile(datafilename, head=False, reverse=reverse,

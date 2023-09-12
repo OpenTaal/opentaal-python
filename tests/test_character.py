@@ -1,27 +1,26 @@
 '''Test class Character.'''
 
-from pytest import raises
+from unicodedata import category
 
 from opentaal import Character
+from pytest import raises
 
 # pylint:disable=missing-function-docstring
 
 def test_get_name():
     assert Character.get_name('a') == 'LATIN SMALL LETTER A'
-
-def test_get_cat():
-    assert Character.get_cat('b') == 'Ll'
+    assert Character.get_name('a', pretty=True) == 'Latin small letter a'
 
 def test_decode():
     assert Character.decode_category('C') == 'control'
-    assert Character.decode_category('L') == 'letter'
+    assert Character.decode_category(category('a')) == 'letter'
     assert Character.decode_category('M') == 'mark'
-    assert Character.decode_category('N') == 'number'
-    assert Character.decode_category('P') == 'punct.'
-    assert Character.decode_category('P', abbrev=False) == 'punctuation'
-    assert Character.decode_category('S') == 'symbol'
-    assert Character.decode_category('Z') == 'whites.'
-    assert Character.decode_category('Z', abbrev=False) == 'whitespace'
+    assert Character.decode_category(category('2')) == 'number'
+    assert Character.decode_category(category(',')) == 'punct.'
+    assert Character.decode_category(category(','), abbrev=False) == 'punctuation'
+    assert Character.decode_category(category('€')) == 'symbol'
+    assert Character.decode_category(category(' ')) == 'whites.'
+    assert Character.decode_category(category(' '), abbrev=False) == 'whitespace'
     with raises(ValueError, match='Unsupported Unicode category code Xx'):
         assert Character.decode_category('Xx')
 

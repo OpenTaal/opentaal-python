@@ -1,8 +1,7 @@
 '''Test class Checker.'''
 
-from pytest import fixture
-
 from opentaal import Checker, Tokenizer, Wordlist
+from pytest import fixture
 
 # pylint:disable=missing-function-docstring
 
@@ -12,7 +11,7 @@ def checker():
 
 @fixture
 def list_words():
-    return Tokenizer.tokenize_paragraph_to_words('D tafel geod, wow? Ja!')
+    return Tokenizer.paragraph_to_words('D tafel geod, wow? Ja!')
 
 @fixture
 def wordparts():
@@ -39,8 +38,8 @@ def test_spelling_list(checker, list_words, wordparts):
     assert checker.check_list(wordparts) != [False, ]
 
 def test_spelling_list_index(checker, list_words, wordparts):
-    assert checker.check_list_index(list_words) == {2, }
-    assert checker.check_list_index(wordparts) != {2, }
+    assert checker.check_list_index(list_words) == {2}
+    assert checker.check_list_index(wordparts) != {2}
 
 # pylint:enable=redefined-outer-name
 

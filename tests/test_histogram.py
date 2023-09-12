@@ -1,9 +1,9 @@
 '''Test class Histogram.'''
 
 from random import randint, seed
-from pytest import fixture, raises
 
 from opentaal import Histogram
+from pytest import fixture, raises
 
 # pylint:disable=missing-function-docstring
 
