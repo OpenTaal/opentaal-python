@@ -15,23 +15,46 @@ Python package by OpenTaal for quickly processing Dutch texts.
 
 Install the following packages for usage
 
-    pip install -U hunspell nltk uniseg py_gnuplot
+    sudo apt-get -y install libexttextcat-dev
+    pip install -U hunspell py_gnuplot python-ucto
+    python3 -c "import ucto; ucto.installdata()"
 
 Install the following packages for development
 
-    pip install -U twine pytest-cov sphinx-autodoc-typehints mock
+    pip install -U twine pytest-cov sphinx-autodoc-typehints mock snakeviz
 
-Run unit tests verbose
+## Unit tests
 
-    pytest -v
+Run unit tests with
 
-Run unit tests with print output
+    pytest
 
-    pytest -s
+Noting the following options
 
-Run unit test with code coverage reporting in HTML
+    -v verbose
+    -s show output print statements
+    --durations=10 show 10 slowest methods
+
+## Code coverage
+
+Run unit tests with code coverage and view report in HTML
 
     pytest --cov=opentaal --cov-branch --cov-report=html
     browse htmlcov/index.html
+
+## Profiling
+
+Profile unit tests and view report in HTML
+
+    python3 -m cProfile -o pytest.prof -m pytest
+    snakeviz pytest.prof
+
+## API documentation
+
+Generate API documentation and view it in HTML with
+
+    cd docs
+    make html
+    browse _build/html/index.html
 
 Donating is also possible with <noscript><a href="https://liberapay.com/opentaal/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>

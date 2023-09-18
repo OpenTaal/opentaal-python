@@ -7,8 +7,10 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'OpenTaal Python'
-copyright = '2023, <a href="https://opentaal.org">Stichting OpenTaal</a>'
-author = 'OpenTaal'
+copyright = '<a href="https://opentaal.org">Stichting OpenTaal</a>'
+#author = 'Stichting OpenTaal'
+version = '0.1'
+release = '0.1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -22,7 +24,6 @@ MOCK_MODULES = ['opentaal', 'nltk', 'nltk.tokenize', ]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
-#, "sphinx_autodoc_typehints"
 extensions = ["sphinx.ext.autodoc"]
 autodoc_typehints = "description"
 
@@ -32,5 +33,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+#html_theme = 'alabaster'
 html_static_path = ['_static']
+html_title = 'for quickly processing Dutch texts'
+html_logo = 'logo.png'
+html_favicon = 'favicon.ico'
+

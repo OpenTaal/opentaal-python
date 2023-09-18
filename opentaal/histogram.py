@@ -13,44 +13,6 @@ class Histogram():
     '''Class for creating histograms. See also
     https://en.wikipedia.org/wiki/Histogram .'''
 
-    @staticmethod
-    def print_friendly(char: str) -> str:#, markdown=False
-        '''Make character print friendly. See also
-        https://en.wikipedia.org/wiki/Whitespace_character and
-        https://en.wikipedia.org/wiki/Non-breaking_space .
-
-        :param char: The character to make print friendly.
-        :return: Print friendly version of the supplied character.'''
-        if char == '\t': # tab character
-            return '↹'
-        if char == '\n': # return character
-            return '⏎'
-        if char == '': # soft hyphen character
-            return '-'
-        if char in (' ', # 0020 space character
-                    ' ', # 2007 figure space character
-                    ' ', # 2008 punctuation space character
-                    ' ', # 2009 thin space character
-                    ' ', # 200A hair space character
-                    ):
-            return '␣'
-        if char in (' ', # 00A0 no-break space character
-                    ' ', # 202F narrow no-break space character
-                    ):
-            return '⍽'
-        # if char == '': # zero width no-break space character
-            # return '␣'
-        # if char == ' ': # zero width non-joiner character
-        #     return ''
-        # if char == ' ': # zero width joiner character
-        #     return ''
-        #perhaps escape single quote or backslash or word joiner 2060
-        #for identified not implemented  raise ValueError('Unsuode {code}')
-        # if char == '|' and markdown:
-            # return '\\|' TODO perhaps not needed with `` around it
-
-        return char
-
     def __init__(self, desc: str, filename: str=None):
         '''Construct object and set its description.
 
@@ -141,11 +103,11 @@ class Histogram():
                 name = Character.get_name(value)
                 cat = category(value)
                 if multi:
-                    res = f'{res}{count: >7}\t{self.print_friendly(value)}' \
+                    res = f'{res}{count: >7}\t{Character.print_friendly(value)}' \
                           f'\t{Character.to_hex(value)}' \
                           f'\t{Character.decode_category(cat=cat,abbrev=abbrev)}\t{name}\n'
                 else:
-                    res = f'{res}{count: >7}\t{self.print_friendly(value)}' \
+                    res = f'{res}{count: >7}\t{Character.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
                           f' {Character.decode_category(cat=cat,abbrev=abbrev)} {name}\n'
                 # perhaps hex(ord(value))
@@ -154,7 +116,7 @@ class Histogram():
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
                 if count < minimum:
                     minimum = count
-                res = f'{res}{count: >7}\t{self.print_friendly(value)}\n'
+                res = f'{res}{count: >7}\t{Character.print_friendly(value)}\n'
         return res, minimum, self.maximum
 
     def to_mdstring(self, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True) -> str:
@@ -185,19 +147,19 @@ class Histogram():
                 name = Character.get_name(value)
                 cat = category(value)
                 if multi:
-                    res = f'{res}`{count}` | `{self.print_friendly(value)}`' \
+                    res = f'{res}`{count}` | `{Character.print_friendly(value)}`' \
                           f' | `{Character.to_hex(value)}`' \
                           f' | {Character.decode_category(cat=cat, abbrev=False)}' \
                           f' | {name}\n'
                 else:
-                    res = f'{res}`{count}` | `{self.print_friendly(value)}`' \
+                    res = f'{res}`{count}` | `{Character.print_friendly(value)}`' \
                           f' `{Character.to_hex(value)}`' \
                           f' {Character.decode_category(cat=cat, abbrev=False)}' \
                           f' {name}\n'
                 # perhaps hex(ord(value))
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
-                res = f'{res}`{count}` | `{self.print_friendly(value)}`\n'
+                res = f'{res}`{count}` | `{Character.print_friendly(value)}`\n'
         return res
 # pylint:enable=too-many-branches
 
@@ -225,7 +187,7 @@ class Histogram():
                 if multi:
                     res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
-                          f'      "value": "{self.print_friendly(value)}",\n' \
+                          f'      "value": "{Character.print_friendly(value)}",\n' \
                           f'      "codepoint": "{Character.to_hex(value)}",\n' \
                           f'      "category": "{Character.decode_category(cat=cat, abbrev=False)}",\n' \
                           f'      "description": "{name}"\n' \
@@ -233,7 +195,7 @@ class Histogram():
                 else:
                     res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
-                          f'      "value": "{self.print_friendly(value)}' \
+                          f'      "value": "{Character.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
                           f' {Character.decode_category(cat=cat, abbrev=False)}' \
                           f' {name}"\n' \
@@ -245,7 +207,7 @@ class Histogram():
                     minimum = count
                 res = f'{res}    {{\n' \
                       f'      "count": {count},\n' \
-                      f'      "value": "{self.print_friendly(value)}"\n' \
+                      f'      "value": "{Character.print_friendly(value)}"\n' \
                       '    },\n'
         res = f'{res[:-2]}\n'
         res = f'{res}  ],\n'

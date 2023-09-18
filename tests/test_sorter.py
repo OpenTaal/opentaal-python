@@ -1,7 +1,8 @@
 '''Test class Sort.'''
 
-from opentaal import Sorter
 from pytest import fixture, raises
+
+from opentaal import Sorter
 
 # pylint:disable=missing-function-docstring
 

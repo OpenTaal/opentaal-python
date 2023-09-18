@@ -1,23 +1,11 @@
 '''Test class Histogram.'''
 
 from random import randint, seed
-
-from opentaal import Histogram
 from pytest import fixture, raises
 
-# pylint:disable=missing-function-docstring
+from opentaal import Histogram
 
-def test_print_friendly():
-    assert Histogram.print_friendly('\t') == '↹'
-    assert Histogram.print_friendly('\n') == '⏎'
-    assert Histogram.print_friendly('') == '-'
-    assert Histogram.print_friendly(' ') == '␣'
-    assert Histogram.print_friendly(' ') == '␣'
-    assert Histogram.print_friendly(' ') == '␣'
-    assert Histogram.print_friendly(' ') == '␣'
-    assert Histogram.print_friendly(' ') == '␣'
-    # assert Histogram.print_friendly(' ') == '⍽'
-    assert Histogram.print_friendly(' ') == '⍽'
+# pylint:disable=missing-function-docstring
 
 @fixture
 def empty():

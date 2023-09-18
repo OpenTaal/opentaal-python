@@ -56,6 +56,17 @@ class Character():
         return False
 
     @staticmethod
+    def is_letternumeral(cat: str) -> bool:
+        '''Test if a Unicode category from unicode.category() code relates to a letter or a numeral.
+
+        :param cat: The two-character category code.
+        :return: True is the category relates to a letter or numeral.'''
+        #TODO https://docs.python.org/3/library/stdtypes.html#str.isalpha
+        if cat in ('LC', 'Ll', 'Lo', 'Lu', 'Nd'): # excluding Lm: Letter. Modifier
+            return True
+        return False
+
+    @staticmethod
     def to_hex(character: str, prefix: bool=True, upper:bool=True) -> str:
         '''Convert Unicode character to its hexidecimal representation.
 
@@ -67,5 +78,86 @@ class Character():
         if prefix:
             tmp = f'U+{tmp}'
         return tmp
+
+    @staticmethod
+    def print_friendly(char: str) -> str:#, markdown=False
+        '''Make character print friendly. See also
+        https://en.wikipedia.org/wiki/Whitespace_character and
+        https://en.wikipedia.org/wiki/Non-breaking_space .
+
+        :param char: The character to make print friendly.
+        :return: Print friendly version of the supplied character.'''
+        if char == '\t': # tab character
+            return '↹'
+        if char == '\n': # return character
+            return '⏎'
+        if char == '': # soft hyphen character
+            return '-'
+        if char in (' ', # 0020 space character
+                    ' ', # 2007 figure space character
+                    ' ', # 2008 punctuation space character
+                    ' ', # 2009 thin space character
+                    ' ', # 200A hair space character
+                    ):
+            return '␣'
+        if char in (' ', # 00A0 no-break space character
+                    ' ', # 202F narrow no-break space character
+                    ):
+            return '⍽'
+        # if char == '': # zero width no-break space character
+            # return '␣'
+        # if char == ' ': # zero width non-joiner character
+        #     return ''
+        # if char == ' ': # zero width joiner character
+        #     return ''
+        #perhaps escape single quote or backslash or word joiner 2060
+        #for identified not implemented  raise ValueError('Unsuode {code}')
+        # if char == '|' and markdown:
+            # return '\\|' TODO perhaps not needed with `` around it
+
+        return char
+
+    @staticmethod
+    def print_friendly_string(text: str) -> str:#, markdown=False
+        '''Make string print friendly. See also
+        https://en.wikipedia.org/wiki/Whitespace_character and
+        https://en.wikipedia.org/wiki/Non-breaking_space .
+
+        :param text: The string to make print friendly.
+        :return: Print friendly version of the supplied string.'''
+        replacements = {
+            '\t': '↹',
+            '\n': '⏎',
+            ' ': '␣',
+            }
+        for src, dst in replacements.items():
+            text = text.replace(src, dst)
+    
+        # if char == '': # soft hyphen character
+            # return '-'
+                    # ' ', # 2007 figure space character
+                    # ' ', # 2008 punctuation space character
+                    # ' ', # 2009 thin space character
+                    # ' ', # 200A hair space character
+                    # ):
+            # return '␣'
+        # if char in (' ', # 00A0 no-break space character
+                    # ' ', # 202F narrow no-break space character
+                    # ):
+            # return '⍽'
+        # if char == '': # zero width no-break space character
+            # return '␣'
+        # if char == ' ': # zero width non-joiner character
+        #     return ''
+        # if char == ' ': # zero width joiner character
+        #     return ''
+        #perhaps escape single quote or backslash or word joiner 2060
+        #for identified not implemented  raise ValueError('Unsuode {code}')
+        # if char == '|' and markdown:
+            # return '\\|' TODO perhaps not needed with `` around it
+
+        return text
+
+
 
 #TODO localized upper and lower e.g. IJsselmeer

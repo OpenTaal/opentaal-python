@@ -1,7 +1,9 @@
-Welcome to OpenTaal Python's documentation!
-===========================================
+OpenTaal Python documentation
+=============================
 
 Python package by OpenTaal for quickly processing Dutch texts.
+
+For example usage, please see the unit tests in the :code:`tests` directory.
 
 .. toctree::
    :maxdepth: 3
@@ -20,3 +22,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+

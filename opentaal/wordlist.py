@@ -1,5 +1,8 @@
 '''Blah blah.'''
 
+
+from os.path import join
+from pathlib import Path
 from urllib.request import urlopen
 
 class Wordlist():  # pylint:disable=too-many-public-methods
@@ -7,14 +10,41 @@ class Wordlist():  # pylint:disable=too-many-public-methods
     https://github.com/OpenTaal/opentaal-wordlist .'''
 
     @staticmethod
-    def file_to_string(filename: str) -> str:
+    def config_path():
+        '''Return path to configuration directory ~/.config/opentaal and create
+        that directory if it doesn't exist yet.'''
+        path = join(Path.home(), '.config', 'opentaal')
+        Path(path).mkdir(parents=True, exist_ok=True)
+        return path
+
+# pylint:disable=unspecified-encoding
+
+    @staticmethod
+    def url_to_string(filename: str, cache: bool = True) -> str:
         '''Read text file to string.
 
         :param filename: Filename to load, possibly with directory prefix.
+        :param cache: Cache the downloaded file.
         :return: String with content of text file.'''
-        with urlopen('https://raw.githubusercontent.com/OpenTaal/'
-                     f'opentaal-wordlist/master/{filename}') as res:
-            return res.read().decode('utf-8')
+        # TODO uncached should update cache?!
+        if cache:
+            leaf = filename.split('/')[-1]
+            path = join(Wordlist.config_path(), leaf)
+            try:
+                with open(path) as file:
+                    return file.read()
+            except FileNotFoundError:  # pragma: no cover
+                with urlopen('https://raw.githubusercontent.com/OpenTaal/'
+                             f'opentaal-wordlist/master/{filename}') as url, \
+                    open(path, 'w') as file:
+                    res = url.read().decode('utf-8')
+                    file.write(res)
+                    return res
+        with urlopen('https://raw.githubusercontent.com/OpenTaal/'  # pragma: no cover
+                     f'opentaal-wordlist/master/{filename}') as url:
+            return url.read().decode('utf-8')  # pragma: no cover
+
+# pylint:enable=unspecified-encoding
 
     @staticmethod
     def string_to_list(string: str) -> list:
@@ -38,7 +68,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def tsvstring_to_list(tsvstring: str, both: bool=True, split: bool=True) -> list:
+    def tsvstring_to_list(tsvstring: str, both: bool = True, split: bool = True) -> list:
         '''Convert TODO.'''
         res = []
         if both:
@@ -54,7 +84,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def tsvstring_to_set(tsvstring: str, both: bool=True, split: bool=True) -> set:
+    def tsvstring_to_set(tsvstring: str, both: bool = True, split: bool = True) -> set:
         '''Convert TODO.'''
         res = set()
         if both:
@@ -81,106 +111,110 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def get_wordparts() -> str:
+    def get_wordparts(cache: bool=True) -> str:
         '''Retrieve TODO. TSV'''
-        return Wordlist.file_to_string('elements/wordparts.tsv')
+        return Wordlist.url_to_string('elements/wordparts.tsv', cache=cache)
 
     @staticmethod
-    def get_wordparts_list(both=True, split=True) -> list:
+    def get_wordparts_list(both=True, split=True, cache: bool=True) -> list:
         '''Retrieve TODO. TSV'''
-        return Wordlist.tsvstring_to_list(Wordlist.get_wordparts(), both=both, split=split)
+        return Wordlist.tsvstring_to_list(Wordlist.get_wordparts(cache=cache),
+                                          both=both, split=split)
 
     @staticmethod
-    def get_wordparts_set(both=True, split=True) -> set:
+    def get_wordparts_set(both=True, split=True, cache: bool=True) -> set:
         '''Retrieve TODO. TSV'''
-        return Wordlist.tsvstring_to_set(Wordlist.get_wordparts(), both=both, split=split)
+        return Wordlist.tsvstring_to_set(Wordlist.get_wordparts(cache=cache),
+                                         both=both, split=split)
 
     @staticmethod
-    def get_wordparts_dict() -> dict:
+    def get_wordparts_dict(cache: bool=True) -> dict:
         '''Retrieve TODO. TSV'''
-        return Wordlist.tsvstring_to_dict(Wordlist.get_wordparts())
+        return Wordlist.tsvstring_to_dict(Wordlist.get_wordparts(cache=cache))
 
     @staticmethod
-    def get_corrections() -> str:  # pragma: no cover
+    def get_corrections(cache: bool=True) -> str:
         '''Retrieve TODO. TSV'''
-        return Wordlist.file_to_string('elements/corrections.tsv')
+        return Wordlist.url_to_string('elements/corrections.tsv', cache=cache)
 
     @staticmethod
-    def get_corrections_list(both=True, split=True) -> list:  # pragma: no cover
+    def get_corrections_list(both=True, split=True, cache: bool=True) -> list:
         '''Retrieve TODO. TSV'''
-        return Wordlist.tsvstring_to_list(Wordlist.get_corrections(), both=both, split=split)
+        return Wordlist.tsvstring_to_list(Wordlist.get_corrections(cache=cache),
+                                          both=both, split=split)
 
     @staticmethod
-    def get_corrections_set(both=True, split=True) -> set:  # pragma: no cover
+    def get_corrections_set(both=True, split=True, cache: bool=True) -> set:
         '''Retrieve TODO. TSV'''
-        return Wordlist.tsvstring_to_set(Wordlist.get_corrections(), both=both, split=split)
+        return Wordlist.tsvstring_to_set(Wordlist.get_corrections(cache=cache),
+                                         both=both, split=split)
 
     @staticmethod
-    def get_corrections_dict() -> dict:  # pragma: no cover
+    def get_corrections_dict(cache: bool=True) -> dict:
         '''Retrieve TODO. TSV'''
-        return Wordlist.tsvstring_to_dict(Wordlist.get_corrections())
+        return Wordlist.tsvstring_to_dict(Wordlist.get_corrections(cache=cache))
 
     @staticmethod
-    def get_only_adverbs() -> str:
+    def get_only_adverbs(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('experimenteel/alleen-bijwoorden.txt')
+        return Wordlist.url_to_string('experimenteel/alleen-bijwoorden.txt', cache=cache)
 
     @staticmethod
-    def get_only_adverbs_list() -> str:
+    def get_only_adverbs_list(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.string_to_list(Wordlist.get_only_adverbs())
+        return Wordlist.string_to_list(Wordlist.get_only_adverbs(cache=cache))
 
     @staticmethod
-    def get_only_adverbs_set() -> str:
+    def get_only_adverbs_set(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.string_to_set(Wordlist.get_only_adverbs())
+        return Wordlist.string_to_set(Wordlist.get_only_adverbs(cache=cache))
 
     @staticmethod
-    def get_wordlist() -> str:  # pragma: no cover
+    def get_wordlist(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('wordlist.txt')
+        return Wordlist.url_to_string('wordlist.txt', cache=cache)
 
     @staticmethod
-    def get_roman_numbers() -> str:  # pragma: no cover
+    def get_roman_numbers(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('elements/romeinse-cijfers.txt')
+        return Wordlist.url_to_string('elements/romeinse-cijfers.txt', cache=cache)
 
     @staticmethod
-    def get_wordlist_ascii() -> str:  # pragma: no cover
+    def get_wordlist_ascii(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('elements/wordlist-ascii.txt')
+        return Wordlist.url_to_string('elements/wordlist-ascii.txt', cache=cache)
 
     @staticmethod
-    def get_wordlist_non_ascii() -> str:  # pragma: no cover
+    def get_wordlist_non_ascii(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('elements/wordlist-non-ascii.txt')
+        return Wordlist.url_to_string('elements/wordlist-non-ascii.txt', cache=cache)
 
     @staticmethod
-    def get_nouns_plural() -> str:  # pragma: no cover
+    def get_nouns_plural(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('experimenteel/nouns-meervouden.txt')
+        return Wordlist.url_to_string('experimenteel/nouns-meervouden.txt', cache=cache)
 
     @staticmethod
-    def get_adjectives_and_adverbs() -> str:  # pragma: no cover
+    def get_adjectives_and_adverbs(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('experimenteel/adjectieven-en-bijwoorden.txt')
+        return Wordlist.url_to_string('experimenteel/adjectieven-en-bijwoorden.txt', cache=cache)
 
     @staticmethod
-    def get_verbs_infinitive() -> str:  # pragma: no cover
+    def get_verbs_infinitive(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('experimenteel/werkwoorden-infinitief.txt')
+        return Wordlist.url_to_string('experimenteel/werkwoorden-infinitief.txt', cache=cache)
 
     @staticmethod
-    def get_base_words_certified() -> str:  # pragma: no cover
+    def get_base_words_certified(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('elements/basiswoorden-gekeurd.txt')
+        return Wordlist.url_to_string('elements/basiswoorden-gekeurd.txt', cache=cache)
 
     @staticmethod
-    def get_base_words_uncertified() -> str:  # pragma: no cover
+    def get_base_words_uncertified(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('elements/basiswoorden-ongekeurd.txt')
+        return Wordlist.url_to_string('elements/basiswoorden-ongekeurd.txt', cache=cache)
 
     @staticmethod
-    def get_flexions_uncertified() -> str:  # pragma: no cover
+    def get_flexions_uncertified(cache: bool=True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.file_to_string('flexies-ongekeurd.txt')
+        return Wordlist.url_to_string('elements/flexies-ongekeurd.txt', cache=cache)
