@@ -7,7 +7,7 @@
 
 # OpenTaal Python
 
-Python package by OpenTaal for quickly processing Dutch texts.
+Python package by OpenTaal for efficiently processing Dutch texts.
 
 ![logo Stichting OpenTaal](images/logo-shape-trans-640x360.png?raw=true)
 
@@ -16,7 +16,7 @@ Python package by OpenTaal for quickly processing Dutch texts.
 Install the following packages for usage
 
     sudo apt-get -y install libexttextcat-dev
-    pip install -U hunspell py_gnuplot python-ucto
+    pip install -U hunspell py_gnuplot python-ucto # nltk
     python3 -c "import ucto; ucto.installdata()"
 
 Install the following packages for development

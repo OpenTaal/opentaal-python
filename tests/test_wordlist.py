@@ -10,84 +10,107 @@ from opentaal import Wordlist
 def minimum():
     return 512
 
-def test_string_to_list():
-    assert Wordlist.string_to_list('aaa\nbbb\n') == ['aaa', 'bbb']
+def test_str_to_list():
+    assert Wordlist.str_to_list('aaa\nbbb\n') == ['aaa', 'bbb']
 
-def test_string_to_set():
+def test_str_to_set():
     exp = set()
     exp.add('aaa')
     exp.add('bbb')
-    assert Wordlist.string_to_set('aaa\nbbb\n') == exp
+    assert Wordlist.str_to_set('aaa\nbbb\n') == exp
 
-def test_tsvstring_to_list():
-    inp = 'word1\tvalue1\nword2\tvalue2\n'
-    exp1 = [('word1', 'value1'),
-            ('word2', 'value2')]
-    exp2 = ['word1', 'word2']
-    exp3 = set()
-    exp3.add('word1')
-    exp3.add('word2')
-    exp4 = {'word1': 'value1', 'word2': 'value2'}
-    assert Wordlist.tsvstring_to_list(inp) == exp1
-    assert Wordlist.tsvstring_to_list(inp, both=False) == exp2
-    assert Wordlist.tsvstring_to_set(inp, both=False) == exp3
-    assert Wordlist.tsvstring_to_dict(inp) == exp4
+def test_tsvstr_to_list():
+    tsvstr = 'word1\tvalues1\nword2\tvalues2\n'
+
+    list_both_split = [('word1', 'values1'),
+                       ('word2', 'values2')]
+    assert Wordlist.tsvstr_to_list(tsvstr) == list_both_split
+    list_both_nosplit = [('word1\tvalues1'),
+                         ('word2\tvalues2')]
+    assert Wordlist.tsvstr_to_list(tsvstr, split=False) == list_both_nosplit
+    list_noboth = ['word1', 'word2']
+    assert Wordlist.tsvstr_to_list(tsvstr, both=False) == list_noboth
+    
+    set_both_split = set()
+    set_both_split.add(('word1', 'values1'))
+    set_both_split.add(('word2', 'values2'))
+    assert Wordlist.tsvstr_to_set(tsvstr) == set_both_split
+    set_both_nosplit = set()
+    set_both_nosplit.add('word1\tvalues1')
+    set_both_nosplit.add('word2\tvalues2')
+    assert Wordlist.tsvstr_to_set(tsvstr, split=False) == set_both_nosplit
+    set_noboth = set()
+    set_noboth.add('word1')
+    set_noboth.add('word2')
+    assert Wordlist.tsvstr_to_set(tsvstr, both=False) == set_noboth
+    
+    dict_both_split = {'word1': 'values1', 'word2': 'values2'}
+    assert Wordlist.tsvstr_to_dict(tsvstr) == dict_both_split
 
 # pylint:disable=redefined-outer-name
 
-def test_get_wordparts(minimum):
-    assert len(Wordlist.get_wordparts()) > minimum
+def test_get_str_wordparts(minimum):
+    assert len(Wordlist.get_str_wordparts()) > minimum
 
-def test_get_wordparts_list(minimum):
-    assert len(Wordlist.get_wordparts_list()) > minimum
+def test_get_list_wordparts(minimum):
+    assert len(Wordlist.get_list_wordparts()) > minimum
 
-def test_get_wordparts_set(minimum):
-    assert len(Wordlist.get_wordparts_set()) > minimum
+def test_get_set_wordparts(minimum):
+    assert len(Wordlist.get_set_wordparts()) > minimum
 
-def test_get_wordparts_dict(minimum):
-    assert len(Wordlist.get_wordparts_dict()) > minimum
+def test_get_dict_wordparts(minimum):
+    assert len(Wordlist.get_dict_wordparts()) > minimum
 
-def test_get_corrections(minimum):
-    assert len(Wordlist.get_corrections()) > minimum
+def test_get_str_corrections(minimum):
+    assert len(Wordlist.get_str_corrections()) > minimum
 
-def test_get_only_adverbs(minimum):
-    assert len(Wordlist.get_only_adverbs()) > minimum
+def test_get_list_corrections(minimum):
+    assert len(Wordlist.get_list_corrections()) > minimum
 
-def test_get_only_adverbs_list(minimum):
-    assert len(Wordlist.get_only_adverbs_list()) > minimum
+def test_get_set_corrections(minimum):
+    assert len(Wordlist.get_set_corrections()) > minimum
 
-def test_get_only_adverbs_set(minimum):
-    assert len(Wordlist.get_only_adverbs_set()) > minimum
+def test_get_dict_corrections(minimum):
+    assert len(Wordlist.get_dict_corrections()) > minimum
 
-def test_get_wordlist(minimum):
-    assert len(Wordlist.get_wordlist()) > minimum
+def test_get_str_onlyadverbs(minimum):
+    assert len(Wordlist.get_str_onlyadverbs()) > minimum
 
-def test_get_roman_numbers(minimum):
-    assert len(Wordlist.get_roman_numbers()) > minimum
+def test_get_list_onlyadverbs(minimum):
+    assert len(Wordlist.get_list_onlyadverbs()) > minimum
 
-def test_get_wordlist_ascii(minimum):
-    assert len(Wordlist.get_wordlist_ascii()) > minimum
+def test_get_set_onlyadverbs(minimum):
+    assert len(Wordlist.get_set_onlyadverbs()) > minimum
 
-def test_get_wordlist_non_ascii(minimum):
-    assert len(Wordlist.get_wordlist_non_ascii()) > minimum
+def test_get_str_wordlist(minimum):
+    assert len(Wordlist.get_str_wordlist()) > minimum
 
-def test_get_nouns_plural(minimum):
-    assert len(Wordlist.get_nouns_plural()) > minimum
+def test_get_str_romannumbers(minimum):
+    assert len(Wordlist.get_str_romannumbers()) > minimum
 
-def test_get_adjectives_and_adverbs(minimum):
-    assert len(Wordlist.get_adjectives_and_adverbs()) > minimum
+def test_get_str_wordlistascii(minimum):
+    assert len(Wordlist.get_str_wordlistascii()) > minimum
 
-def test_get_verbs_infinitive(minimum):
-    assert len(Wordlist.get_verbs_infinitive()) > minimum
+def test_get_str_wordlistnonascii(minimum):
+    assert len(Wordlist.get_str_wordlistnonascii()) > minimum
 
-def test_get_base_words_certified(minimum):
-    assert len(Wordlist.get_base_words_certified()) > minimum
+def test_get_str_nounsplural(minimum):
+    assert len(Wordlist.get_str_nounsplural()) > minimum
 
-def test_get_base_words_uncertified(minimum):
-    assert len(Wordlist.get_base_words_uncertified()) > minimum
+def test_get_str_adjectivesandadverbs(minimum):
+    assert len(Wordlist.get_str_adjectivesandadverbs()) > minimum
 
-def test_get_flexions_uncertified(minimum):
-    assert len(Wordlist.get_flexions_uncertified()) > minimum
+def test_get_str_verbsinfinitive(minimum):
+    assert len(Wordlist.get_str_verbsinfinitive()) > minimum
+
+def test_get_str_basewordscertified(minimum):
+    assert len(Wordlist.get_str_basewordscertified()) > minimum
+
+def test_get_str_basewordsuncertified(minimum):
+    assert len(Wordlist.get_str_basewordsuncertified()) > minimum
+
+def test_get_str_flexionsuncertified(minimum):
+    assert len(Wordlist.get_str_flexionsuncertified()) > minimum
 
 # pylint:enable=redefined-outer-name
 

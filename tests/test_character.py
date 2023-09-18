@@ -46,6 +46,7 @@ def test_is_letternumeral():
     #TODO replace with standard lib method? Test and compare.
     assert Character.is_letternumeral(category('a')) is True
     assert Character.is_letternumeral(category('2')) is True
+    assert Character.is_letternumeral(category(',')) is False
 
 def test_print_friendly():
     assert Character.print_friendly('\t') == '↹'

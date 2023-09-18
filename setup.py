@@ -2,13 +2,13 @@
 OpenTaal Histogram
 ------------------
 
-Python package by OpenTaal for processing Dutch texts.
+Python package by OpenTaal for efficiently processing Dutch texts.
 '''
 from setuptools import setup
 
 setup(
     name='OpenTaal',
-    version='0.0.1',
+    version='0.1.0',
     url='https://github.com/opentaal/opentaal-python',
     project_urls={
         'Documentation': 'https://bootstrap-flask.readthedocs.io/en/stable/',
@@ -19,7 +19,7 @@ setup(
     license='MIT',
     author='OpenTaal',
     author_email='info@opentaal.org',
-    description='Python package for creating pythons with Unicode support.',
+    description='Python package for efficiently processing Dutch texts.',
     long_description=__doc__,
     long_description_content_type='text/markdown',
     platforms='any',
@@ -29,11 +29,11 @@ setup(
     test_suite='tests',
     install_requires=[
         'hunspell',
-        'nltk',
-        'uniseg',
+#        'nltk',
+        'python-ucto',
         'py-gnuplot',
     ],
-    keywords='histogram unicode sort Dutch',
+    keywords='Dutch histogram spelling Unicode sort',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Natural Language :: Dutch',
