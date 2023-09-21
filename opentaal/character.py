@@ -22,8 +22,7 @@ class Character():
         '''Decode Unicode category code from unicode.category().
 
         :param cat: The two-letter category code.
-        :param abbrev: Return abbreveated category name no longer than seven
-        charecters.
+        :param abbrev: Return abbreveated category seven characters or less.
         :return: The category name.'''
         first = cat[0]
         if first == 'C':

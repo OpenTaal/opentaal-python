@@ -11,10 +11,12 @@ For example usage, please see the unit tests in the :code:`tests` directory.
 
    character
    checker
+   database
    histogram
    sorter
    tokenizer
    wordlist
+   word
 
 Indices and tables
 ==================
