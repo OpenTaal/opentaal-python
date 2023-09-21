@@ -4,3 +4,4 @@
 __pycache__/
 /docs/_build/
 /pytest.prof
+/.spyproject/config/backups/

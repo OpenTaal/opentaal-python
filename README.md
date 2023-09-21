@@ -21,7 +21,7 @@ Install the following packages for usage
 
 Install the following packages for development
 
-    pip install -U flake8 twine pytest-cov sphinx-autodoc-typehints mock snakeviz
+    pip install -U flake8 twine pytest-cov sphinx-autodoc-typehints mock snakeviz spyder-unittest
 
 ## Code checking
 

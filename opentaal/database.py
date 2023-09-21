@@ -9,8 +9,8 @@ class Database():
 
 # pylint:disable=unspecified-encoding,consider-using-with
 
-    @classmethod
-    def credentials(zxcv: str = 'opentaal.cnf') -> dict:
+    @staticmethod
+    def credentials(filename: str) -> dict:
         '''Get database credentials from configuration file. The file format is
         supported by at least MySQL and MariaDB clients, in e.g. shell scripts,
         with --defaults-extra-file. See also:
@@ -19,16 +19,19 @@ class Database():
             - https://mariadb.com/kb/en/mariadbd-options/#-defaults-extra-file
             - https://mariadb.com/kb/en/configuring-mariadb-with-option-files/
         Search paths are in this order:
-            1. the current working direcotry
+            1. the current working directory
             2. /usr/local/etc/
+            3. absolute path
 
         :param filename: The filename of the configuration file.
         :return: A dictionary with the key values from the file.'''
-        print('xx', type(zxcv))
         try:
-            cnf = open(realpath(join(getcwd(), zxcv)))
+            cnf = open(realpath(join(getcwd(), filename)))
         except FileNotFoundError:
-            cnf = open(f'/usr/local/etc/{zxcv}')
+            try:
+                cnf = open(f'/usr/local/etc/{filename}')
+            except FileNotFoundError:
+                cnf = open(filename)
 
         res = {}
         in_client_group = False
@@ -40,7 +43,11 @@ class Database():
                 if line.startswith('['):
                     break
                 key, value = line.split('=')
-                res[key.strip()] = value.strip()[1:-1]
+                key = key.strip()
+                value = value.strip()
+                if value[0] == value[-1] and value[0] in ('"', "'"):
+                    value = value[1:-1]
+                res[key.strip()] = value
             else:
                 if line.startswith('[client]'):
                     in_client_group = True

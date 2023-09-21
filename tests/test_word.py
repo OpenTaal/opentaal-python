@@ -10,4 +10,8 @@ def test_checksum():
         '7f6dc331845e318a7e51ecec6243a6793e80c7d4cef84f2fc2867742167a4843'
 
 
+def test_synthesize():
+    Word.synthesize('tafelpoot')
+
+
 # pylint:enable=missing-function-docstring
