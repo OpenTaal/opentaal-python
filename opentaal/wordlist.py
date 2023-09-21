@@ -1,8 +1,9 @@
-'''Blah blah.'''
+'''Class definition for Wordlist.'''
 
 from os.path import join
 from pathlib import Path
 from urllib.request import urlopen
+
 
 class Wordlist():  # pylint:disable=too-many-public-methods
     '''Class for retrieving word lists. See also
@@ -35,7 +36,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
             except FileNotFoundError:  # pragma: no cover
                 with urlopen('https://raw.githubusercontent.com/OpenTaal/'
                              f'opentaal-wordlist/master/{filename}') as url, \
-                    open(path, 'w') as file:
+                        open(path, 'w') as file:
                     res = url.read().decode('utf-8')
                     file.write(res)
                     return res
@@ -67,7 +68,8 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def tsvstr_to_list(string: str, both: bool = True, split: bool = True) -> list:
+    def tsvstr_to_list(string: str, both: bool = True,
+                       split: bool = True) -> list:
         '''Convert TODO.'''
         res = []
         if both:
@@ -83,7 +85,8 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def tsvstr_to_set(string: str, both: bool = True, split: bool = True) -> set:
+    def tsvstr_to_set(string: str, both: bool = True,
+                      split: bool = True) -> set:
         '''Convert TODO.'''
         res = set()
         if both:
@@ -110,110 +113,136 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def get_str_wordparts(cache: bool=True) -> str:
+    def get_str_wordparts(cache: bool = True) -> str:
         '''Retrieve TODO. TSV'''
-        return Wordlist.url_to_str('elements/wordparts.tsv', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'wordparts.tsv',
+                                   cache=cache)
 
     @staticmethod
-    def get_list_wordparts(both=True, split=True, cache: bool=True) -> list:
+    def get_list_wordparts(both=True, split=True, cache: bool = True) -> list:
         '''Retrieve TODO. TSV'''
         return Wordlist.tsvstr_to_list(Wordlist.get_str_wordparts(cache=cache),
-                                          both=both, split=split)
+                                       both=both, split=split)
 
     @staticmethod
-    def get_set_wordparts(both=True, split=True, cache: bool=True) -> set:
+    def get_set_wordparts(both=True, split=True, cache: bool = True) -> set:
         '''Retrieve TODO. TSV'''
         return Wordlist.tsvstr_to_set(Wordlist.get_str_wordparts(cache=cache),
-                                         both=both, split=split)
+                                      both=both, split=split)
 
     @staticmethod
-    def get_dict_wordparts(cache: bool=True) -> dict:
+    def get_dict_wordparts(cache: bool = True) -> dict:
         '''Retrieve TODO. TSV'''
         return Wordlist.tsvstr_to_dict(Wordlist.get_str_wordparts(cache=cache))
 
     @staticmethod
-    def get_str_corrections(cache: bool=True) -> str:
+    def get_str_corrections(cache: bool = True) -> str:
         '''Retrieve TODO. TSV'''
-        return Wordlist.url_to_str('elements/corrections.tsv', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'corrections.tsv',
+                                   cache=cache)
 
     @staticmethod
-    def get_list_corrections(both=True, split=True, cache: bool=True) -> list:
+    def get_list_corrections(both=True, split=True,
+                             cache: bool = True) -> list:
         '''Retrieve TODO. TSV'''
         return Wordlist.tsvstr_to_list(Wordlist.get_str_corrections(cache=cache),
-                                          both=both, split=split)
+                                       both=both, split=split)
 
     @staticmethod
-    def get_set_corrections(both=True, split=True, cache: bool=True) -> set:
+    def get_set_corrections(both=True, split=True, cache: bool = True) -> set:
         '''Retrieve TODO. TSV'''
         return Wordlist.tsvstr_to_set(Wordlist.get_str_corrections(cache=cache),
-                                         both=both, split=split)
+                                      both=both, split=split)
 
     @staticmethod
-    def get_dict_corrections(cache: bool=True) -> dict:
+    def get_dict_corrections(cache: bool = True) -> dict:
         '''Retrieve TODO. TSV'''
         return Wordlist.tsvstr_to_dict(Wordlist.get_str_corrections(cache=cache))
 
     @staticmethod
-    def get_str_onlyadverbs(cache: bool=True) -> str:
+    def get_str_onlyadverbs(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('experimenteel/alleen-bijwoorden.txt', cache=cache)
+        return Wordlist.url_to_str('experimenteel/'
+                                   'alleen-bijwoorden.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_list_onlyadverbs(cache: bool=True) -> str:
+    def get_list_onlyadverbs(cache: bool = True) -> str:
         '''Retrieve TODO.'''
         return Wordlist.str_to_list(Wordlist.get_str_onlyadverbs(cache=cache))
 
     @staticmethod
-    def get_set_onlyadverbs(cache: bool=True) -> str:
+    def get_set_onlyadverbs(cache: bool = True) -> str:
         '''Retrieve TODO.'''
         return Wordlist.str_to_set(Wordlist.get_str_onlyadverbs(cache=cache))
 
     @staticmethod
-    def get_str_wordlist(cache: bool=True) -> str:
+    def get_str_wordlist(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('wordlist.txt', cache=cache)
+        return Wordlist.url_to_str('wordlist.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_romannumbers(cache: bool=True) -> str:
+    def get_str_romannumbers(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('elements/romeinse-cijfers.txt', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'romeinse-cijfers.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_wordlistascii(cache: bool=True) -> str:
+    def get_str_wordlistascii(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('elements/wordlist-ascii.txt', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'wordlist-ascii.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_wordlistnonascii(cache: bool=True) -> str:
+    def get_str_wordlistnonascii(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('elements/wordlist-non-ascii.txt', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'wordlist-non-ascii.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_nounsplural(cache: bool=True) -> str:
+    def get_str_nounsplural(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('experimenteel/nouns-meervouden.txt', cache=cache)
+        return Wordlist.url_to_str('experimenteel/'
+                                   'nouns-meervouden.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_adjectivesandadverbs(cache: bool=True) -> str:
+    def get_str_adjectivesandadverbs(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('experimenteel/adjectieven-en-bijwoorden.txt', cache=cache)
+        return Wordlist.url_to_str('experimenteel/'
+                                   'adjectieven-en-bijwoorden.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_verbsinfinitive(cache: bool=True) -> str:
+    def get_str_verbsinfinitive(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('experimenteel/werkwoorden-infinitief.txt', cache=cache)
+        return Wordlist.url_to_str('experimenteel/'
+                                   'werkwoorden-infinitief.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_basewordscertified(cache: bool=True) -> str:
+    def get_str_basewordscertified(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('elements/basiswoorden-gekeurd.txt', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'basiswoorden-gekeurd.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_basewordsuncertified(cache: bool=True) -> str:
+    def get_str_basewordsuncertified(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('elements/basiswoorden-ongekeurd.txt', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'basiswoorden-ongekeurd.txt',
+                                   cache=cache)
 
     @staticmethod
-    def get_str_flexionsuncertified(cache: bool=True) -> str:
+    def get_str_flexionsuncertified(cache: bool = True) -> str:
         '''Retrieve TODO.'''
-        return Wordlist.url_to_str('elements/flexies-ongekeurd.txt', cache=cache)
+        return Wordlist.url_to_str('elements/'
+                                   'flexies-ongekeurd.txt',
+                                   cache=cache)

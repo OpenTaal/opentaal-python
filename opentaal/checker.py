@@ -8,13 +8,14 @@ from opentaal import Character
 
 # pylint:disable=unspecified-encoding
 
+
 class Checker():
     '''Class for spelling checker. Note that methods are cached, hence no
     methods for add and remove can be offered. The maximum cache size has been
     chosen as a power of two greater than the size of the word list. See also
     https://pypi.org/project/hunspell/ .'''
 
-    def __init__(self, lang: str='nl', path: str='/usr/share/hunspell/'):
+    def __init__(self, lang: str = 'nl', path: str = '/usr/share/hunspell/'):
         '''TODO.
 
         :param lang: TODO

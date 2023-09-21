@@ -7,34 +7,44 @@ from opentaal import Histogram
 
 # pylint:disable=missing-function-docstring
 
+
 @fixture
 def empty():
     return Histogram('Empty')
 
+
 @fixture
 def one():
-    hist  = Histogram('One')
+    hist = Histogram('One')
     hist.add(1)
     return hist
 
 # pylint:disable=redefined-outer-name
 
+
 def test_init_tsvstring_empty(empty):
-    with raises(ValueError, match='Cannot process "Empty" because no values have been added.'):
+    with raises(ValueError, match='Cannot process "Empty" because no values'
+                                  ' have been added.'):
         assert empty.to_tsvstring()
 
+
 def test_init_mdstring_empty(empty):
-    with raises(ValueError, match='Cannot process "Empty" because no values have been added.'):
+    with raises(ValueError, match='Cannot process "Empty" because no values'
+                                  ' have been added.'):
         assert empty.to_mdstring()
 
+
 def test_init_jsonstring_empty(empty):
-    with raises(ValueError, match='Cannot process "Empty" because no values have been added.'):
+    with raises(ValueError, match='Cannot process "Empty" because no values'
+                                  ' have been added.'):
         assert empty.to_jsonstring()
+
 
 def test_tostring_one(one):
     assert one.to_string(unicode=False) == 'One\ncount\tvalue\n      1\t1\n'
 
 # pylint:enable=redefined-outer-name
+
 
 def test_init():
     hist = Histogram('Test')

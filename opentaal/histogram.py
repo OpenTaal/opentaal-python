@@ -9,11 +9,12 @@ from pygnuplot import gnuplot
 
 # pylint:disable=unspecified-encoding
 
+
 class Histogram():
     '''Class for creating histograms. See also
     https://en.wikipedia.org/wiki/Histogram .'''
 
-    def __init__(self, desc: str, filename: str=None):
+    def __init__(self, desc: str, filename: str = None):
         '''Construct object and set its description.
 
         :param desc: Description of the histogram.
@@ -58,7 +59,8 @@ class Histogram():
 
 # pylint:disable=too-many-arguments
 
-    def to_string(self, desc=True, head=True, reverse=True, unicode=True, abbrev=True, multi=True) -> str:
+    def to_string(self, desc=True, head=True, reverse=True, unicode=True,
+                  abbrev=True, multi=True) -> str:
         '''Write the description and sorted histogram counts to a string.
 
         :param desc: Include description.
@@ -69,8 +71,10 @@ class Histogram():
                                  unicode=unicode, abbrev=abbrev, multi=multi)[0]
 
 # pylint:disable=too-many-branches
-    def to_tsvstring(self, desc: bool=True, head: bool=True, reverse: bool=True, unicode: bool=True,
-                     abbrev: bool=True, multi: bool=True) -> str:
+
+    def to_tsvstring(self, desc: bool = True, head: bool = True,
+                     reverse: bool = True, unicode: bool = True,
+                     abbrev: bool = True, multi: bool = True) -> str:
         '''Write the description and sorted histogram counts to a tab-separated
         string. See also https://en.wikipedia.org/wiki/Tab-separated_values .
 
@@ -97,7 +101,9 @@ class Histogram():
             raise ValueError('Unable to pad more than seven spaces at the'
                              ' moment')
         if unicode:
-            for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
+            # TODO secondary sort for words!
+            for value, count in sorted(self.data.items(), key=itemgetter(1),
+                                       reverse=reverse):
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
@@ -113,13 +119,15 @@ class Histogram():
                 # perhaps hex(ord(value))
                 # right align
         else:
-            for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
+            for value, count in sorted(self.data.items(), key=itemgetter(1),
+                                       reverse=reverse):
                 if count < minimum:
                     minimum = count
                 res = f'{res}{count: >7}\t{Character.print_friendly(value)}\n'
         return res, minimum, self.maximum
 
-    def to_mdstring(self, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True) -> str:
+    def to_mdstring(self, desc: bool = True, reverse: bool = True,
+                    unicode: bool = True, multi: bool = True) -> str:
         '''Write the description and sorted histogram counts to a MarkDown
         string. See also https://en.wikipedia.org/wiki/Markdown .
 
@@ -143,7 +151,8 @@ class Histogram():
             res = f'{res}count | value\n'
             res = f'{res}--: | ---\n'
         if unicode:
-            for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
+            for value, count in sorted(self.data.items(), key=itemgetter(1),
+                                       reverse=reverse):
                 name = Character.get_name(value)
                 cat = category(value)
                 if multi:
@@ -158,12 +167,14 @@ class Histogram():
                           f' {name}\n'
                 # perhaps hex(ord(value))
         else:
-            for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
+            for value, count in sorted(self.data.items(), key=itemgetter(1),
+                                       reverse=reverse):
                 res = f'{res}`{count}` | `{Character.print_friendly(value)}`\n'
         return res
 # pylint:enable=too-many-branches
 
-    def to_jsonstring(self, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True) -> str:
+    def to_jsonstring(self, desc: bool = True, reverse: bool = True,
+                      unicode: bool = True, multi: bool = True) -> str:
         '''Write the description and sorted histogram counts to a JSON string.
         See also https://en.wikipedia.org/wiki/JSON .
 
@@ -179,7 +190,8 @@ class Histogram():
         res = f'{res}  "data": [\n'
         minimum = maxsize
         if unicode:
-            for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
+            for value, count in sorted(self.data.items(), key=itemgetter(1),
+                                       reverse=reverse):
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
@@ -202,7 +214,8 @@ class Histogram():
                           '    },\n'
                 # perhaps hex(ord(value))
         else:
-            for value, count in sorted(self.data.items(), key=itemgetter(1), reverse=reverse):
+            for value, count in sorted(self.data.items(), key=itemgetter(1),
+                                       reverse=reverse):
                 if count < minimum:
                     minimum = count
                 res = f'{res}    {{\n' \
@@ -217,7 +230,8 @@ class Histogram():
         res = f'{res}}}\n'
         return res
 
-    def to_tsvfile(self, filename: str, head: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True):
+    def to_tsvfile(self, filename: str, head: bool = True, reverse: bool = True,
+                   unicode: bool = True, multi: bool = True):
         '''Write the description and sorted histogram to an SVG file.
 
         :param filename: The filename to write to.'''
@@ -227,7 +241,8 @@ class Histogram():
             file.write(res[0])
         return res[1:]
 
-    def to_mdfile(self, filename: str, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True):
+    def to_mdfile(self, filename: str, desc: bool = True, reverse: bool = True,
+                  unicode: bool = True, multi: bool = True):
         '''Write the description and sorted histogram to a MarkDown file.
 
         :param filename: The filename to write to.'''
@@ -235,7 +250,7 @@ class Histogram():
             file.write(self.to_mdstring(desc=desc, reverse=reverse,
                                         unicode=unicode, multi=multi))
 
-    def to_jsonfile(self, filename: str, desc: bool=True, reverse: bool=True, unicode: bool=True, multi: bool=True):
+    def to_jsonfile(self, filename: str, desc: bool = True, reverse: bool = True, unicode: bool = True, multi: bool = True):
         '''Write the description and sorted histogram to a JSON file.
 
         :param filename: The filename to write to.'''
@@ -243,11 +258,13 @@ class Histogram():
             file.write(self.to_jsonstring(desc=desc, reverse=reverse,
                                           unicode=unicode, multi=multi))
 
-    def to_graphfile(self, filename: str, reverse: bool=True, unicode: bool=True, pattern: bool=True,
-                 width: int=1920, height: int=1080, font: str='Roboto Slab', term: str='png'):
-        #TODO transparent background
-        #TODO y axis from 0 as option def
-        #TODO xlabel angle
+    def to_graphfile(self, filename: str, reverse: bool = True,
+                     unicode: bool = True, pattern: bool = True,
+                     width: int = 1920, height: int = 1080,
+                     font: str = 'Roboto Slab', term: str = 'png'):
+        # TODO transparent background
+        # TODO y axis from 0 as option def
+        # TODO xlabel angle
         '''Write the description and sorted histogram as a graph to a PNG or
         SVG file. Note: for an optimal result, run e.g. optipng or scour on the
         result.
@@ -257,12 +274,13 @@ class Histogram():
         :param filename: The image height.
         :param filename: The font to use.
         :param term: The Gnuplot terminal to use such as 'png' and 'svg'.'''
-        #TODO refactor with gnnuplot columns
-        datafilename = f'{filename}.tsv' #TODO random string + unlink or inline
+        # TODO refactor with guplot columns
+        datafilename = f'{filename}.tsv'
         res = self.to_tsvfile(datafilename, head=False, reverse=reverse,
                               unicode=unicode, multi=False)
-        plt = gnuplot.Gnuplot(terminal=f'{term} noenhanced size {width},{height} font "{font}"',
-                               output=f'"{filename}"')
+        plt = gnuplot.Gnuplot(terminal=f'{term} noenhanced size'
+                              f' {width},{height} font "{font}"',
+                              output=f'"{filename}"')
         style = ['data histogram']
         if pattern:
             style.append('fill pattern 5')
@@ -273,7 +291,7 @@ class Histogram():
                 y2label='"\\n\\n\\n\\n\\n\\n"',
                 xlabel=f'"value ({self.size()} unique)"',
                 xtics='rotate by -90 scale 0 nomirror',
-                grid = 'y',
+                grid='y',
                 style=style,
                 boxwidth='3',
                 datafile='separator "\t"',

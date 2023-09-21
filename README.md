@@ -16,12 +16,18 @@ Python package by OpenTaal for efficiently processing Dutch texts.
 Install the following packages for usage
 
     sudo apt-get -y install libexttextcat-dev
-    pip install -U hunspell py_gnuplot python-ucto # nltk
+    pip install -U hunspell py_gnuplot python-ucto gtts # nltk
     python3 -c "import ucto; ucto.installdata()"
 
 Install the following packages for development
 
-    pip install -U twine pytest-cov sphinx-autodoc-typehints mock snakeviz
+    pip install -U flake8 twine pytest-cov sphinx-autodoc-typehints mock snakeviz
+
+## Code checking
+
+Static code check is done with
+
+    flake8 --ignore E252 opentaal tests
 
 ## Unit tests
 
@@ -56,5 +62,13 @@ Generate API documentation and view it in HTML with
     cd docs
     make html
     browse _build/html/index.html
+
+## TO DO
+
+- create tox.ini see https://tox.wiki/en/4.11.3/
+- create file .github/workflows/build.yml
+- create readthedocs.yml
+- create codecov.yml
+- publish on PyPI
 
 Donating is also possible with <noscript><a href="https://liberapay.com/opentaal/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>

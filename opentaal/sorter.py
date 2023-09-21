@@ -5,6 +5,7 @@ from re import compile, sub  # pylint:disable=redefined-builtin
 
 # pylint:disable=unspecified-encoding
 
+
 class Sorter():
     '''Class to sort words.'''
 
@@ -23,8 +24,9 @@ class Sorter():
             except Error:  # pragma: no cover
                 try:
                     setlocale(LC_ALL, 'en_GB.UTF-8')
-                except Error:
-                    raise ValueError('No locale nl_NL, en_US or en_GB available.')  # pylint:disable=raise-missing-from
+                except Error as error:
+                    raise ValueError('No locale nl_NL, en_US or'
+                                     ' en_GB available.') from error
         cls.init = True
 
     CONVERSIONS = {
@@ -75,7 +77,7 @@ class Sorter():
         return (substitute, restore)
 
     @staticmethod
-    def sort(text: str, reverse: bool=False, retro: bool=False) -> str:
+    def sort(text: str, reverse: bool = False, retro: bool = False) -> str:
         '''Sort multiline text with non-empty lines.
 
         :param text: Text to sort as list of strings or multiline string.
@@ -155,10 +157,7 @@ class Sorter():
             res.append(line)
         return '\n'.join(res)
 
-
-
-
-    # if non_dutch: #TODO elif
-    # 'De ingevoerde woorden bevatten karakters die niet in Nederlands voorkomen'
+# if non_dutch: #TODO elif
+# 'De ingevoerde woorden bevatten karakters die niet in Nederlands voorkomen'
 
 # pylint:enable=unspecified-encoding

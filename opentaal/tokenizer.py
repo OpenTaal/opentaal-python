@@ -2,14 +2,15 @@
 
 import ucto
 
+
 class Tokenizer():
     '''Class for tokenizing Dutch texts.'''
 
-    def __init__(self, config: str='tokconfig-nld', quotes: bool=True):
+    def __init__(self, config: str = 'tokconfig-nld', quotes: bool = True):
         '''TODO.
 
-        :param config: TODO
-        :param quotes: TODO'''
+        :param text: TODO
+        :return: TODO'''
         self.tokenizer = ucto.Tokenizer(config, quotedetection=quotes)
 
     def text_to_words(self, text: str) -> list[str]:
@@ -23,11 +24,11 @@ class Tokenizer():
             res.append(str(token))
         return res
 
-    def text_to_words_and_spaces(self, text: str) -> list[str]:
+    def text_to_spaced_words(self, text: str) -> list[str]:
         '''TODO.
 
         :param text: TODO
-        :param spaces: TODO'''
+        :return: TODO'''
         self.tokenizer.process(text)
         res = []
         for token in self.tokenizer:
@@ -37,6 +38,10 @@ class Tokenizer():
         return res[:-1]
 
     def text_to_sentences_with_words(self, text: str) -> list[list[str]]:
+        '''TODO.
+
+        :param text: TODO
+        :return: TODO'''
         self.tokenizer.process(text)
         res = []
         sentence = []
@@ -47,7 +52,11 @@ class Tokenizer():
                 sentence = []
         return res
 
-    def text_to_sentences_with_words_and_spaces(self, text: str) -> list[list[str]]:
+    def text_to_sentences_with_spaced_words(self, text: str) -> list[list[str]]:
+        '''TODO.
+
+        :param text: TODO
+        :return: TODO'''
         self.tokenizer.process(text)
         res = []
         sentence = []
@@ -60,7 +69,7 @@ class Tokenizer():
                 sentence.append(' ')
         return res
 
-#TODO wordparts MWE https://www.nltk.org/api/nltk.tokenize.mwe.html
+# TODO wordparts MWE https://www.nltk.org/api/nltk.tokenize.mwe.html
 
     CONVERSIONS = (
         "'s Gravenmoer",
@@ -106,29 +115,6 @@ class Tokenizer():
         "'s Zaterdags",
         "'s Zondags",
     )
-
-
-#    @staticmethod
-#    def sentence_to_words(sentence: str) -> list:
-#        '''Tokenize sentence to words. See also
-#        http://www.nltk.org/api/nltk.tokenize.html#nltk.tokenize.word_tokenize .
-#        Whitespace at beginning and ending is stripped.
-#
-#        :param text: Paragraph containing multiple words.'''
-#        for term in Tokenizer.CONVERSIONS:
-#            sentence = sentence.replace(term, term.replace("'s ", 'ИЯЯБ'))
-#        res = []
-#        for word in word_tokenize(sentence, 'dutch', preserve_line=True):
-#            res.append(word.replace('ИЯЯБ', "'s "))
-#        return res
-#
-#    @staticmethod
-#    def text_to_words(sentence: str) -> list:
-#        '''Tokenize text to words. See also
-#        http://www.nltk.org/api/nltk.tokenize.html#nltk.tokenize.word_tokenize .
-#        Whitespace at beginning and ending is stripped.
-#
-#        :param text: Sentence containing multiple words.'''
 #        for term in Tokenizer.CONVERSIONS:
 #            sentence = sentence.replace(term, term.replace("'s ", 'ИЯЯБ'))
 #        res = []

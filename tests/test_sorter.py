@@ -6,6 +6,7 @@ from opentaal import Sorter
 
 # pylint:disable=missing-function-docstring
 
+
 @fixture
 def short():
     return '''eer
@@ -14,6 +15,7 @@ tafel
 α-straling
 stoel
 appel'''
+
 
 @fixture
 def long():
@@ -185,6 +187,7 @@ a.u.b.
 
 # pylint:disable=redefined-outer-name
 
+
 def test_sorter(short, long):
     assert Sorter.sort(short) == \
         '''appel
@@ -196,6 +199,7 @@ tafel
     res = Sorter.sort(long)
     assert res.startswith('100 eurobiljet\n') is True
     assert res.endswith('\nχ²-toets') is True
+
 
 def test_sorter_reverse(short, long):
     assert Sorter.sort(short, reverse=True) == \
@@ -209,6 +213,7 @@ appel'''
     assert res.startswith('χ²-toets\n') is True
     assert res.endswith('\n100 eurobiljet') is True
 
+
 def test_sorter_retro(short, long):
     assert Sorter.sort(short, retro=True) == \
         '''α-straling
@@ -220,6 +225,7 @@ beer'''
     res = Sorter.sort(long, retro=True)
     assert res.startswith('C 31\n') is True
     assert res.endswith('\nπ') is True
+
 
 def test_sorter_reverse_retro(short, long):
     assert Sorter.sort(short, reverse=True, retro=True) == \
@@ -233,6 +239,7 @@ tafel
     assert res.startswith('C 31\n') is True
     assert res.endswith('\nπ') is True
 
+
 def test_sorter_exact(short, long):
     assert Sorter.sort_exact(short) == \
         '''appel
@@ -244,6 +251,7 @@ tafel'''
     res = Sorter.sort_exact(long)
     assert res.startswith('100 eurobiljet\n') is True
     assert res.endswith('\nzoeven') is True
+
 
 def test_sorter_exact_reverse(short, long):
     assert Sorter.sort_exact(short, reverse=True) == \
@@ -257,6 +265,7 @@ appel'''
     assert res.startswith('zoeven\n') is True
     assert res.endswith('\n100 eurobiljet') is True
 
+
 def test_sorter_exact_retro(short, long):
     assert Sorter.sort_exact(short, retro=True) == \
         '''α-straling
@@ -268,6 +277,7 @@ beer'''
     res = Sorter.sort_exact(long, retro=True)
     assert res.startswith('C 31\n') is True
     assert res.endswith('\nπ') is True
+
 
 def test_sorter_exact_reverse_retro(short, long):
     assert Sorter.sort_exact(short, reverse=True, retro=True) == \
@@ -283,8 +293,10 @@ tafel
 
 # pylint:enable=redefined-outer-name
 
+
 def test_sorter_exact_forbidden():
-    with raises(ValueError, match='The characters ḁ are not allowed in exact sort.'):
+    with raises(ValueError, match='The characters ḁ are not allowed in exact'
+                                  ' sort.'):
         assert Sorter.sort_exact('ḁppel')
 
 # pylint:enable=missing-function-docstring
