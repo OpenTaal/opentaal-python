@@ -1,10 +1,10 @@
 '''Class definition for Database.'''
 
-from os.path import realpath, join
+from os.path import isabs, isfile, join, realpath
 from os import getcwd
 
 
-class Database():
+class Database():  # pylint:disable=too-few-public-methods
     '''Class for using databases.'''
 
 # pylint:disable=unspecified-encoding,consider-using-with
@@ -22,19 +22,28 @@ class Database():
 
         Search paths are in this order:
 
-          1. the current working directory
-          2. /usr/local/etc/
-          3. absolute path
+          1. absolute path
+          2. relative path to the current working directory
+          3. relative path to /usr/local/etc/
 
         :param filename: The filename of the configuration file.
         :return: A dictionary with the key values from the file.'''
-        try:
-            cnf = open(realpath(join(getcwd(), filename)))
-        except FileNotFoundError:
-            try:
-                cnf = open(f'/usr/local/etc/{filename}')
-            except FileNotFoundError:
-                cnf = open(filename)
+        # cnf = None
+        if isabs(filename):
+            cnf = open(filename)
+        else:
+            current = realpath(join(getcwd(), filename))
+            if isfile(current):
+                cnf = open(current)
+            else:
+                try:
+                    cnf = open(f'/usr/local/etc/{filename}')
+                except FileNotFoundError as error:
+                    raise FileNotFoundError(f"[Errno 2] No such file:"
+                                            f" '{filename}' in current"
+                                            " working directory or"
+                                            f" '/usr/local/etc/{filename}'") \
+                        from error
 
         res = {}
         in_client_group = False
@@ -55,7 +64,7 @@ class Database():
                 if line.startswith('[client]'):
                     in_client_group = True
 
-        if 'user' not in res and 'password' not in res and \
+        if 'user' not in res or 'password' not in res or \
            'database' not in res:
             raise ValueError('Incomplete database credentials.')
         return res

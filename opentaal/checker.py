@@ -24,12 +24,19 @@ class Checker():
                                          f'{path}{lang}.aff')
 
     @lru_cache(maxsize=524288)
-    def check(self, word: str) -> bool:
+    def check(self, word: str, space: bool = False) -> bool:
         '''Check cached spelling of a word.
 
         :param word: The word to check.
+        :param space: Split word on spaces and check all terms.
         :return: True if the word is correctly spelled.'''
-        return self.checker.spell(word)
+        spelling = self.checker.spell(word)
+        if not spelling and space and ' ' in word:
+            spelling = True
+            for term in word.split(' '):
+                if term != '' and not self.checker.spell(term):
+                    return False
+        return spelling
 
     @lru_cache(maxsize=524288)
     def suggest(self, word: str) -> list:

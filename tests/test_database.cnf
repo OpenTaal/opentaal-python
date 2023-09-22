@@ -1,5 +1,11 @@
+# This is just test data outside the client group.
 [client]
+# This is just test data inside the client group.
 user = 'testuser'
-password = "testpassword"
-database = 'testdatabase'
+password= "testpassword"
+database ='testdatabase'
+
 port = 54321
+
+[server]
+hostname = 'ignore'

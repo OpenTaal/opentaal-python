@@ -22,6 +22,10 @@ def words():
 def test_spelling(checker):
     assert checker.check('tafel') is True
     assert checker.check('tafle') is False
+    assert checker.check('tafel poot') is False
+    assert checker.check('tafle poot') is False
+    assert checker.check('tafel poot', space=True) is True
+    assert checker.check('tafle poot', space=True) is False
 
 
 def test_suggest(checker):
