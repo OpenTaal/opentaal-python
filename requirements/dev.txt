@@ -1,0 +1,15 @@
+flake8
+
+pytest
+pytest-cov
+
+mock
+sphinx
+sphinx-autodoc-typehints
+
+snakeviz
+spyder
+spyder-unittest
+
+tox
+twine

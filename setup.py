@@ -30,7 +30,6 @@ setup(
     install_requires=[
         'hunspell',
         'gtts',
-#        'nltk',
         'python-ucto',
         'py-gnuplot',
     ],

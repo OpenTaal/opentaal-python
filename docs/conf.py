@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'OpenTaal Python'
-copyright = '<a href="https://opentaal.org">Stichting OpenTaal</a>'
+copyright = '<a href="https://opentaal.org/">Stichting OpenTaal</a>'
 #author = 'Stichting OpenTaal'
 version = '0.1'
 release = '0.1.0'
@@ -20,12 +20,21 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join('..', 'opentaal')))
 
 import mock
-MOCK_MODULES = ['opentaal', 'nltk', 'nltk.tokenize', ]
+MOCK_MODULES = ['opentaal']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
-extensions = ["sphinx.ext.autodoc"]
-autodoc_typehints = "description"
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.coverage',  # TODO Where is the result to be seen? https://www.sphinx-doc.org/en/master/usage/extensions/coverage.html
+    'sphinx.ext.todo',  # TODO Where is the result to be seen? https://www.sphinx-doc.org/en/master/usage/extensions/todo.html
+]
+
+# TODO https://www.sphinx-doc.org/en/master/usage/extensions/githubpages.html
+# TODO https://www.sphinx-doc.org/en/master/usage/extensions/graphviz.html
+
+autodoc_typehints = 'description'
+todo_include_todos = True
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']

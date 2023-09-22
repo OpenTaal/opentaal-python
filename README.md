@@ -16,12 +16,12 @@ Python package by OpenTaal for efficiently processing Dutch texts.
 Install the following packages for usage
 
     sudo apt-get -y install libexttextcat-dev
-    pip install -U hunspell py_gnuplot python-ucto gtts # nltk
+    pip install -r requirements/use.txt
     python3 -c "import ucto; ucto.installdata()"
 
-Install the following packages for development
+Install also the following packages for development
 
-    pip install -U flake8 twine pytest-cov sphinx-autodoc-typehints mock snakeviz spyder-unittest
+    pip install -r requirements/dev.txt
 
 ## Code checking
 
@@ -60,7 +60,7 @@ Profile unit tests and view report in HTML
 Generate API documentation and view it in HTML with
 
     cd docs
-    make html
+    make html  # TODO see tox file
     browse _build/html/index.html
 
 ## TO DO

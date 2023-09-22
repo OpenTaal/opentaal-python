@@ -1,0 +1,7 @@
+hunspell
+gtts
+py_gnuplot
+python-ucto
+
+pytest
+pytest-cov
