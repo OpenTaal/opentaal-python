@@ -40,8 +40,7 @@ class Database():  # pylint:disable=too-few-public-methods
                     cnf = open(f'/usr/local/etc/{filename}')
                 except FileNotFoundError as error:
                     raise FileNotFoundError(f"[Errno 2] No such file:"
-                                            f" '{filename}' in current"
-                                            " working directory or"
+                                            f" '{current}' or"
                                             f" '/usr/local/etc/{filename}'") \
                         from error
 

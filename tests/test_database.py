@@ -1,6 +1,7 @@
 '''Test class Tokenizer.'''
 
 from os.path import dirname, join, realpath
+from os import chdir, getcwd
 from re import escape
 from pytest import fixture, raises
 
@@ -21,11 +22,13 @@ def test_credentials_nonexisting():
     with raises(FileNotFoundError, match=escape("[Errno 2] No such file or"
                 " directory: '/absolute/nonexisting.cnf'")):
         assert Database.credentials('/absolute/nonexisting.cnf')
+    original = getcwd()
+    chdir('/tmp/')
     with raises(FileNotFoundError,
-                match=escape("[Errno 2] No such file: 'nonexisting.cnf' in"
-                             " current working directory or"
-                             " '/usr/local/etc/nonexisting.cnf'")):
+                match=escape("[Errno 2] No such file: '/tmp/nonexisting.cnf'"
+                             " or '/usr/local/etc/nonexisting.cnf'")):
         assert Database.credentials('nonexisting.cnf')
+    chdir(original)
 
 # pylint:disable=redefined-outer-name
 
