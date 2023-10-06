@@ -6,7 +6,7 @@ import ucto
 class Tokenizer():
     '''Class for tokenizing Dutch texts.'''
 
-    def __init__(self, config: str = 'tokconfig-nld', quotes: bool = True):
+    def __init__(self, config: str = 'tokconfig-nld', quotes: bool = True) -> None:
         '''TODO.
 
         :param text: TODO

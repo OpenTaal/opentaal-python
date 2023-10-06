@@ -17,8 +17,11 @@ class Word():
         return sha256(string.encode('utf8')).hexdigest()
 
     @staticmethod
-    def synthesize(string: str):
+    def synthesize(string: str) -> str:
         '''TODO
 
         :param string: TODO.'''
         tts = gTTS(string, lang='nl', tld='nl')
+        
+        path = ''
+        return path

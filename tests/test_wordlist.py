@@ -2,6 +2,7 @@
 
 # pylint:disable=missing-function-docstring
 
+from os import stat
 from pytest import fixture
 
 from opentaal import Wordlist
@@ -50,6 +51,15 @@ def test_tsvstr_to_list():
 
     dict_both_split = {'word1': 'values1', 'word2': 'values2'}
     assert Wordlist.tsvstr_to_dict(tsvstr) == dict_both_split
+
+def test_set_file_to_set():
+    data = set()
+    for value in ('een', 'twee', 'drie'):
+        data.add(value)
+    filename = '/tmp/set_to_file_to_set.txt'
+    Wordlist.set_to_file(data, filename)
+    assert stat('/tmp/set_to_file_to_set.txt').st_size == 14
+    assert Wordlist.file_to_set(filename) == data
 
 # pylint:disable=redefined-outer-name
 

@@ -10,7 +10,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
     https://github.com/OpenTaal/opentaal-wordlist .'''
 
     @staticmethod
-    def config_path():
+    def config_path() -> str:
         '''Return path to configuration directory ~/.config/opentaal and create
         that directory if it doesn't exist yet.'''
         path = join(Path.home(), '.config', 'opentaal')
@@ -111,6 +111,28 @@ class Wordlist():  # pylint:disable=too-many-public-methods
             word, values = line.split('\t')
             res[word] = values
         return res
+
+    @staticmethod
+    def file_to_set(filename: str) -> set:
+        '''Read a file into a set and return the set.
+        
+        :param filename: Filename for the file to read.
+        :return: Set containing lines of from the provided filename.'''
+        res = set()
+        with open(filename) as file:
+            for line in file:
+                res.add(line.strip())
+        return res
+
+    @staticmethod
+    def set_to_file(data: set, filename: str) -> set:
+        '''Write contents of a set to a file with each item on a seperate line.
+        
+        :param filename: Filename for the file to read.
+        :return: Set containing lines of from the provided filename.'''
+        with open(filename, 'w') as file:
+            for line in data:
+                file.write(f'{line}\n')
 
     @staticmethod
     def get_str_wordparts(cache: bool = True) -> str:

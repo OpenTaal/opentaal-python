@@ -1,7 +1,9 @@
 '''Class definition for Sort.'''
 
+
 from locale import setlocale, LC_ALL, Error, strxfrm
 from re import compile, sub  # pylint:disable=redefined-builtin
+from typing import Tuple
 
 # pylint:disable=unspecified-encoding
 
@@ -9,12 +11,12 @@ from re import compile, sub  # pylint:disable=redefined-builtin
 class Sorter():
     '''Class to sort words.'''
 
-    init = False
+    key = None
 
     @classmethod
-    def initialize(cls):
+    def initialize(cls): #TODO __init__?
         '''TODO.'''
-        if cls.init is True:
+        if cls.key is not None:
             return
         try:
             setlocale(LC_ALL, 'nl_NL.UTF-8')
@@ -27,7 +29,7 @@ class Sorter():
                 except Error as error:
                     raise ValueError('No locale nl_NL, en_US or'
                                      ' en_GB available.') from error
-        cls.init = True
+        cls.key = strxfrm
 
     CONVERSIONS = {
         'α': 'ḁ',
@@ -67,7 +69,7 @@ class Sorter():
     }
 
     @staticmethod
-    def exact_conversion():
+    def exact_conversion() -> Tuple[dict, dict]:
         '''Do TODO.'''
         substitute = {}
         restore = {}
@@ -102,7 +104,7 @@ class Sorter():
         else:
             raise ValueError('Unsupported datatype for text.')
 
-        lines = sorted(lines, key=strxfrm, reverse=reverse)
+        lines = sorted(lines, key=Sorter.key, reverse=reverse)
 
         if type(text) is str:
             if retro:
@@ -133,7 +135,7 @@ class Sorter():
         if retro:
             for line in text.split('\n'):
                 lines.append(line[::-1])
-            lines = sorted(lines, key=strxfrm, reverse=reverse)
+            lines = sorted(lines, key=Sorter.key, reverse=reverse)
             res = []
             for line in lines:
                 res.append(line[::-1])
@@ -149,7 +151,7 @@ class Sorter():
         if forbidden:
             raise ValueError(f'The characters {", ".join(sorted(forbidden))}'
                              ' are not allowed in exact sort.')
-        lines = sorted(lines, key=strxfrm, reverse=reverse)
+        lines = sorted(lines, key=Sorter.key, reverse=reverse)
         res = []
         for line in lines:
             for repl in restore:

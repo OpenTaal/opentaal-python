@@ -34,9 +34,17 @@ def test_credentials_nonexisting():
 
 
 def test_credentials_exisiting(creds):
-    with raises(ValueError, match='Incomplete database credentials'):
-        assert Database.credentials(join('tests/test_database_incomplete.cnf'))
-    assert Database.credentials(join('tests/test_database.cnf')) == creds
+    if getcwd().endswith('/tests'):
+        # Spyder runs pytest in the project root directory.
+        with raises(ValueError, match='Incomplete database credentials'):
+            assert Database.credentials(join('test_database_incomplete.cnf'))
+        assert Database.credentials(join('test_database.cnf')) == creds
+    else:
+        # Command-line pytest runs in directory tests directory.
+        with raises(ValueError, match='Incomplete database credentials'):
+            assert Database.credentials(join('tests/test_database_incomplete.cnf'))
+        assert Database.credentials(join('tests/test_database.cnf')) == creds
+    # Test with absolute path.
     assert Database.credentials(join(dirname(realpath(__file__)),
                                      'test_database.cnf')) == creds
 

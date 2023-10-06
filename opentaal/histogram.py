@@ -14,7 +14,7 @@ class Histogram():
     '''Class for creating histograms. See also
     https://en.wikipedia.org/wiki/Histogram .'''
 
-    def __init__(self, desc: str, filename: str = None):
+    def __init__(self, desc: str, filename: str = None) -> None:
         '''Construct object and set its description.
 
         :param desc: Description of the histogram.
@@ -46,7 +46,7 @@ class Histogram():
         '''Return the maximum count.'''
         return self.max
 
-    def add(self, value):
+    def add(self, value) -> None:
         '''Add a value by increasing its count in the histogram.
 
         :param value: The value to increase its count of by one.'''
