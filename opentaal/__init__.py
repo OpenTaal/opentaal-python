@@ -1,3 +1,5 @@
+'''Initialize module.'''
+
 __all__ = [
     'Character',
     'Checker',

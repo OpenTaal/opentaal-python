@@ -188,6 +188,12 @@ a.u.b.
 # pylint:disable=redefined-outer-name
 
 
+def test_sorter_datatype():
+    with raises(ValueError,
+                match="Unsupported datatype <class 'tuple'> for text."):
+        assert Sorter.sort((1, 2, 3))
+
+
 def test_sorter(short, long):
     assert Sorter.sort(short) == \
         '''appel

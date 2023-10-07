@@ -4,8 +4,9 @@ from operator import itemgetter
 from sys import maxsize
 from unicodedata import category
 
-from opentaal import Character
 from pygnuplot import gnuplot
+
+from opentaal import Character
 
 # pylint:disable=unspecified-encoding
 
@@ -21,7 +22,7 @@ class Histogram():
         :param desc: Filename of text file to process.
         :return: Constructed object.'''
         self.desc = desc
-        self.data = {}
+        self.data: dict[str, int] = {}
         self.max = 0
         if filename is not None:
             with open(filename) as file:
@@ -72,9 +73,12 @@ class Histogram():
 
 # pylint:disable=too-many-branches
 
-    def to_tsvstring(self, desc: bool = True, head: bool = True,
-                     reverse: bool = True, unicode: bool = True,
-                     abbrev: bool = True, multi: bool = True) -> str:
+    def to_tsvstring(self, desc: bool = True,
+                     head: bool = True,
+                     reverse: bool = True,
+                     unicode: bool = True,
+                     abbrev: bool = True,
+                     multi: bool = True) -> tuple[str, int, int]:
         '''Write the description and sorted histogram counts to a tab-separated
         string. See also https://en.wikipedia.org/wiki/Tab-separated_values .
 
@@ -107,15 +111,15 @@ class Histogram():
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
-                cat = category(value)
+                cat = Character.decode_category(code=category(value), abbrev=abbrev)
                 if multi:
                     res = f'{res}{count: >7}\t{Character.print_friendly(value)}' \
                           f'\t{Character.to_hex(value)}' \
-                          f'\t{Character.decode_category(cat=cat,abbrev=abbrev)}\t{name}\n'
+                          f'\t{cat}\t{name}\n'
                 else:
                     res = f'{res}{count: >7}\t{Character.print_friendly(value)}' \
                           f' {Character.to_hex(value)}' \
-                          f' {Character.decode_category(cat=cat,abbrev=abbrev)} {name}\n'
+                          f' {cat} {name}\n'
                 # perhaps hex(ord(value))
                 # right align
         else:
@@ -124,7 +128,7 @@ class Histogram():
                 if count < minimum:
                     minimum = count
                 res = f'{res}{count: >7}\t{Character.print_friendly(value)}\n'
-        return res, minimum, self.maximum
+        return res, minimum, self.maximum()
 
     def to_mdstring(self, desc: bool = True, reverse: bool = True,
                     unicode: bool = True, multi: bool = True) -> str:
@@ -154,17 +158,15 @@ class Histogram():
             for value, count in sorted(self.data.items(), key=itemgetter(1),
                                        reverse=reverse):
                 name = Character.get_name(value)
-                cat = category(value)
+                cat = Character.decode_category(code=category(value), abbrev=False)
                 if multi:
                     res = f'{res}`{count}` | `{Character.print_friendly(value)}`' \
                           f' | `{Character.to_hex(value)}`' \
-                          f' | {Character.decode_category(cat=cat, abbrev=False)}' \
+                          f' | {cat}' \
                           f' | {name}\n'
                 else:
                     res = f'{res}`{count}` | `{Character.print_friendly(value)}`' \
-                          f' `{Character.to_hex(value)}`' \
-                          f' {Character.decode_category(cat=cat, abbrev=False)}' \
-                          f' {name}\n'
+                          f' `{Character.to_hex(value)}` {cat} {name}\n'
                 # perhaps hex(ord(value))
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1),
@@ -195,22 +197,20 @@ class Histogram():
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
-                cat = category(value)
+                cat = Character.decode_category(code=category(value), abbrev=False)
                 if multi:
                     res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{Character.print_friendly(value)}",\n' \
                           f'      "codepoint": "{Character.to_hex(value)}",\n' \
-                          f'      "category": "{Character.decode_category(cat=cat, abbrev=False)}",\n' \
+                          f'      "category": "{cat}",\n' \
                           f'      "description": "{name}"\n' \
                           '    },\n'
                 else:
                     res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
                           f'      "value": "{Character.print_friendly(value)}' \
-                          f' {Character.to_hex(value)}' \
-                          f' {Character.decode_category(cat=cat, abbrev=False)}' \
-                          f' {name}"\n' \
+                          f' {Character.to_hex(value)} {cat} {name}"\n' \
                           '    },\n'
                 # perhaps hex(ord(value))
         else:
@@ -226,7 +226,7 @@ class Histogram():
         res = f'{res}  ],\n'
         res = f'{res}  "unique": {len(self.data)},\n'
         res = f'{res}  "minimum": {minimum},\n'
-        res = f'{res}  "maximum": {self.maximum}\n'
+        res = f'{res}  "maximum": {self.maximum()}\n'
         res = f'{res}}}\n'
         return res
 
@@ -250,7 +250,11 @@ class Histogram():
             file.write(self.to_mdstring(desc=desc, reverse=reverse,
                                         unicode=unicode, multi=multi))
 
-    def to_jsonfile(self, filename: str, desc: bool = True, reverse: bool = True, unicode: bool = True, multi: bool = True):
+    def to_jsonfile(self, filename: str,
+                    desc: bool = True,
+                    reverse: bool = True,
+                    unicode: bool = True,
+                    multi: bool = True):
         '''Write the description and sorted histogram to a JSON file.
 
         :param filename: The filename to write to.'''

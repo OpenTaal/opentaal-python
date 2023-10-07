@@ -2,7 +2,7 @@
 
 from hashlib import sha256
 
-from gtts import gTTS
+# from gtts import gTTS
 
 
 class Word():
@@ -21,7 +21,7 @@ class Word():
         '''TODO
 
         :param string: TODO.'''
-        tts = gTTS(string, lang='nl', tld='nl')
-        
-        path = ''
+        # tts = gTTS(string, lang='nl', tld='nl')
+
+        path = string
         return path

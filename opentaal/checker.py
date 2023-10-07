@@ -4,6 +4,7 @@ from functools import lru_cache
 from unicodedata import category
 
 import hunspell
+
 from opentaal import Character
 
 # pylint:disable=unspecified-encoding
@@ -15,7 +16,8 @@ class Checker():
     chosen as a power of two greater than the size of the word list. See also
     https://pypi.org/project/hunspell/ .'''
 
-    def __init__(self, lang: str = 'nl', path: str = '/usr/share/hunspell/') -> None:
+    def __init__(self, lang: str = 'nl',
+                 path: str = '/usr/share/hunspell/') -> None:
         '''TODO.
 
         :param lang: TODO

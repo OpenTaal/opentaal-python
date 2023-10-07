@@ -6,7 +6,10 @@ class Mark():
     https://github.com/OpenTaal/opentaal-wordlist .'''
 
     @staticmethod
-    def html_link(text: str, url: str, tooltip: str=None, new: bool=False) -> str:
+    def html_link(text: str,
+                  url: str,
+                  tooltip: str | None=None,
+                  new: bool=False) -> str:
         '''TODO.'''
         if not new:
             if tooltip is None:
@@ -17,14 +20,20 @@ class Mark():
         return f'<a target="_blank" title="{tooltip}" href="{url}">{text}</a>'
 
     @staticmethod
-    def md_link(text: str, url: str, tooltip: str=None, new: bool=False) -> str:
+    def md_link(text: str,
+                url: str,
+                tooltip: str=None,
+                new: bool=False) -> str:
         '''TODO.'''
         if not new and tooltip is None:
             return f'[{text}]({url})'
         return Mark.html_link(text=text, url=url, tooltip=tooltip, new=new)
 
     @staticmethod
-    def html_head(title: str, lang: str='nl', style: str=None, mono: bool=False) -> str:
+    def html_head(title: str,
+                  lang: str='nl',
+                  style: str=None,
+                  mono: bool=False) -> str:
         '''TODO.'''
         if style is None:
             if mono:

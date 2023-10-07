@@ -112,7 +112,7 @@ def test_html_foot():
 </html>
 '''
     assert Mark.html_foot(footer='Some words at the bottom') == \
-'''<p><small>Some words at the bottom</small></p>
+        '''<p><small>Some words at the bottom</small></p>
 </body>
 </html>
 '''

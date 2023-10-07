@@ -65,6 +65,7 @@ Generate API documentation and view it in HTML with
 
 ## TO DO
 
+- mypy --ignore-missing-imports --implicit-optional opentaal tests
 - create tox.ini see https://tox.wiki/en/4.11.3/
 - create file .github/workflows/build.yml
 - create readthedocs.yml

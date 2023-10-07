@@ -6,7 +6,8 @@ import ucto
 class Tokenizer():
     '''Class for tokenizing Dutch texts.'''
 
-    def __init__(self, config: str = 'tokconfig-nld', quotes: bool = True) -> None:
+    def __init__(self, config: str = 'tokconfig-nld',
+                 quotes: bool = True) -> None:
         '''TODO.
 
         :param text: TODO
@@ -52,7 +53,8 @@ class Tokenizer():
                 sentence = []
         return res
 
-    def text_to_sentences_with_spaced_words(self, text: str) -> list[list[str]]:
+    def text_to_sentences_with_spaced_words(self,
+                                            text: str) -> list[list[str]]:
         '''TODO.
 
         :param text: TODO

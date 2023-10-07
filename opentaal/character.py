@@ -17,14 +17,16 @@ class Character():
             return name(char).lower().replace('latin ', 'Latin ')
         return name(char)
 
+# pylint:disable=too-many-return-statements
+
     @staticmethod
-    def decode_category(cat: str, abbrev: bool = True) -> str:  # pylint:disable=too-many-return-statements
+    def decode_category(code: str, abbrev: bool = True) -> str:
         '''Decode Unicode category code from unicode.category().
 
-        :param cat: The two-letter category code.
+        :param code: The two-letter category code.
         :param abbrev: Return abbreveated category seven characters or less.
         :return: The category name.'''
-        first = cat[0]
+        first = code[0]
         if first == 'C':
             return 'control'
         if first == 'L':
@@ -43,29 +45,31 @@ class Character():
             if abbrev:
                 return 'whites.'
             return 'whitespace'
-        raise ValueError(f'Unsupported Unicode category code {cat}')
+        raise ValueError(f'Unsupported Unicode category code {code}')
+
+# pylint:enable=too-many-return-statements
 
     @staticmethod
-    def is_letter(cat: str) -> bool:
+    def is_letter(code: str) -> bool:
         '''Test if a Unicode category from unicode.category() code relates to a
         letter.
 
-        :param cat: The two-character category code.
+        :param code: The two-character category code.
         :return: True is the category relates to a letter.'''
         # TODO https://docs.python.org/3/library/stdtypes.html#str.isalpha
-        if cat in ('LC', 'Ll', 'Lo', 'Lu'):  # excluding Lm: Letter. Modifier
+        if code in ('LC', 'Ll', 'Lo', 'Lu'):  # excluding Lm: Letter. Modifier
             return True
         return False
 
     @staticmethod
-    def is_letternumeral(cat: str) -> bool:
+    def is_letternumeral(code: str) -> bool:
         '''Test if a Unicode category from unicode.category() code relates to a
         letter or a numeral.
 
-        :param cat: The two-character category code.
+        :param code: The two-character category code.
         :return: True is the category relates to a letter or numeral.'''
         # TODO https://docs.python.org/3/library/stdtypes.html#str.isalpha
-        if cat in ('LC', 'Ll', 'Lo', 'Lu', 'Nd'):
+        if code in ('LC', 'Ll', 'Lo', 'Lu', 'Nd'):
             # excluding Lm: Letter. Modifier
             return True
         return False

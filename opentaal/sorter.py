@@ -1,6 +1,5 @@
 '''Class definition for Sort.'''
 
-
 from locale import setlocale, LC_ALL, Error, strxfrm
 from re import compile, sub  # pylint:disable=redefined-builtin
 from typing import Tuple
@@ -14,7 +13,7 @@ class Sorter():
     key = None
 
     @classmethod
-    def initialize(cls): #TODO __init__?
+    def initialize(cls):  # TODO __init__?
         '''TODO.'''
         if cls.key is not None:
             return
@@ -78,8 +77,12 @@ class Sorter():
             restore[char] = compile(f'{replacement}')
         return (substitute, restore)
 
+# pylint:disable=too-many-branches
+
     @staticmethod
-    def sort(text: str, reverse: bool = False, retro: bool = False) -> str:
+    def sort(text: str,
+             reverse: bool = False,
+             retro: bool = False) -> str:
         '''Sort multiline text with non-empty lines.
 
         :param text: Text to sort as list of strings or multiline string.
@@ -88,25 +91,25 @@ class Sorter():
         :return: Sorted text.'''
         Sorter.initialize()
         lines = []
-        if type(text) is str:
+        if isinstance(text, str):
             if retro:
                 for line in text.split('\n'):
                     lines.append(line[::-1])
             else:
                 for line in text.split('\n'):
                     lines.append(line)
-        elif type(text) is list:
+        elif isinstance(text, list):
             if retro:
                 for line in text:
                     lines.append(line[::-1])
             else:
                 lines = text
         else:
-            raise ValueError('Unsupported datatype for text.')
+            raise ValueError(f'Unsupported datatype {type(text)} for text.')
 
         lines = sorted(lines, key=Sorter.key, reverse=reverse)
 
-        if type(text) is str:
+        if isinstance(text, str):  # TODO why this here? explain
             if retro:
                 res = []
                 for line in lines:
@@ -119,6 +122,8 @@ class Sorter():
                 lines.append(line[::-1])
             return res
         return lines
+
+# pylint:enable=too-many-branches
 
     @staticmethod
     def sort_exact(text: str, reverse=False, retro=False) -> str:
@@ -145,8 +150,8 @@ class Sorter():
             for char in Sorter.CONVERSIONS.values():
                 if char in line:
                     forbidden.add(char)
-            for repl in substitute:
-                line = sub(substitute[repl], repl, line)
+            for repl, value in substitute.items():
+                line = sub(value, repl, line)
             lines.append(line)
         if forbidden:
             raise ValueError(f'The characters {", ".join(sorted(forbidden))}'
@@ -154,8 +159,8 @@ class Sorter():
         lines = sorted(lines, key=Sorter.key, reverse=reverse)
         res = []
         for line in lines:
-            for repl in restore:
-                line = sub(restore[repl], repl, line)
+            for repl, value in restore.items():
+                line = sub(value, repl, line)
             res.append(line)
         return '\n'.join(res)
 
