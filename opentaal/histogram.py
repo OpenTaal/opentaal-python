@@ -69,7 +69,8 @@ class Histogram():
         :param reverse: Reverse the counts, starting with the highest first.
         :return: The description and histogram.'''
         return self.to_tsvstring(desc=desc, head=head, reverse=reverse,
-                                 unicode=unicode, abbrev=abbrev, multi=multi)[0]
+                                 unicode=unicode, abbrev=abbrev,
+                                 multi=multi)[0]
 
 # pylint:disable=too-many-branches
 
@@ -97,7 +98,8 @@ class Histogram():
                 if abbrev:
                     res = f'{res}count\tchar.\tcodep.\tcateg.\tdescription\n'
                 else:
-                    res = f'{res}count\tcharacter\tcodepoint\tcategory\tdescription\n'
+                    res = f'{res}count\tcharacter\tcodepoint\tcategory' \
+                          '\tdescription\n'
             else:
                 res = f'{res}count\tvalue\n'
         minimum = maxsize
@@ -111,14 +113,17 @@ class Histogram():
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
-                cat = Character.decode_category(code=category(value), abbrev=abbrev)
+                cat = Character.decode_category(code=category(value),
+                                                abbrev=abbrev)
+                esc = Character.print_friendly(value)
+                hxa = Character.to_hex(value)
                 if multi:
-                    res = f'{res}{count: >7}\t{Character.print_friendly(value)}' \
-                          f'\t{Character.to_hex(value)}' \
+                    res = f'{res}{count: >7}\t{esc}' \
+                          f'\t{hxa}' \
                           f'\t{cat}\t{name}\n'
                 else:
-                    res = f'{res}{count: >7}\t{Character.print_friendly(value)}' \
-                          f' {Character.to_hex(value)}' \
+                    res = f'{res}{count: >7}\t{esc}' \
+                          f' {hxa}' \
                           f' {cat} {name}\n'
                 # perhaps hex(ord(value))
                 # right align
@@ -146,10 +151,12 @@ class Histogram():
             res = f'{self.desc}\n\n'
         if unicode:
             if multi:
-                res = f'{res}count | character | codepoint | categegory | description\n'
+                res = f'{res}count | character | codepoint | categegory |' \
+                      ' description\n'
                 res = f'{res}--: | --- | --: | --- | ---\n'
             else:
-                res = f'{res}count | character, codepoint, categegory and description\n'
+                res = f'{res}count | character, codepoint, categegory and' \
+                      ' description\n'
                 res = f'{res}--: | ---\n'
         else:
             res = f'{res}count | value\n'
@@ -158,15 +165,18 @@ class Histogram():
             for value, count in sorted(self.data.items(), key=itemgetter(1),
                                        reverse=reverse):
                 name = Character.get_name(value)
-                cat = Character.decode_category(code=category(value), abbrev=False)
+                cat = Character.decode_category(code=category(value),
+                                                abbrev=False)
+                esc = Character.print_friendly(value)
+                hxa = Character.to_hex(value)
                 if multi:
-                    res = f'{res}`{count}` | `{Character.print_friendly(value)}`' \
-                          f' | `{Character.to_hex(value)}`' \
+                    res = f'{res}`{count}` | `{esc}`' \
+                          f' | `{hxa}`' \
                           f' | {cat}' \
                           f' | {name}\n'
                 else:
-                    res = f'{res}`{count}` | `{Character.print_friendly(value)}`' \
-                          f' `{Character.to_hex(value)}` {cat} {name}\n'
+                    res = f'{res}`{count}` | `{esc}`' \
+                          f' `{hxa}` {cat} {name}\n'
                 # perhaps hex(ord(value))
         else:
             for value, count in sorted(self.data.items(), key=itemgetter(1),
@@ -197,20 +207,23 @@ class Histogram():
                 if count < minimum:
                     minimum = count
                 name = Character.get_name(value)
-                cat = Character.decode_category(code=category(value), abbrev=False)
+                cat = Character.decode_category(code=category(value),
+                                                abbrev=False)
+                esc = Character.print_friendly(value)
+                hxa = Character.to_hex(value)
                 if multi:
                     res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
-                          f'      "value": "{Character.print_friendly(value)}",\n' \
-                          f'      "codepoint": "{Character.to_hex(value)}",\n' \
+                          f'      "value": "{esc}",\n' \
+                          f'      "codepoint": "{hxa}",\n' \
                           f'      "category": "{cat}",\n' \
                           f'      "description": "{name}"\n' \
                           '    },\n'
                 else:
                     res = f'{res}    {{\n' \
                           f'      "count": {count},\n' \
-                          f'      "value": "{Character.print_friendly(value)}' \
-                          f' {Character.to_hex(value)} {cat} {name}"\n' \
+                          f'      "value": "{esc}' \
+                          f' {hxa} {cat} {name}"\n' \
                           '    },\n'
                 # perhaps hex(ord(value))
         else:
@@ -218,9 +231,10 @@ class Histogram():
                                        reverse=reverse):
                 if count < minimum:
                     minimum = count
+                esc = Character.print_friendly(value)
                 res = f'{res}    {{\n' \
                       f'      "count": {count},\n' \
-                      f'      "value": "{Character.print_friendly(value)}"\n' \
+                      f'      "value": "{esc}"\n' \
                       '    },\n'
         res = f'{res[:-2]}\n'
         res = f'{res}  ],\n'
@@ -230,8 +244,9 @@ class Histogram():
         res = f'{res}}}\n'
         return res
 
-    def to_tsvfile(self, filename: str, head: bool = True, reverse: bool = True,
-                   unicode: bool = True, multi: bool = True):
+    def to_tsvfile(self, filename: str, head: bool = True,
+                   reverse: bool = True, unicode: bool = True,
+                   multi: bool = True) -> tuple[int, int]:
         '''Write the description and sorted histogram to an SVG file.
 
         :param filename: The filename to write to.'''
@@ -239,10 +254,10 @@ class Histogram():
                                 unicode=unicode, multi=multi)
         with open(filename, 'w') as file:
             file.write(res[0])
-        return res[1:]
+        return res[1:]  # TODO Why? explain, need min and max
 
     def to_mdfile(self, filename: str, desc: bool = True, reverse: bool = True,
-                  unicode: bool = True, multi: bool = True):
+                  unicode: bool = True, multi: bool = True) -> None:
         '''Write the description and sorted histogram to a MarkDown file.
 
         :param filename: The filename to write to.'''
@@ -254,7 +269,7 @@ class Histogram():
                     desc: bool = True,
                     reverse: bool = True,
                     unicode: bool = True,
-                    multi: bool = True):
+                    multi: bool = True) -> None:
         '''Write the description and sorted histogram to a JSON file.
 
         :param filename: The filename to write to.'''
@@ -265,7 +280,7 @@ class Histogram():
     def to_graphfile(self, filename: str, reverse: bool = True,
                      unicode: bool = True, pattern: bool = True,
                      width: int = 1920, height: int = 1080,
-                     font: str = 'Roboto Slab', term: str = 'png'):
+                     font: str = 'Roboto Slab', term: str = 'png') -> None:
         # TODO transparent background
         # TODO y axis from 0 as option def
         # TODO xlabel angle
