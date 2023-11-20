@@ -5,3 +5,4 @@ __pycache__/
 /docs/_build/
 /pytest.prof
 /.spyproject/config/backups/
+/.spyproject/config/workspace.ini

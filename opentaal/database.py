@@ -10,7 +10,7 @@ class Database():  # pylint:disable=too-few-public-methods
 # pylint:disable=unspecified-encoding,consider-using-with
 
     @staticmethod
-    def credentials(filename: str) -> dict:
+    def credentials(filename: str, parent: bool = False) -> dict:
         '''Get database credentials from configuration file. The file format is
         supported by at least MySQL and MariaDB clients, in e.g. shell scripts,
         with --defaults-extra-file. See also:
@@ -23,16 +23,19 @@ class Database():  # pylint:disable=too-few-public-methods
         Search paths are in this order:
 
           1. absolute path
-          2. relative path to the current working directory
+          2. relative path to the current working directory (or its parent)
           3. relative path to /usr/local/etc/
 
         :param filename: The filename of the configuration file.
+        :param parent: Search parent of current working directory instead.
         :return: A dictionary with the key values from the file.'''
         # cnf = None
         if isabs(filename):
             cnf = open(filename)
         else:
             current = realpath(join(getcwd(), filename))
+            if parent: #TODO this can be done nicer
+                current = realpath(join(getcwd(), '..', filename))
             if isfile(current):
                 cnf = open(current)
             else:
