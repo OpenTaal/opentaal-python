@@ -7,3 +7,4 @@ __pycache__/
 /.spyproject/config/backups/
 /.spyproject/config/workspace.ini
 /test_database.cnf
+/test_database_error.cnf

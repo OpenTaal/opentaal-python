@@ -28,6 +28,10 @@ port = 54321
 
 [server]
 hostname = 'ignore'""")
+    with open('test_database_error.cnf', 'w') as file:
+        file.write('''[client]
+user = 'testuser'
+password = "testpassword"''')
     return {'user': 'testuser',
             'password': 'testpassword',
             'database': 'testdatabase',
@@ -50,30 +54,29 @@ def test_credentials_nonexisting():
 
 
 def test_credentials_exisiting_absolute(creds):
-    if getcwd().endswith('/tests'):
-        with raises(ValueError, match='Incomplete database credentials'):
-            assert Database.credentials('test_database_error.cnf')
-        assert Database.credentials(join('test_database.cnf')) == creds
-    else:
-        with raises(ValueError, match='Incomplete database credentials'):
-            assert Database.credentials(join('tests', 'test_database_error.cnf'))
-        assert Database.credentials(join('tests', 'test_database.cnf')) == creds
-    # Test with absolute path.
-    assert Database.credentials(join(dirname(realpath(__file__)),
+    with raises(ValueError, match='Incomplete database credentials'):
+        assert Database.credentials(join(dirname(realpath(__file__)), '..',
+                                         'test_database_error.cnf'))
+    assert Database.credentials(join(dirname(realpath(__file__)), '..',
                                      'test_database.cnf')) == creds
 
 
-def test_credentials_exisiting_relative_current(creds):
+def test_credentials_exisiting_current(creds):
+    original = getcwd()
     if getcwd().endswith('/tests'):
         chdir('..')
-    # Test with current path.
+    with raises(ValueError, match='Incomplete database credentials'):
+        assert Database.credentials('test_database_error.cnf')
     assert Database.credentials('test_database.cnf') == creds
+    chdir(original)
 
-def test_credentials_exisiting_relative_parent(creds):
+
+def test_credentials_exisiting_parent(creds):
+    original = getcwd()
     if not getcwd().endswith('/tests'):
         chdir('tests')
-    # Test with parent path.
     assert Database.credentials('test_database.cnf', parent=True) == creds
+    chdir(original)
 
 # pylint:enable=redefined-outer-name
 
