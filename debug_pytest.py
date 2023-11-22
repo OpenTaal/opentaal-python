@@ -1,5 +1,7 @@
 '''Debug Pytest in IDE.'''
 
-import pytest
+from pdb import set_trace
+from pytest import main
 
-pytest.main()
+set_trace()  # pylint:disable=forgotten-debug-statement
+main()

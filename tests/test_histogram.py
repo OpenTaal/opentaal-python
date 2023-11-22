@@ -1,6 +1,7 @@
 '''Test class Histogram.'''
 
 from random import randint, seed
+from os import chdir, getcwd
 from pytest import fixture, raises
 
 from opentaal import Histogram
@@ -46,12 +47,53 @@ def test_tostring_one(one):
 # pylint:enable=redefined-outer-name
 
 
+def test_too_many_values():
+    hist = Histogram('Test', 'tmp_histogram.txt')
+    assert hist.get('a') == 0
+    for _ in range(10000000):
+        hist.add('a')
+    with raises(ValueError, match='Unable to pad more than seven spaces at'
+                ' the moment'):
+        assert hist.to_tsvstring()
+
+
 def test_init():
     hist = Histogram('Test')
     assert hist.get('a') == 0
     seed(2.71828)
     for _ in range(1024):
         hist.add(str(randint(1, 9)))
+    assert hist.get('1') != 0
+    # TODO replace != '' below with actual content tests
+    assert hist.to_string(unicode=False, abbrev=False) != ''
+    assert hist.to_tsvstring(abbrev=False) != ''
+    assert hist.to_mdstring(desc=False) != ''
+    assert hist.to_mdstring(unicode=False) != ''
+    assert hist.to_mdstring(multi=False) != ''
+    assert hist.to_jsonstring(desc=False) != ''
+    assert hist.to_jsonstring(unicode=False) != ''
+    assert hist.to_jsonstring(multi=False) != ''
+    hist.to_tsvfile('/tmp/test.tsv')
+    hist.to_jsonfile('/tmp/test.json')
+    hist.to_mdfile('/tmp/test.md', reverse=False)
+    hist.to_graphfile('/tmp/test.png', pattern=False)
+    hist.to_graphfile('/tmp/test.svg', term='svg')
+
+# pylint:disable=unspecified-encoding
+
+
+def test_init_file():
+    original = getcwd()
+    if getcwd().endswith('/tests'):
+        chdir('..')
+    with open('tmp_histogram.txt', 'w') as file:
+        seed(2.71828)
+        for _ in range(1024):
+            file.write(f'{randint(1, 9)}\n')
+    print(original)
+    hist = Histogram('Test', 'tmp_histogram.txt')
+    chdir(original)
+    assert hist.get('a') == 0
     assert hist.get('1') != 0
     assert hist.to_string(unicode=False, abbrev=False) != ''
     assert hist.to_tsvstring(abbrev=False) != ''
@@ -62,5 +104,7 @@ def test_init():
     hist.to_mdfile('/tmp/test.md', reverse=False)
     hist.to_graphfile('/tmp/test.png', pattern=False)
     hist.to_graphfile('/tmp/test.svg', term='svg')
+
+# pylint:enable=unspecified-encoding
 
 # pylint:enable=missing-function-docstring

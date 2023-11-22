@@ -80,9 +80,9 @@ class Sorter():
 # pylint:disable=too-many-branches
 
     @staticmethod
-    def sort(text: str,
+    def sort(text: str | tuple[str] | list[str] | set[str],
              reverse: bool = False,
-             retro: bool = False) -> str:
+             retro: bool = False) -> str | list[str]:
         '''Sort multiline text with non-empty lines.
 
         :param text: Text to sort as list of strings or multiline string.
@@ -98,18 +98,18 @@ class Sorter():
             else:
                 for line in text.split('\n'):
                     lines.append(line)
-        elif isinstance(text, list):
+        elif isinstance(text, (tuple, list, set)):
             if retro:
                 for line in text:
                     lines.append(line[::-1])
             else:
-                lines = text
+                lines = list(text)
         else:
             raise ValueError(f'Unsupported datatype {type(text)} for text.')
 
         lines = sorted(lines, key=Sorter.key, reverse=reverse)
 
-        if isinstance(text, str):  # TODO why this here? explain
+        if isinstance(text, str):
             if retro:
                 res = []
                 for line in lines:
@@ -119,14 +119,13 @@ class Sorter():
         if retro:
             res = []
             for line in lines:
-                lines.append(line[::-1])
+                res.append(line[::-1])
             return res
         return lines
 
-# pylint:enable=too-many-branches
-
     @staticmethod
-    def sort_exact(text: str, reverse=False, retro=False) -> str:
+    def sort_exact(text: str | tuple[str] | list[str] | set[str],
+                   reverse=False, retro=False) -> str | list[str]:
         '''Exact sort multiline text with non-empty lines.
 
         :param text: Text to sort as list of strings or multiline string.
@@ -138,21 +137,41 @@ class Sorter():
         forbidden = set()
         lines = []
         if retro:
-            for line in text.split('\n'):
-                lines.append(line[::-1])
+            if isinstance(text, str):
+                for line in text.split('\n'):
+                    lines.append(line[::-1])
+            elif isinstance(text, (tuple, list, set)):
+                for line in text:
+                    lines.append(line[::-1])
+            else:
+                raise ValueError(f'Unsupported datatype {type(text)} for'
+                                 ' text.')
             lines = sorted(lines, key=Sorter.key, reverse=reverse)
             res = []
             for line in lines:
                 res.append(line[::-1])
-            return '\n'.join(res)
+            if isinstance(text, str):
+                return '\n'.join(res)
+            return res
 
-        for line in text.split('\n'):
-            for char in Sorter.CONVERSIONS.values():
-                if char in line:
-                    forbidden.add(char)
-            for repl, value in substitute.items():
-                line = sub(value, repl, line)
-            lines.append(line)
+        if isinstance(text, str):
+            for line in text.split('\n'):
+                for char in Sorter.CONVERSIONS.values():
+                    if char in line:
+                        forbidden.add(char)
+                for repl, value in substitute.items():
+                    line = sub(value, repl, line)
+                lines.append(line)
+        elif isinstance(text, (tuple, list, set)):
+            for line in text:
+                for char in Sorter.CONVERSIONS.values():
+                    if char in line:
+                        forbidden.add(char)
+                for repl, value in substitute.items():
+                    line = sub(value, repl, line)
+                lines.append(line)
+        else:
+            raise ValueError(f'Unsupported datatype {type(text)} for text.')
         if forbidden:
             raise ValueError(f'The characters {", ".join(sorted(forbidden))}'
                              ' are not allowed in exact sort.')
@@ -162,9 +181,13 @@ class Sorter():
             for repl, value in restore.items():
                 line = sub(value, repl, line)
             res.append(line)
-        return '\n'.join(res)
+        if isinstance(text, str):
+            return '\n'.join(res)
+        return res
 
 # if non_dutch: #TODO elif
 # 'De ingevoerde woorden bevatten karakters die niet in Nederlands voorkomen'
+
+# pylint:enable=too-many-branches
 
 # pylint:enable=unspecified-encoding

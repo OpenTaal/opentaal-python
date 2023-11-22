@@ -7,7 +7,7 @@ from os import getcwd
 class Database():  # pylint:disable=too-few-public-methods
     '''Class for using databases.'''
 
-# pylint:disable=unspecified-encoding,consider-using-with
+# pylint:disable=unspecified-encoding,consider-using-with,too-many-branches
 
     @staticmethod
     def credentials(filename: str, parent: bool = False) -> dict:
@@ -34,7 +34,7 @@ class Database():  # pylint:disable=too-few-public-methods
             cnf = open(filename)
         else:
             current = realpath(join(getcwd(), filename))
-            if parent: #TODO this can be done nicer
+            if parent:  # TODO this can be done nicer
                 current = realpath(join(getcwd(), '..', filename))
             if isfile(current):
                 cnf = open(current)
@@ -71,4 +71,4 @@ class Database():  # pylint:disable=too-few-public-methods
             raise ValueError('Incomplete database credentials.')
         return res
 
-# pylint:enable=unspecified-encoding,consider-using-with
+# pylint:enable=unspecified-encoding,consider-using-with,too-many-branches

@@ -6,19 +6,45 @@ from opentaal import Sorter
 
 # pylint:disable=missing-function-docstring
 
-
-@fixture
-def short():
-    return '''eer
-beer
-tafel
-α-straling
-stoel
-appel'''
+WORDS = ('eer', 'beer', 'tafel', 'α-straling', 'stoel', 'appel')
 
 
 @fixture
-def long():
+def short_tuple():
+    return WORDS
+
+
+@fixture
+def short_str():
+    res = ''
+    first = True
+    for word in WORDS:
+        if first:
+            res = word
+            first = False
+        else:
+            res = f'{res}\n{word}'
+    return res
+
+
+@fixture
+def short_list():
+    res = []
+    for word in WORDS:
+        res.append(word)
+    return res
+
+
+@fixture
+def short_set():
+    res = set()
+    for word in WORDS:
+        res.add(word)
+    return res
+
+
+@fixture
+def long_str():
     return '''BB
 zo-even
 C 32
@@ -188,114 +214,180 @@ a.u.b.
 # pylint:disable=redefined-outer-name
 
 
-def test_sorter_datatype():
+def test_sorter_datatypes():
     with raises(ValueError,
-                match="Unsupported datatype <class 'tuple'> for text."):
-        assert Sorter.sort((1, 2, 3))
+                match="Unsupported datatype <class 'bool'> for text."):
+        assert Sorter.sort(True)
+    with raises(ValueError,
+                match="Unsupported datatype <class 'int'> for text."):
+        assert Sorter.sort_exact(12)
+    with raises(ValueError,
+                match="Unsupported datatype <class 'float'> for text."):
+        assert Sorter.sort_exact(12.34, retro=True)
 
 
-def test_sorter(short, long):
-    assert Sorter.sort(short) == \
+def test_sorter_str(short_str, long_str):
+    assert Sorter.sort(short_str) == \
         '''appel
 beer
 eer
 stoel
 tafel
 α-straling'''
-    res = Sorter.sort(long)
+    res = Sorter.sort(long_str)
     assert res.startswith('100 eurobiljet\n') is True
     assert res.endswith('\nχ²-toets') is True
 
 
-def test_sorter_reverse(short, long):
-    assert Sorter.sort(short, reverse=True) == \
+def test_sorter_tuple(short_tuple):
+    assert Sorter.sort(short_tuple) == \
+        ['appel', 'beer', 'eer', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_list(short_list):
+    assert Sorter.sort(short_list) == \
+        ['appel', 'beer', 'eer', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_set(short_set):
+    assert Sorter.sort(short_set) == \
+        ['appel', 'beer', 'eer', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_reverse(short_str, long_str):
+    assert Sorter.sort(short_str, reverse=True) == \
         '''α-straling
 tafel
 stoel
 eer
 beer
 appel'''
-    res = Sorter.sort(long, reverse=True)
+    res = Sorter.sort(long_str, reverse=True)
     assert res.startswith('χ²-toets\n') is True
     assert res.endswith('\n100 eurobiljet') is True
 
 
-def test_sorter_retro(short, long):
-    assert Sorter.sort(short, retro=True) == \
+def test_sorter_retro(short_str, long_str):
+    assert Sorter.sort(short_str, retro=True) == \
         '''α-straling
 tafel
 stoel
 appel
 eer
 beer'''
-    res = Sorter.sort(long, retro=True)
+    res = Sorter.sort(long_str, retro=True)
     assert res.startswith('C 31\n') is True
     assert res.endswith('\nπ') is True
 
 
-def test_sorter_reverse_retro(short, long):
-    assert Sorter.sort(short, reverse=True, retro=True) == \
+def test_sorter_reverse_retro_str(short_str, long_str):
+    assert Sorter.sort(short_str, reverse=True, retro=True) == \
         '''beer
 eer
 appel
 stoel
 tafel
 α-straling'''
-    res = Sorter.sort(long, retro=True)
+    res = Sorter.sort(long_str, retro=True)
     assert res.startswith('C 31\n') is True
     assert res.endswith('\nπ') is True
 
 
-def test_sorter_exact(short, long):
-    assert Sorter.sort_exact(short) == \
+def test_sorter_reverse_retro_tuple(short_tuple):
+    assert Sorter.sort(short_tuple, reverse=True, retro=True) == \
+        ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_reverse_retro_list(short_list):
+    assert Sorter.sort(short_list, reverse=True, retro=True) == \
+        ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_reverse_retro_set(short_set):
+    assert Sorter.sort(short_set, reverse=True, retro=True) == \
+        ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_exact_str(short_str, long_str):
+    assert Sorter.sort_exact(short_str) == \
         '''appel
 α-straling
 beer
 eer
 stoel
 tafel'''
-    res = Sorter.sort_exact(long)
+    res = Sorter.sort_exact(long_str)
     assert res.startswith('100 eurobiljet\n') is True
     assert res.endswith('\nzoeven') is True
 
 
-def test_sorter_exact_reverse(short, long):
-    assert Sorter.sort_exact(short, reverse=True) == \
+def test_sorter_exact_tuple(short_tuple):
+    assert Sorter.sort_exact(short_tuple) == \
+        ['appel', 'α-straling', 'beer', 'eer', 'stoel', 'tafel']
+
+
+def test_sorter_exact_list(short_list):
+    assert Sorter.sort_exact(short_list) == \
+        ['appel', 'α-straling', 'beer', 'eer', 'stoel', 'tafel']
+
+
+def test_sorter_exact_set(short_set):
+    assert Sorter.sort_exact(short_set) == \
+        ['appel', 'α-straling', 'beer', 'eer', 'stoel', 'tafel']
+
+
+def test_sorter_exact_reverse(short_str, long_str):
+    assert Sorter.sort_exact(short_str, reverse=True) == \
         '''tafel
 stoel
 eer
 beer
 α-straling
 appel'''
-    res = Sorter.sort_exact(long, reverse=True)
+    res = Sorter.sort_exact(long_str, reverse=True)
     assert res.startswith('zoeven\n') is True
     assert res.endswith('\n100 eurobiljet') is True
 
 
-def test_sorter_exact_retro(short, long):
-    assert Sorter.sort_exact(short, retro=True) == \
+def test_sorter_exact_retro(short_str, long_str):
+    assert Sorter.sort_exact(short_str, retro=True) == \
         '''α-straling
 tafel
 stoel
 appel
 eer
 beer'''
-    res = Sorter.sort_exact(long, retro=True)
+    res = Sorter.sort_exact(long_str, retro=True)
     assert res.startswith('C 31\n') is True
     assert res.endswith('\nπ') is True
 
 
-def test_sorter_exact_reverse_retro(short, long):
-    assert Sorter.sort_exact(short, reverse=True, retro=True) == \
+def test_sorter_exact_reverse_retro_str(short_str, long_str):
+    assert Sorter.sort_exact(short_str, reverse=True, retro=True) == \
         '''beer
 eer
 appel
 stoel
 tafel
 α-straling'''
-    res = Sorter.sort_exact(long, reverse=True, retro=True)
+    res = Sorter.sort_exact(long_str, reverse=True, retro=True)
     assert res.startswith('π\n') is True
     assert res.endswith('\nC 31') is True
+
+
+def test_sorter_exact_reverse_retro_tuple(short_tuple):
+    assert Sorter.sort_exact(short_tuple, reverse=True, retro=True) == \
+        ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_exact_reverse_retro_list(short_list):
+    assert Sorter.sort_exact(short_list, reverse=True, retro=True) == \
+        ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
+
+
+def test_sorter_exact_reverse_retro_set(short_set):
+    assert Sorter.sort_exact(short_set, reverse=True, retro=True) == \
+        ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
 
 # pylint:enable=redefined-outer-name
 
@@ -304,5 +396,8 @@ def test_sorter_exact_forbidden():
     with raises(ValueError, match='The characters ḁ are not allowed in exact'
                                   ' sort.'):
         assert Sorter.sort_exact('ḁppel')
+    with raises(ValueError, match='The characters ḙ are not allowed in exact'
+                                  ' sort.'):
+        assert Sorter.sort_exact(['appḙl'])
 
 # pylint:enable=missing-function-docstring

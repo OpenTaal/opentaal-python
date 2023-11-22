@@ -1,13 +1,15 @@
 '''Test class Tokenizer.'''
 
 from os.path import dirname, join, realpath
-from os import chdir, getcwd, makedirs
+from os import chdir, getcwd
 from re import escape
 from pytest import fixture, raises
 
 from opentaal import Database
 
 # pylint:disable=missing-function-docstring
+
+# pylint:disable=unspecified-encoding
 
 
 @fixture
@@ -16,7 +18,7 @@ def creds():
     # Spyder runs pytest in the project root directory.
     if getcwd().endswith('/tests'):
         chdir('..')
-    with open('test_database.cnf', 'w') as file:
+    with open('tmp_database.cnf', 'w') as file:
         file.write("""# This is just test data outside the client group.
 [client]
 # This is just test data inside the client group.
@@ -28,7 +30,7 @@ port = 54321
 
 [server]
 hostname = 'ignore'""")
-    with open('test_database_error.cnf', 'w') as file:
+    with open('tmp_database_error.cnf', 'w') as file:
         file.write('''[client]
 user = 'testuser'
 password = "testpassword"''')
@@ -36,6 +38,8 @@ password = "testpassword"''')
             'password': 'testpassword',
             'database': 'testdatabase',
             'port': '54321'}
+
+# pylint:enable=unspecified-encoding
 
 
 def test_credentials_nonexisting():
@@ -56,9 +60,9 @@ def test_credentials_nonexisting():
 def test_credentials_exisiting_absolute(creds):
     with raises(ValueError, match='Incomplete database credentials'):
         assert Database.credentials(join(dirname(realpath(__file__)), '..',
-                                         'test_database_error.cnf'))
+                                         'tmp_database_error.cnf'))
     assert Database.credentials(join(dirname(realpath(__file__)), '..',
-                                     'test_database.cnf')) == creds
+                                     'tmp_database.cnf')) == creds
 
 
 def test_credentials_exisiting_current(creds):
@@ -66,8 +70,8 @@ def test_credentials_exisiting_current(creds):
     if getcwd().endswith('/tests'):
         chdir('..')
     with raises(ValueError, match='Incomplete database credentials'):
-        assert Database.credentials('test_database_error.cnf')
-    assert Database.credentials('test_database.cnf') == creds
+        assert Database.credentials('tmp_database_error.cnf')
+    assert Database.credentials('tmp_database.cnf') == creds
     chdir(original)
 
 
@@ -75,7 +79,7 @@ def test_credentials_exisiting_parent(creds):
     original = getcwd()
     if not getcwd().endswith('/tests'):
         chdir('tests')
-    assert Database.credentials('test_database.cnf', parent=True) == creds
+    assert Database.credentials('tmp_database.cnf', parent=True) == creds
     chdir(original)
 
 # pylint:enable=redefined-outer-name

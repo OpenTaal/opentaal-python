@@ -6,5 +6,6 @@ __pycache__/
 /pytest.prof
 /.spyproject/config/backups/
 /.spyproject/config/workspace.ini
-/test_database.cnf
-/test_database_error.cnf
+/tmp_database.cnf
+/tmp_database_error.cnf
+/tmp_histogram.txt
