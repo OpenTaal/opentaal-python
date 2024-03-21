@@ -1,4 +1,4 @@
-'''Class definition for Sort.'''
+'''Class definition for Sorter.'''
 
 from locale import setlocale, LC_ALL, Error, strxfrm
 from re import compile, sub  # pylint:disable=redefined-builtin
@@ -8,7 +8,7 @@ from typing import Tuple
 
 
 class Sorter():
-    '''Class to sort words.'''
+    '''Class for sorting words.'''
 
     key = None
 
@@ -85,7 +85,7 @@ class Sorter():
              retro: bool = False) -> str | list[str]:
         '''Sort multiline text with non-empty lines.
 
-        :param text: Text to sort as list of strings or multiline string.
+        :param text: The text to sort as list of strings or multiline string.
         :param reverse: Sort descending when True.
         :param retro: Sort retrograde when True.
         :return: Sorted text.'''
@@ -128,7 +128,7 @@ class Sorter():
                    reverse=False, retro=False) -> str | list[str]:
         '''Exact sort multiline text with non-empty lines.
 
-        :param text: Text to sort as list of strings or multiline string.
+        :param text: The text to sort as list of strings or multiline string.
         :param reverse: Sort descending when True.
         :param retro: Sort retrograde when True.
         :return: Sorted text.'''

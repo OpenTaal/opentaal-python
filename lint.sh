@@ -1,11 +1,12 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 echo '* CHECKBASHISMS'
 checkbashisms *.sh
 
 FILES='opentaal tests debug_pytest.py'
 echo '* FLAKE8'
-flake8 --ignore E252 $FILES
+# --ignore E252
+flake8 $FILES
 echo '* PYLINT'
 # --import-graph a.gv
 # --ignore-imports

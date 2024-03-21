@@ -4,14 +4,13 @@ from unicodedata import name
 
 
 class Character():
-    '''Class for creating histograms. See also
-    https://en.wikipedia.org/wiki/Histogram ,
-    https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str .'''
+    '''Class for processing characters.'''
 
     @staticmethod
     def get_name(char: str, pretty: bool = False) -> str:
         '''Get Unicode name for character.
 
+        :param char: The character for which to get the Unicode name.
         :param pretty: Pretty print in lower case except for names.'''
         if pretty:
             return name(char).lower().replace('latin ', 'Latin ')
@@ -131,8 +130,8 @@ class Character():
         https://en.wikipedia.org/wiki/Whitespace_character and
         https://en.wikipedia.org/wiki/Non-breaking_space .
 
-        :param text: The string to make print friendly.
-        :return: Print friendly version of the supplied string.'''
+        :param text: The text to make print friendly.
+        :return: Print friendly version of the supplied text.'''
         replacements = {
             '\t': '↹',  # U+0009 tab character
             '\n': '⏎',  # U+000A? new line character

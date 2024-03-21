@@ -1,4 +1,4 @@
-'''Test class Sort.'''
+'''Test class Sorter.'''
 
 from pytest import fixture, raises
 

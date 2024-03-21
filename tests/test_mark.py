@@ -1,4 +1,4 @@
-'''Test class Tokenizer.'''
+'''Test class Mark.'''
 
 from opentaal import Mark
 

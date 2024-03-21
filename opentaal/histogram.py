@@ -15,20 +15,31 @@ class Histogram():
     '''Class for creating histograms. See also
     https://en.wikipedia.org/wiki/Histogram .'''
 
-    def __init__(self, desc: str, filename: str = None) -> None:
+    def __init__(self, desc: str,
+                 filename: str = None,
+                 chars: bool = True) -> None:
         '''Construct object and set its description.
 
-        :param desc: Description of the histogram.
-        :param desc: Filename of text file to process.
+        :param desc: The description of the histogram.
+        :param desc: The filename of text file to process.
+        :param chars: Process characters or words. This parameters is
+        irrelevant when adding bool, int or float.
         :return: Constructed object.'''
+        # TODO Support bin size for int and float
         self.desc = desc
+        self.chars = chars
         self.data: dict[str, int] = {}
         self.max = 0
         if filename is not None:
+            # TODO char or word
             with open(filename) as file:
                 for line in file:
-                    for char in line[:-1]:
-                        self.add(char)
+                    line = line[:-1]
+                    if chars:
+                        for char in line:
+                            self.add(char)
+                    else:
+                        self.add(line)
 
     def size(self) -> int:
         '''Return the number of unique values, also known as bins.'''
@@ -48,25 +59,48 @@ class Histogram():
         return self.max
 
     def add(self, value) -> None:
-        '''Add a value by increasing its count in the histogram.
+        '''Add a value by increasing its count in the histogram. If Histogram
+        object was constructed character-based (chars=True), when a word is
+        added, all characters will be added seperately. Do not mix adding
+        different types.
 
-        :param value: The value to increase its count of by one.'''
-        if value in self.data:
-            self.data[value] += 1
+        :param value: The value to increase its count of by one. Can be str,
+        bool, int or float.'''
+        if value in ('', None):
+            raise ValueError('Cannot add empty string or None to'
+                             f' "{self.desc}".')
+        if not self.chars or isinstance(value, (bool, int, float)):
+            if value in self.data:
+                self.data[value] += 1
+            else:
+                self.data[value] = 1
+            if self.data[value] > self.max:
+                self.max = self.data[value]
         else:
-            self.data[value] = 1
-        if self.data[value] > self.max:
-            self.max = self.data[value]
+            for char in value:
+                if char in self.data:
+                    self.data[char] += 1
+                else:
+                    self.data[char] = 1
+                if self.data[char] > self.max:
+                    self.max = self.data[char]
 
 # pylint:disable=too-many-arguments
 
-    def to_string(self, desc=True, head=True, reverse=True, unicode=True,
-                  abbrev=True, multi=True) -> str:
+    def to_string(self, desc: bool = True,
+                  head: bool = True,
+                  reverse: bool = True,
+                  unicode: bool = True,
+                  abbrev: bool = True,
+                  multi: bool = True) -> str:
         '''Write the description and sorted histogram counts to a string.
 
         :param desc: Include description.
         :param head: Include header.
         :param reverse: Reverse the counts, starting with the highest first.
+        :param unicode: TODO.
+        :param abbrev: TODO.
+        :param multi: TODO.
         :return: The description and histogram.'''
         return self.to_tsvstring(desc=desc, head=head, reverse=reverse,
                                  unicode=unicode, abbrev=abbrev,
@@ -86,6 +120,9 @@ class Histogram():
         :param desc: Include description.
         :param head: Include header.
         :param reverse: Reverse the counts, starting with the highest first.
+        :param unicode: TODO.
+        :param abbrev: TODO.
+        :param multi: TODO.
         :return: The description and histogram.'''
         if len(self.data) == 0:
             raise ValueError(f'Cannot process "{self.desc}" because no values'
@@ -142,6 +179,8 @@ class Histogram():
 
         :param desc: Include description.
         :param reverse: Reverse the counts, starting with the highest first.
+        :param unicode: TODO.
+        :param multi: TODO.
         :return: The description and histogram.'''
         if len(self.data) == 0:
             raise ValueError(f'Cannot process "{self.desc}" because no values'
@@ -192,6 +231,8 @@ class Histogram():
 
         :param desc: Include description.
         :param reverse: Reverse the counts, starting with the highest first.
+        :param unicode: TODO.
+        :param multi: TODO.
         :return: The description and histogram.'''
         if len(self.data) == 0:
             raise ValueError(f'Cannot process "{self.desc}" because no values'
@@ -249,7 +290,12 @@ class Histogram():
                    multi: bool = True) -> tuple[int, int]:
         '''Write the description and sorted histogram to an SVG file.
 
-        :param filename: The filename to write to.'''
+        :param filename: The filename to write to.
+        :param head: TODO
+        :param reverse: TODO
+        :param unicode: TODO
+        :param multi: TODO
+        :return: TODO'''
         res = self.to_tsvstring(desc=False, head=head, reverse=reverse,
                                 unicode=unicode, multi=multi)
         with open(filename, 'w') as file:
@@ -260,7 +306,12 @@ class Histogram():
                   unicode: bool = True, multi: bool = True) -> None:
         '''Write the description and sorted histogram to a MarkDown file.
 
-        :param filename: The filename to write to.'''
+        :param filename: The filename to write to.
+        :param desc: TODO
+        :param reverse: TODO
+        :param unicode: TODO
+        :param multi: TODO
+        :return: TODO'''
         with open(filename, 'w') as file:
             file.write(self.to_mdstring(desc=desc, reverse=reverse,
                                         unicode=unicode, multi=multi))

@@ -13,6 +13,7 @@ For example usage, please see the unit tests in the :code:`tests` directory.
    checker
    database
    histogram
+   isocode
    mark
    sorter
    tokenizer

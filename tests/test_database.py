@@ -1,4 +1,4 @@
-'''Test class Tokenizer.'''
+'''Test class Database.'''
 
 from os.path import dirname, join, realpath
 from os import chdir, getcwd

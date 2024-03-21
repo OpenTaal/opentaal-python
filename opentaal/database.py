@@ -27,7 +27,7 @@ class Database():  # pylint:disable=too-few-public-methods
           3. relative path to /usr/local/etc/
 
         :param filename: The filename of the configuration file.
-        :param parent: Search parent of current working directory instead.
+        :param parent: Search parent of the current working directory instead.
         :return: A dictionary with the key values from the file.'''
         # cnf = None
         if isabs(filename):

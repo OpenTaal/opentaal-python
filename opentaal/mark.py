@@ -1,16 +1,21 @@
-'''Class definition for HTML.'''
+'''Class definition for Mark.'''
 
 
 class Mark():
-    '''Class for retrieving word lists. See also
-    https://github.com/OpenTaal/opentaal-wordlist .'''
+    '''Class for exporting to markup languages such as HTML and Markdown.'''
 
     @staticmethod
     def html_link(text: str,
                   url: str,
-                  tooltip: str | None=None,
-                  new: bool=False) -> str:
-        '''TODO.'''
+                  tooltip: str | None = None,
+                  new: bool = False) -> str:
+        '''TODO.
+
+        :param text: TODO.
+        :param url: TODO.
+        :param tooltip: TODO.
+        :param new: TODO.
+        :return: TODO.'''
         if not new:
             if tooltip is None:
                 return f'<a href="{url}">{text}</a>'
@@ -22,19 +27,31 @@ class Mark():
     @staticmethod
     def md_link(text: str,
                 url: str,
-                tooltip: str=None,
-                new: bool=False) -> str:
-        '''TODO.'''
+                tooltip: str = None,
+                new: bool = False) -> str:
+        '''TODO.
+
+        :param text: TODO.
+        :param url: TODO.
+        :param tooltip: TODO.
+        :param new: TODO.
+        :return: TODO.'''
         if not new and tooltip is None:
             return f'[{text}]({url})'
         return Mark.html_link(text=text, url=url, tooltip=tooltip, new=new)
 
     @staticmethod
     def html_head(title: str,
-                  lang: str='nl',
-                  style: str=None,
-                  mono: bool=False) -> str:
-        '''TODO.'''
+                  lang: str = 'nl',
+                  style: str = None,
+                  mono: bool = False) -> str:
+        '''TODO.
+
+        :param title: TODO.
+        :param lang: TODO.
+        :param style: TODO.
+        :param mono: TODO.
+        :return: TODO.'''
         if style is None:
             if mono:
                 style = '''<style>
@@ -67,14 +84,20 @@ class Mark():
 
     @staticmethod
     def md_head(title: str) -> str:
-        '''TODO.'''
+        '''TODO.
+
+        :param title: TODO.
+        :return: TODO.'''
         return f'''# {title}
 
 '''
 
     @staticmethod
-    def html_foot(footer: str=None) -> str:
-        '''TODO.'''
+    def html_foot(footer: str = None) -> str:
+        '''TODO.
+
+        :param footer: TODO.
+        :return: TODO.'''
         if footer is not None:
             return f'''<p><small>{footer}</small></p>
 </body>
@@ -85,8 +108,11 @@ class Mark():
 '''
 
     @staticmethod
-    def md_foot(footer: str=None) -> str:
-        '''TODO.'''
+    def md_foot(footer: str = None) -> str:
+        '''TODO.
+
+        :param footer: TODO.
+        :return: TODO.'''
         if footer is not None:
             return f'''
 <small>{footer}</small>
