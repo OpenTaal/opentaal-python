@@ -3,6 +3,10 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import os
+import sys
+import mock
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -15,11 +19,8 @@ release = '0.1.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-import os
-import sys
 sys.path.insert(0, os.path.abspath(os.path.join('..', 'opentaal')))
 
-import mock
 MOCK_MODULES = ['opentaal']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
@@ -37,9 +38,9 @@ autodoc_default_options = {
     'members': True,
     'undoc-members': True,
     'special-members': True,
-#    'private-members': True,
+    # 'private-members': True,
     'exclude-members': '__dict__, __module__, __weakref__',
-    'memvber-order': 'bysource',
+    'member-order': 'bysource',
     'show-inheritance': True}
 autodoc_typehints = 'description'
 todo_include_todos = True
@@ -50,7 +51,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-#html_theme = 'alabaster'
+# html_theme = 'alabaster'
 html_static_path = ['_static']
 html_title = 'for quickly processing Dutch texts'
 html_logo = 'logo.png'
