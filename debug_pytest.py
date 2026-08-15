@@ -1,7 +1,6 @@
 """Debug Pytest in IDE."""
 
-from pdb import set_trace
 from pytest import main
 
-set_trace()  # pylint:disable=forgotten-debug-statement
-main()
+if __name__ == '__main__':
+    main(['-s', '--pdb'])

@@ -10,7 +10,7 @@ class Database():  # pylint:disable=too-few-public-methods
 # pylint:disable=unspecified-encoding,consider-using-with,too-many-branches
 
     @staticmethod
-    def credentials(filename: str, parent: bool = False) -> dict:
+    def credentials(filename: str, parent: bool = False) -> dict[str, str]:
         """Get database credentials from configuration file.
 
         The file format is supported by at least MySQL and MariaDB clients, in
@@ -75,4 +75,4 @@ class Database():  # pylint:disable=too-few-public-methods
             raise ValueError('Incomplete database credentials.')
         return res
 
-# pylint:enable=unspecified-encoding,consider-using-with,too-many-branches
+# pylint:enable=consider-using-with,too-many-branches

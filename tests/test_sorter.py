@@ -4,7 +4,7 @@ from pytest import fixture, raises
 
 from opentaal import Sorter
 
-# pylint:disable=missing-function-docstring
+# pylint:disable=missing-function-docstring,redefined-outer-name
 
 WORDS = ('eer', 'beer', 'tafel', 'α-straling', 'stoel', 'appel')
 
@@ -211,8 +211,6 @@ St.-Eustatius
 a.u.b.
 å'''
 
-# pylint:disable=redefined-outer-name
-
 
 def test_sorter_datatypes():
     with raises(ValueError,
@@ -389,8 +387,6 @@ def test_sorter_exact_reverse_retro_set(short_set):
     assert Sorter.sort_exact(short_set, reverse=True, retro=True) == \
         ['beer', 'eer', 'appel', 'stoel', 'tafel', 'α-straling']
 
-# pylint:enable=redefined-outer-name
-
 
 def test_sorter_exact_forbidden():
     with raises(ValueError, match='The characters ḁ are not allowed in exact'
@@ -399,5 +395,3 @@ def test_sorter_exact_forbidden():
     with raises(ValueError, match='The characters ḙ are not allowed in exact'
                                   ' sort.'):
         assert Sorter.sort_exact(['appḙl'])
-
-# pylint:enable=missing-function-docstring

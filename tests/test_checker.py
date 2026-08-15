@@ -4,7 +4,7 @@ from pytest import fixture
 
 from opentaal import Checker
 
-# pylint:disable=missing-function-docstring
+# pylint:disable=missing-function-docstring,redefined-outer-name
 
 
 @fixture
@@ -15,8 +15,6 @@ def checker():
 @fixture
 def words():
     return ['D', 'tafel', 'geod', ',', 'wow', '?', 'Ja', '!']
-
-# pylint:disable=redefined-outer-name
 
 
 def test_members(checker):
@@ -37,17 +35,17 @@ def test_spelling(checker):
     assert checker.check('tafle poot', space=True) is False
 
 
-def test_suggest(checker):
-    assert checker.suggest('tafle') == ['tafel', 'tale']
-    assert checker.suggest('tafel') == ['Tafel']
+def test_suggest(checker):  # TODO add bulk methods
+    assert checker.suggest('tafle') == ('tafel', 'tale')
+    assert checker.suggest('tafel') == ('Tafel', )
 
 
 def test_stem(checker):
-    assert checker.stem('tafels') == [b'tafel']
+    assert checker.stem('tafels') == ('tafel', )
 
 
 def test_analyze(checker):
-    assert checker.analyze('tafels') == [b' st:tafel ts:NN2']
+    assert checker.analyze('tafels') == (' st:tafel ts:NN2', )
 
 
 def test_spelling_list(checker, words):
@@ -57,7 +55,3 @@ def test_spelling_list(checker, words):
 
 def test_spelling_list_index(checker, words):
     assert checker.check_list_index(words) == {2}
-
-# pylint:enable=redefined-outer-name
-
-# pylint:enable=missing-function-docstring

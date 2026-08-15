@@ -1,6 +1,6 @@
 """Test class Wordlist."""
 
-# pylint:disable=missing-function-docstring
+# pylint:disable=missing-function-docstring,redefined-outer-name
 
 from os import stat
 from pytest import fixture
@@ -61,8 +61,6 @@ def test_set_file_to_set():
     Wordlist.set_to_file(data, filename)
     assert stat('/tmp/set_to_file_to_set.txt').st_size == 14
     assert Wordlist.file_to_set(filename) == data
-
-# pylint:disable=redefined-outer-name
 
 
 def test_get_str_wordparts(minimum):
@@ -147,7 +145,3 @@ def test_get_str_basewordsuncertified(minimum):
 
 def test_get_str_flexionsuncertified(minimum):
     assert len(Wordlist.get_str_flexionsuncertified()) > minimum
-
-# pylint:enable=redefined-outer-name
-
-# pylint:enable=missing-function-docstring

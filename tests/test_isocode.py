@@ -16,5 +16,3 @@ def test_get_dict_currencies():
 
 def test_get_dict_languagefamilies():
     assert len(Isocode.get_dict_languagefamilies()) > 16
-
-# pylint:enable=missing-function-docstring

@@ -1,16 +1,6 @@
-flake8
-mypy
-
-pytest
-pytest-cov
-
-mock
-sphinx
-sphinx-autodoc-typehints
-
+-r lint.txt
+-r test.txt
+-r doc.txt
 snakeviz
-spyder
-spyder-unittest
-
-tox
+#tox
 twine

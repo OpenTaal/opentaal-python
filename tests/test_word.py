@@ -32,6 +32,3 @@ def test_synthesize():
 #     assert Word.esc("'s-Herogenbosch") == "\\'s-Herogenbosch"
 #     assert Word.unesc(None) is None
 #     assert Word.unesc("\\'s-Herogenbosch") == "'s-Herogenbosch"
-
-
-# pylint:enable=missing-function-docstring

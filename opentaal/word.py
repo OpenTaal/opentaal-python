@@ -12,8 +12,9 @@ class Word():
     # def esc(string: str) -> str:
     #     """Escape single quote with a backslash for use with SQL.
 
-    #     :param string: TODO.
-    #     :return: TODO."""
+    #     :param string: The string to escape.
+    #     :return: String with escaped single quotes.
+    #     """
     #     if string is None:
     #         return string
     #     return string.replace("'", "\\'")
@@ -22,8 +23,9 @@ class Word():
     # def unesc(string: str) -> str:
     #     """Unescape single quote with a backslash for use with SQL.
 
-    #     :param string: TODO.
-    #     :return: TODO."""
+    #     :param string: The string to unescaped.
+    #     :return: String with unescaped single quotes.
+    #     """
     #     if string is None:
     #         return string
     #     return string.replace("\\'", "'")
@@ -38,11 +40,12 @@ class Word():
         return sha256(string.encode('utf8')).hexdigest()
 
     @staticmethod
-    def synthesize(string: str, path: str) -> None:  # pragma: no cover
-        """TODO.
+    def synthesize(text: str, path: str) -> None:  # pragma: no cover
+        """Synthesize text with TTS into an MP3 file.
 
-        :param string: The text synthesize.
-        :param path: The path to store the audio file.
+        :param text: The text synthesize.
+        :param path: The path to store the audio as MP3 file.
         """
         # TODO perhaps a special class withh also support for OpenAI TTS
-        gTTS(string, lang='nl', tld='nl').save(path)
+        # TODO use os.environ.get("XXXOPENAIXXX")
+        gTTS(text, lang='nl', tld='nl').save(path)

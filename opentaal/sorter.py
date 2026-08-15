@@ -2,7 +2,7 @@
 
 from locale import setlocale, LC_ALL, Error, strxfrm
 from re import compile, sub  # pylint:disable=redefined-builtin
-from typing import Tuple
+from typing import Pattern
 
 # pylint:disable=unspecified-encoding
 
@@ -13,7 +13,7 @@ class Sorter():
     key = None
 
     @classmethod
-    def initialize(cls):  # TODO __init__?
+    def initialize(cls) -> None:  # TODO __init__ or something else with __?
         """TODO."""
         if cls.key is not None:
             return
@@ -68,7 +68,7 @@ class Sorter():
     }
 
     @staticmethod
-    def exact_conversion() -> Tuple[dict, dict]:
+    def exact_conversion() -> tuple[dict[str, Pattern], dict[str, Pattern]]:
         """Do TODO."""
         substitute = {}
         restore = {}
@@ -191,5 +191,3 @@ class Sorter():
 # 'De ingevoerde woorden bevatten karakters die niet in Nederlands voorkomen'
 
 # pylint:enable=too-many-branches
-
-# pylint:enable=unspecified-encoding

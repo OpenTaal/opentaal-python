@@ -20,7 +20,7 @@ class Histogram():
     """
 
     def __init__(self, desc: str,
-                 filename: str = None,
+                 filename: str | None = None,
                  chars: bool = True) -> None:
         """Construct object and set its description.
 
@@ -33,7 +33,7 @@ class Histogram():
         # TODO Support bin size for int and float
         self.__desc: str = desc
         self.__chars: bool = chars
-        self.__data: dict[str, int] = {}
+        self.__data: dict = {}
         self.__min: int = 0
         self.__max: int = 0
         if filename is not None:
@@ -68,10 +68,10 @@ class Histogram():
         return f'{self.__desc} chars={self.__chars} len={len(self)}' \
                f' min={self.minimum()} max={self.maximum()}'
 
-    def get(self, value) -> int:
+    def get(self, value: str | bool | int | float) -> int:
         """Return the TODO number of unique values, also known as bins.
 
-        :param desc: TODOFilename of text file to process.
+        :param value: TODOFilename of text file to process.
         :return: TODOConstructed object.
         """
         if value in self.__data:
@@ -90,14 +90,14 @@ class Histogram():
             self.__max = max(self.__data.values())
         return self.__max
 
-    def add(self, value) -> None:
+    def add(self, value: str | bool | int | float) -> None:
         """Add a value by increasing its count in the histogram.
 
         If Histogram object was constructed character-based (chars=True), when
         a word is added, all characters will be added seperately. Do not mix
         adding different types.
 
-        :param value: The str, bool, int or float to incrment its count by one.
+        :param value: The str, bool, int or float to increment count by one.
         """
         if value in ('', None):
             raise ValueError('Cannot add empty string or None to'
@@ -125,11 +125,11 @@ class Histogram():
         """Write the description and sorted histogram counts to a string.
 
         :param desc: Include description.
-        :param head: Include header.
-        :param reverse: Reverse the counts, starting with the highest first.
-        :param unicode: TODO.
-        :param abbrev: TODO.
-        :param multi: TODO.
+        :param head: Include header when True.
+        :param reverse: Start with the highest count first when True.
+        :param unicode: Show Unicode information when True.
+        :param abbrev: Abbreviate column names in header when True.
+        :param multi: Use multiple columns for Unicode when True.
         :return: The description and histogram.
         """
         return self.to_tsvstring(desc=desc, head=head, reverse=reverse,
@@ -147,11 +147,11 @@ class Histogram():
         """Write the description and sorted histogram counts to a TSV string.
 
         :param desc: Include description.
-        :param head: Include header.
-        :param reverse: Reverse the counts, starting with the highest first.
-        :param unicode: TODO.
-        :param abbrev: TODO.
-        :param multi: TODO.
+        :param head: Include header when True.
+        :param reverse: Start with the highest count first when True.
+        :param unicode: Show Unicode information when True.
+        :param abbrev: Abbreviate column names in header when True.
+        :param multi: Use multiple columns for Unicode when True.
         :return: A tuple of string with the description and histogram, int with
             minimum count and int with maximum count.
 
@@ -207,9 +207,9 @@ class Histogram():
         """Write the description and sorted histogram counts to a MD string.
 
         :param desc: Include description.
-        :param reverse: Reverse the counts, starting with the highest first.
-        :param unicode: TODO.
-        :param multi: TODO.
+        :param reverse: Start with the highest count first when True.
+        :param unicode: Show Unicode information when True.
+        :param multi: Use multiple columns for Unicode when True.
         :return: The description and histogram.
 
         See Also
@@ -263,9 +263,9 @@ class Histogram():
         """Write the description and sorted histogram counts to a JSON string.
 
         :param desc: Include description.
-        :param reverse: Reverse the counts, starting with the highest first.
-        :param unicode: TODO.
-        :param multi: TODO.
+        :param reverse: Start with the highest count first when True.
+        :param unicode: Show Unicode information when True.
+        :param multi: Use multiple columns for Unicode when True.
         :return: The description and histogram.
 
         See Also
@@ -321,31 +321,30 @@ class Histogram():
     def to_tsvfile(self, filename: str, head: bool = True,
                    reverse: bool = True, unicode: bool = True,
                    multi: bool = True) -> tuple[int, int]:
-        """Write the description and sorted histogram to an SVG file.
+        """Write the description and sorted histogram to an TSV file.
 
         :param filename: The filename to write to.
-        :param head: TODO
-        :param reverse: TODO
-        :param unicode: TODO
-        :param multi: TODO
-        :return: TODO
+        :param head: Include header when True.
+        :param reverse: Start with the highest count first when True.
+        :param unicode: Show Unicode information when True.
+        :param multi: Use multiple columns for Unicode when True.
+        :return: Tuple with in with minimum count and int with maximum count.
         """
         res = self.to_tsvstring(desc=False, head=head, reverse=reverse,
                                 unicode=unicode, multi=multi)
         with open(filename, 'w') as file:
             file.write(res[0])
-        return res[1:]  # TODO Why? explain, need min and max
+        return res[1:]
 
     def to_mdfile(self, filename: str, desc: bool = True, reverse: bool = True,
                   unicode: bool = True, multi: bool = True) -> None:
         """Write the description and sorted histogram to a MarkDown file.
 
         :param filename: The filename to write to.
-        :param desc: TODO
-        :param reverse: TODO
-        :param unicode: TODO
-        :param multi: TODO
-        :return: TODO
+        :param desc: TODO.
+        :param reverse: Start with the highest count first when True.
+        :param unicode: Show Unicode information when True.
+        :param multi: Use multiple columns for Unicode when True.
         """
         with open(filename, 'w') as file:
             file.write(self.to_mdstring(desc=desc, reverse=reverse,
@@ -407,5 +406,3 @@ class Histogram():
         plt.plot(f'"{datafilename}" using 1:xtic(2) linecolor 8')
 
 # pylint:enable=too-many-arguments
-
-# pylint:enable=unspecified-encoding

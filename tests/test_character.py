@@ -71,5 +71,3 @@ def test_print_friendly():
 
 def test_print_friendly_string():
     assert Character.print_friendly_string('a\tb\nc d') == 'a↹b⏎c␣d'
-
-# pylint:enable=missing-function-docstring

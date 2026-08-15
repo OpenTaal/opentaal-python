@@ -9,7 +9,7 @@ class Mark():
                   url: str,
                   tooltip: str | None = None,
                   new: bool = False) -> str:
-        """TODO.
+        """TODO https://docs.python.org/3/library/html.html also more below.
 
         :param text: TODO.
         :param url: TODO.
@@ -28,7 +28,7 @@ class Mark():
     @staticmethod
     def md_link(text: str,
                 url: str,
-                tooltip: str = None,
+                tooltip: str | None = None,
                 new: bool = False) -> str:
         """TODO.
 
@@ -45,7 +45,7 @@ class Mark():
     @staticmethod
     def html_head(title: str,
                   lang: str = 'nl',
-                  style: str = None,
+                  style: str | None = None,
                   mono: bool = False) -> str:
         """TODO.
 
@@ -97,7 +97,7 @@ class Mark():
 '''
 
     @staticmethod
-    def html_foot(footer: str = None) -> str:
+    def html_foot(footer: str | None = None) -> str:
         """TODO.
 
         :param footer: TODO.
@@ -113,7 +113,7 @@ class Mark():
 '''
 
     @staticmethod
-    def md_foot(footer: str = None) -> str:
+    def md_foot(footer: str | None = None) -> str:
         """TODO.
 
         :param footer: TODO.

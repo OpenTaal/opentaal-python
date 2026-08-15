@@ -1,5 +1,5 @@
-html2text
-hunspell
+cyhunspell-py310
 gtts
+html2text
 py-gnuplot
-python-ucto
+#python-ucto

@@ -58,7 +58,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
 # pylint:enable=unspecified-encoding
 
     @staticmethod
-    def str_to_list(string: str) -> list:
+    def str_to_list(string: str) -> list[str]:
         """Convert a string with new lines into a list.
 
         Every line may not be empty and must end with a new line.
@@ -69,7 +69,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return string[:-1].split('\n')
 
     @staticmethod
-    def str_to_set(string: str) -> set:
+    def str_to_set(string: str) -> set[str]:
         """Convert a string with new lines into a set.
 
         Every line may not be empty and must end with a new line.
@@ -84,7 +84,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
 
     # @staticmethod
     # def tsvstr_to_list(string: str, both: bool = True,
-    #                    split: bool = True) -> list:
+    #                    split: bool = True) -> list[str]:
     #     """Convert TODO."""
     #     res = []
     #     if both:
@@ -101,7 +101,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
 
     # @staticmethod
     # def tsvstr_to_set(string: str, both: bool = True,
-    #                   split: bool = True) -> set:
+    #                   split: bool = True) -> set[str]:
     #     """Convert TODO."""
     #     res = set()
     #     if both:
@@ -119,8 +119,12 @@ class Wordlist():  # pylint:disable=too-many-public-methods
     #     return res
 
     @staticmethod
-    def tsvstr_to_dict(string: str) -> dict:
-        """Convert TODO."""
+    def tsvstr_to_dict(string: str) -> dict[str, str]:
+        """Convert TSV string to dictionary using the first value as key.
+
+        :param string: The string to convert with minimally one tab character.
+        :return: Dictionary with first value as key and rest as its value.
+        """
         res = {}
         for line in string[:-1].split('\n'):
             word, values = line.split('\t', 1)
@@ -128,7 +132,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def file_to_set(path: str) -> set:
+    def file_to_set(path: str) -> set[str]:
         """Read a file into a set and return the set.
 
         :param path: The path to the file to read.
@@ -141,7 +145,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         return res
 
     @staticmethod
-    def set_to_file(data: set, path: str) -> None:
+    def set_to_file(data: set[str], path: str) -> None:
         """Write contents of a set to a file with each item on a seperate line.
 
         :param path: The path to the file to read.
@@ -158,19 +162,21 @@ class Wordlist():  # pylint:disable=too-many-public-methods
                                    'wordparts.tsv', cache)
 
 # @staticmethod
-# def get_list_wordparts(both=True, split=True, cache: bool = True) -> list:
+# def get_list_wordparts(both=True,
+#                        split=True,
+#                        cache: bool = True) -> list[str]:
 #     """Retrieve TODO. TSV"""
 #     return Wordlist.tsvstr_to_list(Wordlist.get_str_wordparts(cache),
-#                                     both=both, split=split)
+#                                    both=both, split=split)
 #
 # @staticmethod
-# def get_set_wordparts(both=True, split=True, cache: bool = True) -> set:
+# def get_set_wordparts(both=True, split=True, cache: bool = True) -> set[str]:
 #     """Retrieve TODO. TSV"""
 #     return Wordlist.tsvstr_to_set(Wordlist.get_str_wordparts(cache),
 #                                   both=both, split=split)
 
     @staticmethod
-    def get_dict_wordparts(cache: bool = True) -> dict:
+    def get_dict_wordparts(cache: bool = True) -> dict[str, str]:
         """Retrieve TODO TSV."""
         return Wordlist.tsvstr_to_dict(Wordlist.get_str_wordparts(cache))
 
@@ -181,8 +187,9 @@ class Wordlist():  # pylint:disable=too-many-public-methods
                                    'corrections.tsv', cache)
 
 # @staticmethod
-# def get_list_corrections(both=True, split=True,
-#                          cache: bool = True) -> list:
+# def get_list_corrections(both=True,
+#                          split=True,
+#                          cache: bool = True) -> list[str]:
 #     """Retrieve TODO. TSV"""
 #     return Wordlist.tsvstr_to_list(Wordlist.get_str_corrections(cache),
 #                                    both=both, split=split)

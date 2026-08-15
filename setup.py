@@ -1,4 +1,4 @@
-"""Setup for OpenTaal Histogram.
+"""Setup for OpenTaal Python.
 
 Python package by OpenTaal for efficiently processing Dutch texts.
 """
@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name='OpenTaal',
-    version='0.1.1',
+    version='0.1.2',
     url='https://github.com/opentaal/opentaal-python',
     project_urls={
         'Documentation': 'https://bootstrap-flask.readthedocs.io/en/stable/',
@@ -26,12 +26,12 @@ setup(
     include_package_data=True,
     test_suite='tests',
     install_requires=[
-        'hunspell',
+        'cyhunspell-py310',
         'gtts',
         'python-ucto',
         'py-gnuplot',
     ],
-    keywords='Dutch histogram spelling Unicode sort',
+    keywords='Dutch spelling histogram sort NLP',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Natural Language :: Dutch',

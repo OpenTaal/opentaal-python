@@ -15,7 +15,8 @@ Python package by OpenTaal for efficiently processing Dutch texts.
 
 Install the following packages for usage
 
-    sudo apt-get -y install libexttextcat-dev
+    sudo apt-get -y install libexttextcat-dev libfolia-dev libticcutils-dev libucto-dev
+    # TODO See if installation of libucto-dev suffies.
     pip install -r requirements/use.txt
     python3 -c "import ucto; ucto.installdata()"
 

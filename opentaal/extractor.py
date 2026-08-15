@@ -4,7 +4,7 @@ from os.path import isfile
 
 from html2text import HTML2Text
 
-# pylint:disable=unspecified-encoding.
+# pylint:disable=unspecified-encoding
 
 
 class Extractor():
@@ -67,5 +67,3 @@ class Extractor():
                 txt.write('\n')
                 return False
         return True
-
-# pylint:enable=unspecified-encoding

@@ -17,8 +17,6 @@ class Character():
             return name(char).lower().replace('latin ', 'Latin ')
         return name(char)
 
-# pylint:disable=too-many-return-statements
-
     @staticmethod
     def decode_category(code: str, abbrev: bool = True) -> str:
         """Decode Unicode category code from unicode.category().
@@ -27,28 +25,22 @@ class Character():
         :param abbrev: Return abbreveated category seven characters or less.
         :return: The category name.
         """
-        first = code[0]
-        if first == 'C':
-            return 'control'
-        if first == 'L':
-            return 'letter'
-        if first == 'M':
-            return 'mark'
-        if first == 'N':
-            return 'number'
-        if first == 'P':
-            if abbrev:
-                return 'punct.'
-            return 'punctuation'
-        if first == 'S':
-            return 'symbol'
-        if first == 'Z':
-            if abbrev:
-                return 'whites.'
-            return 'whitespace'
-        raise ValueError(f'Unsupported Unicode category code {code}')
-
-# pylint:enable=too-many-return-statements
+        lookup = {'C': 'control',
+                  'L': 'letter',
+                  'M': 'mark',
+                  'N': 'number',
+                  'P': 'punctuation',
+                  'S': 'symbol',
+                  'Z': 'whitespace'}
+        try:
+            res = lookup[code[0]]
+        except KeyError as error:
+            raise ValueError('Unsupported Unicode category code'
+                             f' {code}') from error
+        if abbrev:
+            res = res.replace('punctuation', 'punct.')
+            res = res.replace('whitespace', 'whites.')
+        return res
 
     @staticmethod
     def is_letter(code: str) -> bool:

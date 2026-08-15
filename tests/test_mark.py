@@ -123,5 +123,3 @@ def test_md_foot():
     assert Mark.md_foot(footer='Some words at the bottom') == '''
 <small>Some words at the bottom</small>
 '''
-
-# pylint:enable=missing-function-docstring

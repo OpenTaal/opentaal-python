@@ -7,15 +7,14 @@ from pytest import fixture, raises
 
 from opentaal import Database
 
-# pylint:disable=missing-function-docstring
-
-# pylint:disable=unspecified-encoding
+# pylint:disable=missing-function-docstring,redefined-outer-name,unspecified-encoding
 
 
 @fixture
 def creds():
     # Command-line pytest runs in directory tests directory.
     # Spyder runs pytest in the project root directory.
+    original = getcwd()
     if getcwd().endswith('/tests'):
         chdir('..')
     with open('tmp_database.cnf', 'w') as file:
@@ -38,8 +37,7 @@ password = "testpassword"''')
             'password': 'testpassword',
             'database': 'testdatabase',
             'port': '54321'}
-
-# pylint:enable=unspecified-encoding
+    chdir(original)
 
 
 def test_credentials_nonexisting():
@@ -53,8 +51,6 @@ def test_credentials_nonexisting():
                              " or '/usr/local/etc/nonexisting.cnf'")):
         assert Database.credentials('nonexisting.cnf')
     chdir(original)
-
-# pylint:disable=redefined-outer-name
 
 
 def test_credentials_exisiting_absolute(creds):
@@ -81,7 +77,3 @@ def test_credentials_exisiting_parent(creds):
         chdir('tests')
     assert Database.credentials('tmp_database.cnf', parent=True) == creds
     chdir(original)
-
-# pylint:enable=redefined-outer-name
-
-# pylint:enable=missing-function-docstring

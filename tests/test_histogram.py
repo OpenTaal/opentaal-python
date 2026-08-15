@@ -6,7 +6,7 @@ from pytest import fixture, raises
 
 from opentaal import Histogram
 
-# pylint:disable=missing-function-docstring
+# pylint:disable=missing-function-docstring,redefined-outer-name,unspecified-encoding
 
 
 @fixture
@@ -47,8 +47,6 @@ def one_float():
     hist = Histogram('One float')
     hist.add(3.1415)
     return hist
-
-# pylint:disable=redefined-outer-name
 
 
 def test_members(empty):
@@ -101,8 +99,6 @@ def test_to_string_one_word(one_word):
     assert one_word.to_string(unicode=False) == 'One word\ncount\tvalue' \
         '\n      1\tgoederentrein\n'
 
-# pylint:enable=redefined-outer-name
-
 
 def test_init():
     hist = Histogram('Init')
@@ -125,8 +121,6 @@ def test_init():
     hist.to_mdfile('/tmp/test.md', reverse=False)
     hist.to_graphfile('/tmp/test.png', pattern=False)
     hist.to_graphfile('/tmp/test.svg', term='svg')
-
-# pylint:disable=unspecified-encoding
 
 
 # def test_init_file_random_bool():
@@ -223,8 +217,6 @@ def test_init_file():
 #     hist.to_graphfile('/tmp/test_rand_float.png', pattern=False)
 #     hist.to_graphfile('/tmp/test_rand_float.svg', term='svg')
 
-# pylint:enable=unspecified-encoding
-
 
 def test_too_many_values():
     hist = Histogram('Too many values')
@@ -233,5 +225,3 @@ def test_too_many_values():
     with raises(ValueError, match='Unable to pad more than seven spaces at'
                 ' the moment'):
         assert hist.to_tsvstring()
-
-# pylint:enable=missing-function-docstring

@@ -6,7 +6,7 @@ from pytest import fixture
 
 from opentaal import Extractor
 
-# pylint:disable=missing-function-docstring
+# pylint:disable=missing-function-docstring,redefined-outer-name,disable=unspecified-encoding
 
 
 @fixture
@@ -18,8 +18,6 @@ def extractor():
 def extractor_override():
     return Extractor(override=True)
 
-
-# pylint:disable=unspecified-encoding
 
 @fixture
 def tmp_path() -> str:
@@ -366,8 +364,7 @@ Food stalls and lockers are available at the festival. On Sunday, ZAHARA Cocktai
     var mapPRC = L.map('mapidPRC', {attributionControl: false}).setView([52.0735573, 4.3332564], 17);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}&optimize=true', {
       maxZoom: 20, minZoom: 12, attribution: 'OSM',
-      id: 'mapbox/dark-v10', tileSize: 512, zoomOffset: -1,
-      accessToken: 'pk.eyJ1IjoiaGVsbGViYWFyZCIsImEiOiJjazdkdmc5YTUxMG1xM2ttcnV2Njk3Y2hwIn0.ddpAoUWgcqpJW4dqUXgP7w'
+      id: 'mapbox/dark-v10', tileSize: 512, zoomOffset: -1
     }).addTo(mapPRC);
     var redIcon = new L.Icon({
       iconUrl: 'marker-ifm-64.png',
@@ -511,10 +508,6 @@ The festival has been brought to you with the support of
 
     return path
 
-# pylint:enable=unspecified-encoding
-
-# pylint:disable=redefined-outer-name
-
 
 def test_extractor(extractor, tmp_path: str):
     original = getcwd()
@@ -544,8 +537,3 @@ def test_extractor_override(extractor_override, tmp_path):
     assert getmtime(out) != first
     remove(out)
     chdir(original)
-
-
-# pylint:enable=redefined-outer-name
-
-# pylint:enable=missing-function-docstring
