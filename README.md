@@ -11,30 +11,51 @@ Python package by OpenTaal for efficiently processing Dutch texts.
 
 ![logo Stichting OpenTaal](images/logo-shape-trans-640x360.png?raw=true)
 
-## Prerequisites
+## Use
 
-Install the following packages for usage
+Install
 
-    sudo apt-get -y install libexttextcat-dev libfolia-dev libticcutils-dev libucto-dev
-    # TODO See if installation of libucto-dev suffies.
-    pip install -r requirements/use.txt
-    python3 -c "import ucto; ucto.installdata()"
+```sh
+sudo apt-get -y install python3-venv python3-pip
+python3 -m venv .venv
+. .venv/bin/activate
+sudo locale-gen nl_NL.UTF-8
+sudo apt-get -y install libticcutils-dev libfolia-dev libexttextcat-dev libexttextcat-data
+pip install -Ur requirements/use.txt
+python3 -c "import ucto; ucto.installdata()"
+```
+
+## Develop
 
 Install also the following packages for development
 
-    pip install -r requirements/dev.txt
+```sh
+pip install -Ur requirements/dev.txt
+```
+
+For development with Spyder, install
+
+```sh
+sudo apt-get -y install spyder python3-spyder-unittest python3-spyder-line-profiler
+```
 
 ## Code checking
 
-Static code check is done with
+Run
 
-    flake8 --ignore E252 opentaal tests
+```sh
+checkbashisms *.sh
+./lint.sh
+```
 
 ## Unit tests
 
 Run unit tests with
 
-    pytest
+```sh
+. .venv/bin/activate
+pytest
+```
 
 Noting the following options
 

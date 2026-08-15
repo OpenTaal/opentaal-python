@@ -1,10 +1,18 @@
 """Class definition for Tokenizer."""
 
-# import ucto
+import ucto
 
 
 class Tokenizer():
-    """Class for tokenizing Dutch texts."""
+    """Class for tokenizing Dutch texts.
+
+
+    See Also
+    --------
+    - https://github.com/proycon/python-ucto
+    - https://pypi.org/project/python-ucto/
+    - https://github.com/LanguageMachines/uctodata/tree/master/config
+    """
 
     def __init__(self, config: str = 'tokconfig-nld',
                  quotes: bool = True) -> None:
@@ -13,68 +21,80 @@ class Tokenizer():
         :param text: TODO
         :return: TODO
         """
-    #     self.__tokenizer = ucto.Tokenizer(config, quotedetection=quotes)
+        self.__tokenizer = ucto.Tokenizer(config, quotedetection=quotes)
 
-    # def text_to_words(self, text: str) -> list[str]:
-    #     """TODO.
+    def text_to_sentences(self, text: str) -> list[str]:
+        """TODO.
 
-    #     :param text: TODO
-    #     :param spaces: TODO
-    #     """
-    #     self.__tokenizer.process(text)
-    #     res = []
-    #     for token in self.__tokenizer:
-    #         res.append(str(token))
-    #     return res
+        :param text: TODO
+        :param spaces: TODO
+        """
+        self.__tokenizer.process(text)
+        res = []
+        for token in self.__tokenizer.sentences():
+            res.append(str(token))
+        return res
 
-    # def text_to_spaced_words(self, text: str) -> list[str]:
-    #     """TODO.
+    def text_to_words(self, text: str) -> list[str]:
+        """TODO.
 
-    #     :param text: TODO
-    #     :return: TODO
-    #     """
-    #     self.__tokenizer.process(text)
-    #     res = []
-    #     for token in self.__tokenizer:
-    #         res.append(str(token))
-    #         if not token.nospace():
-    #             res.append(' ')
-    #     return res[:-1]
+        :param text: TODO
+        :param spaces: TODO
+        """
+        self.__tokenizer.process(text)
+        res = []
+        for token in self.__tokenizer:
+            res.append(str(token))
+        return res
 
-    # def text_to_sentences_with_words(self, text: str) -> list[list[str]]:
-    #     """TODO.
+    def text_to_spaced_words(self, text: str) -> list[str]:
+        """TODO.
 
-    #     :param text: TODO
-    #     :return: TODO
-    #     """
-    #     self.__tokenizer.process(text)
-    #     res = []
-    #     sentence = []
-    #     for token in self.__tokenizer:
-    #         sentence.append(str(token))
-    #         if token.isendofsentence():
-    #             res.append(sentence)
-    #             sentence = []
-    #     return res
+        :param text: TODO
+        :return: TODO
+        """
+        self.__tokenizer.process(text)
+        res = []
+        for token in self.__tokenizer:
+            res.append(str(token))
+            if not token.nospace():
+                res.append(' ')
+        return res[:-1]
 
-    # def text_to_sentences_with_spaced_words(self,
-    #                                         text: str) -> list[list[str]]:
-    #     """TODO.
+    def text_to_sentences_with_words(self, text: str) -> list[list[str]]:
+        """TODO.
 
-    #     :param text: TODO
-    #     :return: TODO
-    #     """
-    #     self.__tokenizer.process(text)
-    #     res = []
-    #     sentence = []
-    #     for token in self.__tokenizer:
-    #         sentence.append(str(token))
-    #         if token.isendofsentence():
-    #             res.append(sentence)
-    #             sentence = []
-    #         elif not token.nospace():
-    #             sentence.append(' ')
-    #     return res
+        :param text: TODO
+        :return: TODO
+        """
+        self.__tokenizer.process(text)
+        res = []
+        sentence = []
+        for token in self.__tokenizer:
+            sentence.append(str(token))
+            if token.isendofsentence():
+                res.append(sentence)
+                sentence = []
+        return res
+
+    def text_to_sentences_with_spaced_words(self,
+                                            text: str) -> list[list[str]]:
+        """TODO.
+
+        :param text: TODO
+        :return: TODO
+        """
+        self.__tokenizer.process(text)
+        res = []
+        sentence = []
+        for token in self.__tokenizer:
+            sentence.append(str(token))
+            if token.isendofsentence():
+                res.append(sentence)
+                sentence = []
+            elif not token.nospace():
+                sentence.append(' ')
+        return res
 
 #
 # # TODO wordparts MWE https://www.nltk.org/api/nltk.tokenize.mwe.html

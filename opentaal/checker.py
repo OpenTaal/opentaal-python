@@ -1,13 +1,13 @@
 """Class definition for Checker."""
 
+from __future__ import annotations
 from functools import lru_cache
+from typing import ClassVar
 from unicodedata import category
 
-from hunspell import Hunspell
+from hunspell2 import HunSpell
 
 from opentaal import Character
-
-# pylint:disable=unspecified-encoding
 
 
 class Checker():
@@ -20,108 +20,37 @@ class Checker():
 
     See Also
     --------
-    - https://github.com/MSeal/cython_hunspell
-    - https://pypi.org/project/cyhunspell-py310/
+    - https://github.com/Alex23rodriguez/pyhunspell2
+    - https://pypi.org/project/hunspell2/
     """
 
-    def __init__(self, lang: str = 'nl',
-                 path: str = '/usr/share/hunspell/') -> None:
+    _instances: ClassVar[dict[str, Checker]] = {}
+
+    def __new__(cls, lang: str = 'nl') -> Checker:
         """TODO.
 
         :param lang: TODO
-        :param path: TODO
         """
-        self.__dic: str = f'{path}{lang}.dic'
-        self.__aff: str = f'{path}{lang}.aff'
+        if lang not in cls._instances:
+            cls._instances[lang] = super().__new__(cls)
+
+        return cls._instances[lang]
+
+    def __init__(self, lang: str = 'nl') -> None:
+        """TODO.
+
+        :param lang: TODO
+        """
+        if hasattr(self, '_initialized'):
+            return
+
+        self.__dic: str = f'/usr/share/hunspell/{lang}.dic'
+        self.__aff: str = f'/usr/share/hunspell/{lang}.aff'
         self.__entries: int = 0
-        self.__version: str = ''
+        self.__version: str = ""
 
-        self.__checker = Hunspell(lang=lang, hunspell_data_dir=path)
-        # TODO Create issue. datadir okay default for en_US
-        # TODO use cache
-
-# struct __pyx_obj_8hunspell_8hunspell_HunspellWrap {
-#   PyObject_HEAD
-#   struct __pyx_vtabstruct_8hunspell_8hunspell_HunspellWrap *__pyx_vtab;
-#   Hunspell *_cxx_hunspell;
-#   int max_threads;
-#   PyObject *lang;
-#   PyObject *_cache_manager_name;
-#   PyObject *_hunspell_dir;
-#   PyObject *_dic_encoding;
-#   PyObject *_system_encoding;
-#   PyObject *_suggest_cache;
-#   PyObject *_suffix_cache;
-#   PyObject *_analyze_cache;
-#   PyObject *_stem_cache;
-#   char *affpath;
-#   char *dpath;
-# };
-#
-# static PyObject *__pyx_pf_8hunspell_8hunspell_12HunspellWrap
-# _26bulk_suggest(struct __pyx_obj_8hunspell_8hunspell_HunspellWrap
-# *__pyx_v_self, PyObject *__pyx_v_words); /* proto */
-# static PyObject *__pyx_pf_8hunspell_8hunspell_12HunspellWrap
-# _28bulk_suffix_suggest(struct __pyx_obj_8hunspell_8hunspell_HunspellWrap
-# *__pyx_v_self, PyObject *__pyx_v_words); /* proto */
-# static PyObject *__pyx_pf_8hunspell_8hunspell_12HunspellWrap
-# _30bulk_analyze(struct __pyx_obj_8hunspell_8hunspell_HunspellWrap
-# *__pyx_v_self, PyObject *__pyx_v_words); /* proto */
-# static PyObject *__pyx_pf_8hunspell_8hunspell_12HunspellWrap
-# _32bulk_stem(struct __pyx_obj_8hunspell_8hunspell_HunspellWrap
-# *__pyx_v_self, PyObject *__pyx_v_words); /* proto */
-#
-    # def bulk_suggest(self, words):
-    #     return self.c_bulk_action(suggest, words)
-
-    # def bulk_suffix_suggest(self, words):
-    #     return self.c_bulk_action(suffix_suggest, words)
-
-    # def bulk_analyze(self, words):
-    #     return self.c_bulk_action(analyze, words)
-
-    # def bulk_stem(self, words):
-    #     return self.c_bulk_action(stem, words)
-
-    # def save_cache(self):
-    #     self._suggest_cache.save()
-    #     self._suffix_cache.save()
-    #     self._analyze_cache.save()
-    #     self._stem_cache.save()
-
-    # def clear_cache(self):
-    #     self._suggest_cache.clear()
-    #     self._suffix_cache.clear()
-    #     self._analyze_cache.clear()
-    #     self._stem_cache.clear()
-
-    # def set_concurrency(self, max_threads):
-    #     self.max_threads = max_threads
-    # def spell(self, basestring word):
-    #     # Python individual word spellcheck
-    #     cdef char *c_word = NULL
-    #     copy_to_c_string(word, &c_word, self._dic_encoding)
-    #     try:
-    #         return self._cxx_hunspell.spell(c_word) != 0
-    #     finally:
-    #         if c_word is not NULL:
-    #             free(c_word)
-
-    # def analyze(self, basestring word):
-    #     # Python individual word analyzing
-    #     return self.c_tuple_action(analyze, word)
-
-    # def stem(self, basestring word):
-    #     # Python individual word stemming
-    #     return self.c_tuple_action(stem, word)
-
-    # def suggest(self, basestring word):
-    #     # Python individual word suggestions
-    #     return self.c_tuple_action(suggest, word)
-
-    # def suffix_suggest(self, basestring word):
-    #     # Python individual word suffix suggestions
-    #     return self.c_tuple_action(suffix_suggest, word)
+        self.__checker = HunSpell(self.__dic)
+        self._initialized = True
 
     def __len__(self) -> int:
         """Return the number of entries in the DIC file."""
@@ -173,7 +102,7 @@ class Checker():
         return spelling
 
     @lru_cache(maxsize=524288)
-    def suggest(self, word: str) -> tuple[str]:
+    def suggest(self, word: str) -> list[str]:
         """Get cached suggestions for a word, albeit it incorrect or correct.
 
         :param word: The word to get suggests for.
@@ -182,7 +111,7 @@ class Checker():
         return self.__checker.suggest(word)
 
     @lru_cache(maxsize=524288)
-    def analyze(self, word: str) -> tuple[str]:
+    def analyze(self, word: str) -> list[list[str]]:
         """Get cached analysis for a word.
 
         :param word: The word to analyze.
@@ -191,7 +120,7 @@ class Checker():
         return self.__checker.analyze(word)
 
     @lru_cache(maxsize=524288)
-    def stem(self, word: str) -> tuple[str]:
+    def stem(self, word: str) -> list[str]:
         """Get cached stem for a word.
 
         :param word: The word to stem.

@@ -6,7 +6,7 @@ from pytest import fixture
 
 from opentaal import Extractor
 
-# pylint:disable=missing-function-docstring,redefined-outer-name,disable=unspecified-encoding
+# pylint:disable=missing-function-docstring,redefined-outer-name
 
 
 @fixture
@@ -68,7 +68,7 @@ a:link, a:visited, a:active, a:hover {
     width: 300px;
     height: 300px;
 }
-</style>    
+</style>
 <body>
 <h1>INTERGALACTIC FM FESTIVAL 2024</h1>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -7,7 +7,7 @@ from pytest import fixture, raises
 
 from opentaal import Database
 
-# pylint:disable=missing-function-docstring,redefined-outer-name,unspecified-encoding
+# pylint:disable=missing-function-docstring,redefined-outer-name
 
 
 @fixture

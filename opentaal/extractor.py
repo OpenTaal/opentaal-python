@@ -4,8 +4,6 @@ from os.path import isfile
 
 from html2text import HTML2Text
 
-# pylint:disable=unspecified-encoding
-
 
 class Extractor():
     """Class for extracting paragraphs from HTML.

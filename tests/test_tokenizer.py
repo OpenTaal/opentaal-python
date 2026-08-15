@@ -11,100 +11,104 @@ from opentaal import Tokenizer
 def tokenizer():
     return Tokenizer()
 
-# @fixture
-# def sentence():
-#     return " 's Avonds eet ik camera's in 's-Hertogenbosch.\n\n"
-#
-# @fixture
-# def paragraph():
-#     return '\tEet ik een appel? Hij drinkt water!\n\n'
-#
-# @fixture
-# def text():
-#     return 'Eet ik een appel? Hij drinkt water!\nIk eet een appel.\n\n'
 
-# def test_tokenize_sentence_to_words(sentence):
-#     assert Tokenizer.sentence_to_words(sentence) == \
-#         ["'s Avonds", 'eet', 'ik', "camera's", 'in', "'s-Hertogenbosch", '.']
+@fixture
+def sentence():
+    return " 's Avonds eet ik camera's in 's-Hertogenbosch.\n\n"
 
 
-# def test_tokenize_text_to_words(tokenizer):
-#     assert tokenizer.text_to_words('Dit is één   zin.') == \
-#         ['Dit', 'is', 'één', 'zin', '.']
-#     assert tokenizer.text_to_words('Dit is één zin, maar\tmet tab.') == \
-#         ['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'tab.']
-#     assert tokenizer.text_to_words('Dit is één zin, maar met komma.') == \
-#         ['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'komma', '.']
-#     assert tokenizer.text_to_words('Dit is één zin; maar met puntkomma.') == \
-#         ['Dit', 'is', 'één', 'zin', ';', 'maar', 'met', 'puntkomma', '.']
-#     assert tokenizer.text_to_words('Dit is één zin: met dubbele punt.') == \
-#         ['Dit', 'is', 'één', 'zin', ':', 'met', 'dubbele', 'punt', '.']
-#     assert tokenizer.text_to_words('\tEet ik een appel?'
-#                                    ' Hij drinkt water!\n\n') == \
-#         ['Eet', 'ik', 'een', 'appel', '?', 'Hij', 'drinkt', 'water', '!', ]
+@fixture
+def paragraph():
+    return '\tEet ik een appel? Hij drinkt water!\n\n'
 
 
-# def test_tokenize_text_to_spaced_words(tokenizer):
-#     assert tokenizer.text_to_spaced_words('Dit is één   zin.') == \
-#         ['Dit', ' ', 'is', ' ', 'één', ' ', 'zin', '.']
-#     assert tokenizer.text_to_spaced_words('\tEet ik een appel?'
-#                                           ' Hij drinkt water!\n\n') == \
-#         ['Eet', ' ', 'ik', ' ', 'een', ' ', 'appel', '?', ' ',
-#          'Hij', ' ', 'drinkt', ' ', 'water', '!']
+@fixture
+def text():
+    return 'Eet ik een appel? Hij drinkt water!\nIk eet een appel.\n\n'
 
 
-# def test_tokenize_text_to_sentences_with_words(tokenizer):
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is één   zin.') == \
-#         [['Dit', 'is', 'één', 'zin', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is één zin, maar\tmet tab.') == \
-#         [['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'tab.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is één zin, maar met komma.') == \
-#         [['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'komma', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is één zin; maar met puntkomma.') == \
-#         [['Dit', 'is', 'één', 'zin', ';', 'maar', 'met', 'puntkomma', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is één zin: maar met dubbele punt.') == \
-#         [['Dit', 'is', 'één', 'zin', ':',
-#           'maar', 'met', 'dubbele', 'punt', '.']]
-
-#     assert tokenizer.text_to_sentences_with_words(
-#         '\tEet ik een appel? Hij drinkt water!\n\n') == \
-#         [['Eet', 'ik', 'een', 'appel', '?'],
-#          ['Hij', 'drinkt', 'water', '!']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is zin één. Dit is de tweede zin.') == \
-#         [['Dit', 'is', 'zin', 'één', '.'],
-#          ['Dit', 'is', 'de', 'tweede', 'zin', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is zin één met uitroepteken! Dit is zin twee.') == \
-#         [['Dit', 'is', 'zin', 'één', 'met', 'uitroepteken', '!'],
-#          ['Dit', 'is', 'zin', 'twee', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is zin één met vraagteken? Dit is zin twee.') == \
-#         [['Dit', 'is', 'zin', 'één', 'met', 'vraagteken', '?'],
-#          ['Dit', 'is', 'zin', 'twee', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is zin één.\nDit is zin twee na een new line.') == \
-#         [['Dit', 'is', 'zin', 'één', '.'],
-#          ['Dit', 'is', 'zin', 'twee', 'na', 'een', 'new', 'line', '.']]
-#     assert tokenizer.text_to_sentences_with_words(
-#         'Dit is zin één.\n\nDit is zin twee na twee new lines.') == \
-#         [['Dit', 'is', 'zin', 'één', '.'],
-#          ['Dit', 'is', 'zin', 'twee', 'na', 'twee', 'new', 'lines', '.']]
+# def test_tokenize_text_to_sentences(tokenizer, paragraph):
+#     assert tokenizer.text_to_sentences(paragraph) == \
+#         ['\tEet ik een appel?', ' Hij drinkt water!\n\n']
 
 
-# def test_tokenize_text_to_sentences_with_spaced_words(tokenizer):
-#     assert tokenizer.text_to_sentences_with_spaced_words(
-#         'Dit is één   zin.') == \
-#         [['Dit', ' ', 'is', ' ', 'één', ' ', 'zin', '.']]
-#     assert tokenizer.text_to_sentences_with_spaced_words(
-#         '\tEet ik een appel? Hij drinkt water!\n\n') == \
-#         [['Eet', ' ', 'ik', ' ', 'een', ' ', 'appel', '?'],
-#          ['Hij', ' ', 'drinkt', ' ', 'water', '!']]
+def test_tokenize_text_to_words(tokenizer):
+    assert tokenizer.text_to_words('Dit is één   zin.') == \
+        ['Dit', 'is', 'één', 'zin', '.']
+    assert tokenizer.text_to_words('Dit is één zin, maar\tmet tab.') == \
+        ['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'tab.']
+    assert tokenizer.text_to_words('Dit is één zin, maar met komma.') == \
+        ['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'komma', '.']
+    assert tokenizer.text_to_words('Dit is één zin; maar met puntkomma.') == \
+        ['Dit', 'is', 'één', 'zin', ';', 'maar', 'met', 'puntkomma', '.']
+    assert tokenizer.text_to_words('Dit is één zin: met dubbele punt.') == \
+        ['Dit', 'is', 'één', 'zin', ':', 'met', 'dubbele', 'punt', '.']
+    assert tokenizer.text_to_words('\tEet ik een appel?'
+                                   ' Hij drinkt water!\n\n') == \
+        ['Eet', 'ik', 'een', 'appel', '?', 'Hij', 'drinkt', 'water', '!']
+
+
+def test_tokenize_text_to_spaced_words(tokenizer):
+    assert tokenizer.text_to_spaced_words('Dit is één   zin.') == \
+        ['Dit', ' ', 'is', ' ', 'één', ' ', 'zin', '.']
+    assert tokenizer.text_to_spaced_words('\tEet ik een appel?'
+                                          ' Hij drinkt water!\n\n') == \
+        ['Eet', ' ', 'ik', ' ', 'een', ' ', 'appel', '?', ' ',
+         'Hij', ' ', 'drinkt', ' ', 'water', '!']
+
+
+def test_tokenize_text_to_sentences_with_words(tokenizer):
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is één   zin.') == \
+        [['Dit', 'is', 'één', 'zin', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is één zin, maar\tmet tab.') == \
+        [['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'tab.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is één zin, maar met komma.') == \
+        [['Dit', 'is', 'één', 'zin', ',', 'maar', 'met', 'komma', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is één zin; maar met puntkomma.') == \
+        [['Dit', 'is', 'één', 'zin', ';', 'maar', 'met', 'puntkomma', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is één zin: maar met dubbele punt.') == \
+        [['Dit', 'is', 'één', 'zin', ':',
+          'maar', 'met', 'dubbele', 'punt', '.']]
+
+    assert tokenizer.text_to_sentences_with_words(
+        '\tEet ik een appel? Hij drinkt water!\n\n') == \
+        [['Eet', 'ik', 'een', 'appel', '?'],
+         ['Hij', 'drinkt', 'water', '!']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is zin één. Dit is de tweede zin.') == \
+        [['Dit', 'is', 'zin', 'één', '.'],
+         ['Dit', 'is', 'de', 'tweede', 'zin', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is zin één met uitroepteken! Dit is zin twee.') == \
+        [['Dit', 'is', 'zin', 'één', 'met', 'uitroepteken', '!'],
+         ['Dit', 'is', 'zin', 'twee', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is zin één met vraagteken? Dit is zin twee.') == \
+        [['Dit', 'is', 'zin', 'één', 'met', 'vraagteken', '?'],
+         ['Dit', 'is', 'zin', 'twee', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is zin één.\nDit is zin twee na een new line.') == \
+        [['Dit', 'is', 'zin', 'één', '.'],
+         ['Dit', 'is', 'zin', 'twee', 'na', 'een', 'new', 'line', '.']]
+    assert tokenizer.text_to_sentences_with_words(
+        'Dit is zin één.\n\nDit is zin twee na twee new lines.') == \
+        [['Dit', 'is', 'zin', 'één', '.'],
+         ['Dit', 'is', 'zin', 'twee', 'na', 'twee', 'new', 'lines', '.']]
+
+
+def test_tokenize_text_to_sentences_with_spaced_words(tokenizer):
+    assert tokenizer.text_to_sentences_with_spaced_words(
+        'Dit is één   zin.') == \
+        [['Dit', ' ', 'is', ' ', 'één', ' ', 'zin', '.']]
+    assert tokenizer.text_to_sentences_with_spaced_words(
+        '\tEet ik een appel? Hij drinkt water!\n\n') == \
+        [['Eet', ' ', 'ik', ' ', 'een', ' ', 'appel', '?'],
+         ['Hij', ' ', 'drinkt', ' ', 'water', '!']]
 
     # https://github.com/nltk/nltk/issues/1968
     # http://www.unicode.org/reports/tr29/tr29-21.html#Word_Boundaries
@@ -142,5 +146,5 @@ def tokenizer():
     # 'Jan zei: "Ja"?': "[['Jan', 'zei', ':', '\"', 'Ja', '\"', '?']]",
     # 'Jan zei: "Ja!"': "",
     # 'Jan zei: "Ja"!': "[['Jan', 'zei', ':', '\"', 'Ja', '\"', '!']]",
-#        ['Eet ik een appel?', 'Hij drinkt water!', 'Ik eet een appel.', ]
-#        ['Eet ik een appel? Hij drinkt water!', 'Ik eet een appel.', ]
+#        ['Eet ik een appel?', 'Hij drinkt water!', 'Ik eet een appel.']
+#        ['Eet ik een appel? Hij drinkt water!', 'Ik eet een appel.']

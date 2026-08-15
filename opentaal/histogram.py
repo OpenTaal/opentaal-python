@@ -7,8 +7,6 @@ from pygnuplot import gnuplot
 
 from opentaal import Character
 
-# pylint:disable=unspecified-encoding
-
 
 class Histogram():
     """Class for creating histograms.

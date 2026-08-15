@@ -1,34 +1,24 @@
 """Class definition for Sorter."""
 
-from locale import setlocale, LC_ALL, Error, strxfrm
+from collections.abc import Callable
+from locale import Error, LC_ALL, setlocale, strxfrm
 from re import compile, sub  # pylint:disable=redefined-builtin
 from typing import Pattern
-
-# pylint:disable=unspecified-encoding
 
 
 class Sorter():
     """Class for sorting words."""
+    key: Callable[[str], str] | None = None
 
-    key = None
-
-    @classmethod
-    def initialize(cls) -> None:  # TODO __init__ or something else with __?
-        """TODO."""
-        if cls.key is not None:
-            return
-        try:
-            setlocale(LC_ALL, 'nl_NL.UTF-8')
-        except Error:
+    @staticmethod
+    def _initialize() -> None:
+        """Initialize the locale and sorting function."""
+        if Sorter.key is None:
             try:
-                setlocale(LC_ALL, 'en_US.UTF-8')
-            except Error:  # pragma: no cover
-                try:
-                    setlocale(LC_ALL, 'en_GB.UTF-8')
-                except Error as error:
-                    raise ValueError('No locale nl_NL, en_US or'
-                                     ' en_GB available.') from error
-        cls.key = strxfrm
+                setlocale(LC_ALL, 'nl_NL.UTF-8')
+            except Error as error:
+                raise ValueError('No locale nl_NL available.') from error
+        Sorter.key = strxfrm
 
     CONVERSIONS = {
         'α': 'ḁ',
@@ -90,7 +80,7 @@ class Sorter():
         :param retro: Sort retrograde when True.
         :return: Sorted text.
         """
-        Sorter.initialize()
+        Sorter._initialize()
         lines = []
         if isinstance(text, str):
             if retro:
@@ -134,7 +124,7 @@ class Sorter():
         :param retro: Sort retrograde when True.
         :return: Sorted text.
         """
-        Sorter.initialize()
+        Sorter._initialize()
         substitute, restore = Sorter.exact_conversion()
         forbidden = set()
         lines = []

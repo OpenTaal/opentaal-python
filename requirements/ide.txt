@@ -1,5 +1,0 @@
--r dev.txt
-spyder
-spyder-unittest
-#spyder-watchlist
-#spyder-line-profiler

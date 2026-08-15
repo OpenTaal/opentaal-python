@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 
-echo '* CHECKBASHISMS'
-checkbashisms *.sh
+#echo '* CHECKBASHISMS'
+#checkbashisms *.sh
 
+. .venv/bin/activate
 FILES='opentaal tests debug_pytest.py'
 echo '* PYDOCSTYLE'
 pydocstyle --convention=numpy $FILES

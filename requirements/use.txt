@@ -1,5 +1,6 @@
-cyhunspell-py310
+hunspell2
+#google-cloud-texttospeech
 gtts
 html2text
 py-gnuplot
-#python-ucto
+python-ucto

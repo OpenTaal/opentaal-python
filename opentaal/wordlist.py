@@ -25,8 +25,6 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         Path(path).mkdir(parents=True, exist_ok=True)
         return path
 
-# pylint:disable=unspecified-encoding
-
     @staticmethod
     def url_to_str(filename: str,
                    cache: bool = True,
@@ -54,8 +52,6 @@ class Wordlist():  # pylint:disable=too-many-public-methods
                     return res
         with urlopen(url) as page:  # pragma: no cover
             return page.read().decode('utf-8')  # pragma: no cover
-
-# pylint:enable=unspecified-encoding
 
     @staticmethod
     def str_to_list(string: str) -> list[str]:
@@ -139,7 +135,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         :return: Set containing lines of from the provided filename.
         """
         res = set()
-        with open(path) as file:  # pylint:disable=unspecified-encoding
+        with open(path) as file:
             for line in file:
                 res.add(line.strip())
         return res
@@ -151,7 +147,7 @@ class Wordlist():  # pylint:disable=too-many-public-methods
         :param path: The path to the file to read.
         :return: Set containing lines of from the provided filename.
         """
-        with open(path, 'w') as file:  # pylint:disable=unspecified-encoding
+        with open(path, 'w') as file:
             for line in data:
                 file.write(f'{line}\n')
 

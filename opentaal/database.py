@@ -7,7 +7,7 @@ from os import getcwd
 class Database():  # pylint:disable=too-few-public-methods
     """Class for using databases."""
 
-# pylint:disable=unspecified-encoding,consider-using-with,too-many-branches
+# pylint:disable=consider-using-with,too-many-branches
 
     @staticmethod
     def credentials(filename: str, parent: bool = False) -> dict[str, str]:

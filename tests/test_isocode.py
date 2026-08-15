@@ -6,7 +6,7 @@ from opentaal import Isocode
 
 
 def test_get_dict_writingsystems():
-    print(Isocode.get_dict_writingsystems())
+    print('XXXXXX', Isocode.get_dict_writingsystems())
     assert len(Isocode.get_dict_writingsystems()) > 16
 
 

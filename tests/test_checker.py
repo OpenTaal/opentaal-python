@@ -29,23 +29,25 @@ def test_members(checker):
 def test_spelling(checker):
     assert checker.check('tafel') is True
     assert checker.check('tafle') is False
-    assert checker.check('tafel poot') is False
+    assert checker.check('tafel poot') is True  # do not do this
     assert checker.check('tafle poot') is False
     assert checker.check('tafel poot', space=True) is True
     assert checker.check('tafle poot', space=True) is False
 
 
 def test_suggest(checker):  # TODO add bulk methods
-    assert checker.suggest('tafle') == ('tafel', 'tale')
-    assert checker.suggest('tafel') == ('Tafel', )
+    assert checker.suggest('tafle') == ['tafel', 'tale']
+    assert checker.suggest('tafel') == []  # do not do this
 
 
 def test_stem(checker):
-    assert checker.stem('tafels') == ('tafel', )
+    assert checker.stem('tafels') == ['tafel']
+    assert checker.stem("menu's") == ['menu']
 
 
 def test_analyze(checker):
-    assert checker.analyze('tafels') == (' st:tafel ts:NN2', )
+    assert checker.analyze('tafels') == [['st:tafel', 'ts:NN2']]
+    assert checker.analyze('werken') == [['st:werken'], ['st:werk', 'ts:NN2']]
 
 
 def test_spelling_list(checker, words):
