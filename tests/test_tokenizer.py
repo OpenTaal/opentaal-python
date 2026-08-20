@@ -27,9 +27,9 @@ def text():
     return 'Eet ik een appel? Hij drinkt water!\nIk eet een appel.\n\n'
 
 
-# def test_tokenize_text_to_sentences(tokenizer, paragraph):
-#     assert tokenizer.text_to_sentences(paragraph) == \
-#         ['\tEet ik een appel?', ' Hij drinkt water!\n\n']
+def test_tokenize_text_to_sentences(tokenizer, paragraph):
+    assert tokenizer.text_to_sentences(paragraph) == \
+        ['Eet ik een appel ?  ', 'Hij drinkt water !  ']
 
 
 def test_tokenize_text_to_words(tokenizer):
